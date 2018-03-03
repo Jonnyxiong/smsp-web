@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="smsClientTariffMapper" >
+  <resultMap id="smsClientTariffModel" type="com.ucpaas.smsp.model.SmsClientTariff" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="prefix" property="prefix" jdbcType="INTEGER" />
+    <result column="areaname" property="areaname" jdbcType="VARCHAR" />
+    <result column="intername" property="intername" jdbcType="VARCHAR" />
+    <result column="intercode" property="intercode" jdbcType="VARCHAR" />
+    <result column="fee" property="fee" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="querySmsClientTariffListConditon">
+  	<where>
+  		1 = 1 
+  		<if test="countryInfo != null and countryInfo != '' ">
+  			and 
+  			(
+  				intername like CONCAT('%',#{countryInfo},'%' ) 
+		  		or areaname like CONCAT('%',#{countryInfo},'%' ) 
+		  		or prefix like CONCAT('%',#{countryInfo},'%' ) 
+		  	)
+  		
+  		</if>
+  	
+  	
+  	</where>
+  
+  </sql>
+  
+  <select id="querySmsClientTariffList" resultMap="smsClientTariffModel">
+  	SELECT 
+  		id,
+  		prefix,
+  		areaname,
+  		intername,
+  		intercode,
+  		round(fee/1000000,2) as fee
+  	FROM 
+  		t_sms_client_tariff
+  	<include refid="querySmsClientTariffListConditon" />
+  	LIMIT #{startIndex},#{pageSize}
+  </select>
+  
+  <select id="querySmsClientTariffListCount" resultType="java.lang.Integer">
+  	SELECT COUNT(0) FROM(
+	  	SELECT 
+	  		0
+	  	FROM 
+	  		t_sms_client_tariff
+	  	<include refid="querySmsClientTariffListConditon" />
+  	) m
+  </select>
+  
+  
+  
+  
+ 
+</mapper>

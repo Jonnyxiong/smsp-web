@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>云之讯-短信平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="baidu-site-verification" content="zNwez22Bcq" />
+    <meta name="google-site-verification" content="6hC_46bMT6_bGxmL_Ec5V_7xnPSnQBhQBl8y3MtfoFc" />
+    <meta name="Baiduspider" content="noarchive"/>
+	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+	<link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+	<link rel='stylesheet' type='text/css' href='/font/iconfont.css' th:href="@{/font/iconfont.css}"/>
+	<link rel="stylesheet" type="text/css" href="/js/jquery-ui/css/theme/all.css" th:href="@{/js/jquery-ui/css/theme/all.css}"/>
+	<link rel='stylesheet' type='text/css' href='/css/main.css' th:href="@{/css/main.css}"/>
+</head>
+<body>
+	<div id="wrap" class="clearfix">
+		<!-- 左侧导航栏 bf-->
+		<div id="sidebar" >
+			<div class="logo">
+			    <a href="/" title="云之讯"><img src="/img/logo2.png" alt="云之讯" /></a>
+			</div>
+			<div class="nav">
+			    <ul>
+					<li><a href="/console" th:if="${accountModel.paytype ne 1}" ><span class="iconfont icon-shouyeshouye"></span>首页</a></li>
+			        <li class="cur">
+			            <a href="javascript:void(0)" class="cur"><span class="iconfont icon-duanxin"></span>传统短信<i  class="show"></i></a>
+			            <ul class="sub-nav">
+			                <li><a href="/console/bussiness/send.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信发送<span></span></a></li>
+			                <li><a href="/console/bussiness/template.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信模板管理<span></span></a></li>
+			                <li><a href="/console/bussiness/record.html"  class="">短信发送记录<span></span></a></li>
+			                <li><a href="/console/bussiness/statistics.html" class="">短信数据统计<span></span></a></li>
+			                <li><a href="/console/bussiness/price.html"  class="cur">国际短信报价<span></span></a></li>
+			            </ul>
+			        </li>
+			        <li th:if="${session.LOGIN_USER_INFO.smsfrom==6}">
+			            <a href="javascript:void(0)"><span class="iconfont icon-caixin2"></span>彩印<i></i></a>
+			            <ul class="sub-nav">
+			                <li><a href="/console/mms/send.html" class="">彩印发送<span></span></a></li>
+			                <li><a href="/console/mms/template.html" class="">彩印模版管理<span></span></a></li>
+			                <li><a href="/console/mms/record.html"  class="">彩印发送记录<span></span></a></li>
+			                <li><a href="/console/mms/ussdday.html" class="">彩印数据统计<span></span></a></li>
+			            </ul>
+			        </li>
+			        <li>
+			            <a href="javascript:void(0)"><span class="iconfont icon-qianbi01"></span>财务管理<i></i></a>
+			            <ul class="sub-nav">
+			                <li><a href="/console/order/list.html" class="">我的订单<span></span></a></li>
+			            </ul>
+			        </li>
+			        <li>
+			            <a href="javascript:void(0)" class=""><span class="iconfont icon-shenfenzheng"></span>账户管理<i></i></a>
+			            <ul class="sub-nav">
+			                <li><a href="/console/account/info.html" class="">账户资料<span></span></a></li>
+			                <li><a href="/console/account/security.html" class="">账户安全<span></span></a></li>
+			            </ul>
+			        </li>
+			        <li>
+			            <a href="javascript:void(0)"><span class="iconfont icon-bangzhuzhongxin"></span>帮助中心<i></i></a>
+			            <ul class="sub-nav">
+			                <li><a href="/console/help/smsAccessIntroduce.html" class="">短信接入<span></span></a></li>
+			                <li><a href="/console/help/FAQ.html" class="">FAQ<span></span></a></li>
+			            </ul>
+			        </li>
+			    </ul>
+			</div>
+		</div>
+		<!-- 左侧导航栏 ef -->
+
+		<!-- 右边内容 bf -->
+		<div id="main">
+			<div class="main-con">
+				<div class="top notes-top clearfix">
+					<h1>国际短信价格</h1>
+					<div class="ft-r ">
+                        <a href="/console/login.html" class="lay-out btn-white btn-small btn" th:href="@{/console/quit}">退出</a>
+                    </div>
+                    <!-- 
+                    <div class="top-r ft-r">
+						<span class="contact-phone" th:text="'联系电话：'+${accountModel.agentMobile}">联系电话：18689206965</span>
+					</div> -->
+				</div>
+				<div class="con-out">
+					<div class="crumbs"><a class="active">国际短信价格</a></div>
+					<div class="content notes-content">
+						<div class="order-option clearfix">
+							<form id="getInterShortMessageForm" action="${ctx}/bussiness/interShortMessage" method="post" th:action="@{/console/bussiness/price}">
+								<div class="option-r ft-l">
+									<label>国家查询</label>
+									<input type="text" name="countryInfo" th:value="${countryInfo }" placeholder="国际名称/国际代码/中文名称" />
+									<span><a href="javascript:;" class="green-btn" onclick="getInterShortMessage()">查询</a></span>
+								</div>
+								
+								<input id="pageRowCount" type="hidden" name="pageSize" th:value="${pageBean.pageSize}"/>
+									<input id="goalPage" type="hidden" name="goalPage" value="1"/>
+							</form>
+						</div>
+						<div class="product-pack msm-notes clearfix">
+							<table>
+								<thead>
+									<tr>
+										<th>序号</th>
+										<th>国际名称</th>
+										<th>中文名称</th>
+										<th>国际代码</th>
+										<th>国际简码</th>
+										<th>国际价格</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="tariff,iterStat:${pageBean.list}">
+										<td th:text="${iterStat.count}"></td>
+										<td class="intername" th:text="${tariff.intername}"></td>
+										<td class="areaname" th:text="${tariff.areaname}"></td>
+										<td class="prefix" th:text="${tariff.prefix}"></td>
+										<td th:text="${tariff.intercode}"></td>
+										<td th:text="${tariff.fee}"></td>
+									</tr>
+									<tr>
+										<td colspan="8" class="clearfix">
+											<div class="pagination ft-r clearfix" style="">
+												<div class="show-count ft-l">共有<span class="allCount" th:text="${pageBean.totalRows }"> 100</span>条，每页显示
+													<span class="select"><span th:text="${pageBean.pageSize}">5</span>
+													<ul class="show-num">
+														<li>5</li>
+														<li>10</li>
+														<li>15</li>
+														<li>20</li>
+													</ul>
+													</span> 条
+												</div>
+												<input id="currentPage" type="hidden" th:value="${pageBean.currentPage }"/>
+													<input id="totalPages" type="hidden" th:value="${pageBean.totalPages }"/>
+													<input id="hasNextPage" type="hidden" th:value="${pageBean.hasNextPage }"/>
+													<input id="hasPreviousPage" type="hidden" th:value="${pageBean.hasPreviousPage }"/>
+													
+													
+													<ul class="pre-after ft-l">
+														<li class="first"><a href="javascript:;" onclick="firstPage()"></a></li>
+														<li class="pre"><a href="javascript:;" onclick="prePage()"></a></li>
+														<li class="now"><a href="javascript:;" th:text="${pageBean.currentPage}+'/'+${pageBean.totalPages}">10</a></li>
+														<li class="after"><a href="javascript:;" onclick="afterPage()"></a></li>
+														<li class="last"><a href="javascript:;" onclick="lastPage()"></a></li>
+													</ul>
+													<div class="ft-l">
+														<input id="jump2PageNum" type="text" class="jump-to" name="jump-to" style="height:30px;"/>
+														<a href="javascript:;" onclick="jump2Page()" class="btn-page">跳转</a>
+													</div>
+											</div>	
+										</td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="btm-copyright">
+						<p>© 2016 ucpaas.com 版权所有 粤ICP备14046848号</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 右边内容 ef -->
+	</div>
+</body>
+<script src="/js/jquery.min.js"  th:src="@{/js/jquery.min.js}"></script>
+<script src="/js/jquery-ui/js/datepicker.js" th:src="@{/js/jquery-ui/js/datepicker.js}"></script>
+<script src="/js/datepicker.js" th:src="@{/js/datepicker.js}"></script>
+<script type="text/javascript" src="/js/common.js" th:src="@{/js/common.js}"></script>
+<script src="/js/layer/layer.js"  th:src="@{/js/layer/layer.js}"></script>
+<script src="/js/keywords.js" th:src="@{/js/keywords.js}"></script>
+<script type="text/javascript">
+	$(function() {
+	    $( "#datepicker" ).datepicker();
+        var keywords = $("input[name='countryInfo']").val();
+        if(keywords){
+            var internameArr = $(".intername");
+            var areanameArr = $(".areaname");
+            var prefixArr = $(".prefix");
+            for(var i = 0;i < internameArr.length;i++){
+
+                if(	!/^[\d]+$/.test(i)){
+                    continue;
+                }
+                handleKeyWords(internameArr[i],keywords);
+            }
+            for(var i = 0;i < areanameArr.length;i++){
+                if(!/^[\d]+$/.test(i)){
+                    continue;
+                }
+                handleKeyWords(areanameArr[i],keywords);
+            }
+            for(var i = 0;i < prefixArr.length;i++){
+                if(!/^[\d]+$/.test(i)){
+                    continue;
+                }
+                handleKeyWords(prefixArr[i],keywords);
+            }
+        }
+	})	
+</script>
+<script th:inline="javascript" >
+	/*<![CDATA[*/
+	$("#jump-to").keyup(function(){
+		var val = $(this).val();
+		if(!/^[1-9]\d*$/.test(val)){
+			$(this).val("");
+		}
+	});
+	
+	var searchForm = $("#getInterShortMessageForm");
+
+	function getInterShortMessage(){
+		var goalPage = 1;
+        if(!isSessionValid()){return}
+        searchForm.find("#goalPage").val(goalPage);
+		searchForm.submit();
+	}
+	
+	function getPageByNum(goalPage){
+        if(!isSessionValid()){return}
+        searchForm.find("#goalPage").val(goalPage);
+		searchForm.submit();
+	}
+	
+	var reloadFun = function(){
+// 		var goalPage = $('#currentPage').val();
+// 		getPageByNum(goalPage);
+
+        var goalPage = 1;
+        if(!isSessionValid()){return}
+		searchForm.find("#goalPage").val(goalPage);
+		searchForm.submit();
+	}
+
+	 function prePage(){
+			var hasPreviousPage = $('#hasPreviousPage').val();
+			if(hasPreviousPage != "true"){
+				layer.alert("已经首页！");
+				return;
+			}
+			var goalPage = $('#currentPage').val()-1;
+			getPageByNum(goalPage);
+		}
+		
+		function afterPage(){
+			var hasNextPage = $('#hasNextPage').val();
+			if(hasNextPage != "true"){
+				layer.alert("已经是最后一页！");
+				return;
+			}
+			var goalPage = parseInt($('#currentPage').val())+1;
+			getPageByNum(goalPage);
+		}
+		
+		function jumpToPage(){
+			var jumpPage =  $('#jump-to').val();
+			if(jumpPage == ""){
+				layer.alert("请输入跳转的页数");
+				return;
+			}
+			
+			var goalPage =parseInt(jumpPage);
+			if(goalPage <1){
+				goalPage = 1;
+			}
+		
+			var lastPage = parseInt($('#totalPages').val());
+			if(goalPage > lastPage){
+				goalPage = lastPage;
+			}
+			
+			getPageByNum(goalPage);
+		}
+		
+		function firstPage(){
+			var goalPage = 1;
+			getPageByNum(goalPage);
+		}
+		
+		function lastPage(){
+			var goalPage = $('#totalPages').val();
+			getPageByNum(goalPage);
+		}
+
+
+		/*]]>*/
+		</script>
+
+</html>

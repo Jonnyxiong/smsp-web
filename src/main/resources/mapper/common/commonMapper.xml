@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common">
+	
+	<resultMap id="SmsClientIdentifyLogPoMap" type="com.ucpaas.smsp.model.po.SmsClientIdentifyLogPo" >
+	    <id column="id" property="id" jdbcType="BIGINT" />
+	    <result column="date" property="date" jdbcType="DATE" />
+	    <result column="clientid" property="clientid" jdbcType="VARCHAR" />
+	    <result column="identify" property="identify" jdbcType="INTEGER" />
+	    <result column="update" property="update" jdbcType="TIMESTAMP" />
+	    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  	</resultMap>
+
+	<!-- 查询在时间范围内存在的表格 -->
+	<select id="getExistTable" resultType="map">
+		SELECT
+			t.table_name
+		FROM
+			v_table t
+		WHERE
+			t.table_name IN
+		<foreach collection="list" item="i" open="(" close=")" separator=",">
+			#{i}
+		</foreach>
+	</select>
+	
+	<!-- 查询账号状态和资质认证状态 -->
+	<select id="getClientAccountStatus" resultType="map">
+		SELECT
+			oauth_status AS oauthStatus,
+			status AS accountStatus
+		FROM
+			t_sms_account
+		WHERE
+			clientid = #{clientId}
+	</select>
+	
+	<select id="getSmsClientIdentifyLogForAll" parameterType="map" resultMap="SmsClientIdentifyLogPoMap" >
+		SELECT
+			id,
+			date,
+			clientid,
+			identify
+		FROM 
+			t_sms_client_identify_log
+		WHERE 
+			clientid = #{clientid}
+		ORDER BY date
+	</select>
+	
+</mapper> 

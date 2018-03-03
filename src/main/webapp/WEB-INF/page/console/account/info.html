@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+	<meta charset="UTF-8"/>
+	<title>云之讯-短信平台</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="baidu-site-verification" content="zNwez22Bcq"/>
+	<meta name="google-site-verification" content="6hC_46bMT6_bGxmL_Ec5V_7xnPSnQBhQBl8y3MtfoFc" />
+	<meta name="Baiduspider" content="noarchive"/>
+	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+	<link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+	<link rel='stylesheet' type='text/css' href='/font/iconfont.css' th:href="@{/font/iconfont.css}"/>
+	<link rel='stylesheet' type='text/css' href='/css/main.css' th:href="@{/css/main.css}"/>
+</head>
+<body>
+	<div id="wrap" class="clearfix">
+		<!-- 左侧导航栏 bf-->
+		<div id="sidebar">
+			<div class="logo">
+			    <a href="/" title="云之讯"><img src="/img/logo2.png" alt="云之讯" /></a>
+			</div>
+			<div class="nav">
+			    <ul>
+					<li><a href="/console" th:if="${accountModel.paytype ne 1}" ><span class="iconfont icon-shouyeshouye"></span>首页</a></li>
+			        <li>
+			            <a href="javascript:void(0)"><span class="iconfont icon-duanxin"></span>传统短信<i></i></a>
+			            <ul class="sub-nav">
+			                <li><a href="/console/bussiness/send.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信发送<span></span></a></li>
+			                <li><a href="/console/bussiness/template.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信模板管理<span></span></a></li>
+			                <li><a href="/console/bussiness/record.html"  class="">短信发送记录<span></span></a></li>
+			                <li><a href="/console/bussiness/statistics.html" class="">短信数据统计<span></span></a></li>
+			                <li><a href="/console/bussiness/price.html"  class="">国际短信报价<span></span></a></li>
+			            </ul>
+			        </li>
+			        <li th:if="${session.LOGIN_USER_INFO.smsfrom==6}">
+			            <a href="javascript:void(0)"><span class="iconfont icon-caixin2"></span>彩印<i></i></a>
+			            <ul class="sub-nav">
+			                <li><a href="/console/mms/send.html" class="">彩印发送<span></span></a></li>
+			                <li><a href="/console/mms/template.html" class="">彩印模版管理<span></span></a></li>
+			                <li><a href="/console/mms/record.html"  class="">彩印发送记录<span></span></a></li>
+			                <li><a href="/console/mms/ussdday.html" class="">彩印数据统计<span></span></a></li>
+			            </ul>
+			        </li>
+			        <li>
+			            <a href="javascript:void(0)"><span class="iconfont icon-qianbi01"></span>财务管理<i></i></a>
+			            <ul class="sub-nav">
+			                <li><a href="/console/order/list.html" class="">我的订单<span></span></a></li>
+			            </ul>
+			        </li>
+			        <li>
+			            <a href="javascript:void(0)" class="cur"><span class="iconfont icon-shenfenzheng"></span>账户管理<i></i></a>
+			            <ul class="sub-nav" style="display: block;">
+			                <li><a href="/console/account/info.html" class="cur">账户资料<span></span></a></li>
+			                <li><a href="/console/account/security.html" class="">账户安全<span></span></a></li>
+			            </ul>
+			        </li>
+			        <li>
+			            <a href="javascript:void(0)"><span class="iconfont icon-bangzhuzhongxin"></span>帮助中心<i class="show"></i></a>
+			            <ul class="sub-nav">
+			                <li><a href="/console/help/smsAccessIntroduce.html" class="">短信接入<span></span></a></li>
+			                <li><a href="/console/help/FAQ.html" class="">FAQ<span></span></a></li>
+			            </ul>
+			        </li>
+			    </ul>
+			</div>
+		</div>
+		<!-- 左侧导航栏 ef -->
+		<!-- 右边内容 bf -->
+		<div id="main">
+			<div class="main-con">
+				<div class="top acount-top clearfix">
+					<h1>账户资料</h1>
+					<div class="ft-r ">
+                        <a href="/console/quit" class="lay-out btn-white btn-small btn" th:href="@{/console/quit}">退出</a>
+                    </div>
+					<!--
+				<div class="top-r ft-r">
+					<span class="contact-phone" th:text="'联系电话：'+${accountModel.agentMobile}">联系电话：18689206965</span>
+				</div> -->
+				</div>
+				<div class="con-out">
+					<form id="mainForm">
+
+					<input type="hidden" id="clientId" name="clientId" th:value="${accountInfo.clientId}" />
+		          	 <div class="crumbs">
+						 <a href="javascript:;" class="active">基本资料</a>
+						 <a href="/console/qualification/view.html" th:if="${session.LOGIN_USER_INFO.smsfrom eq 6}" th:href="@{/console/qualification}">资质信息</a>
+					 </div>
+					<div class="content acount-content">
+						<div class="con-border clearfix">
+							<dl class="info1" style="width:45%;margin-left:10%;" >
+								<dt>客户ID：</dt>
+								<dd th:text="${accountInfo.clientId}">b00000</dd>
+								<dt>客户名称：</dt>
+								<dd th:text="${accountInfo.name}">九天玄女</dd>
+								<dt>客户账户状态：</dt>
+								<dd  th:switch="${accountInfo.status}">
+								  <span th:case="0">注册未激活</span>
+								  <span th:case="1">注册完成</span>
+								  <span th:case="5">冻结</span>
+								  <span th:case="6">注销</span>
+								  <span th:case="7">锁定</span>
+								</dd>
+								<dt>创建时间：</dt>
+								<dd th:text="${#calendars.format(accountInfo.createtime,'yyyy-MM-dd HH:mm:ss')}">
+									2016-11-26 16:45
+								</dd>
+								<dt>认证状态：</dt>
+								<dd th:switch="${accountInfo.oauthStatus}">
+								 	<span th:case="2">待认证</span>
+									<span th:case="3">已认证</span>
+									<span th:case="4">认证不通过</span>
+								</dd>
+								<dt>认证时间：</dt>
+								<dd th:text="${#calendars.format(accountInfo.oauthDate,'yyyy-MM-dd HH:mm:ss')}" th:if="${accountInfo.oauthDate}">
+									2016-11-26 16:45
+								</dd>
+								<dt>手机：</dt>
+								<dd th:text="${accountInfo.mobile }">18689245611</dd>
+								<dt>邮件：</dt>
+								<dd th:text="${accountInfo.email}">huangwenjie@ucpaas.com</dd>
+								<dt th:switch="${accountInfo.clientType}">
+									<span th:case="1">真实姓名：</span>
+									<span th:case="2">公司名称：</span>
+								</dt>
+								<dd th:text="${accountInfo.realname }"></dd>
+								<dt th:switch="${accountInfo.clientType}">
+									<span th:case="1">联系地址：</span>
+									<span th:case="2">公司地址：</span>
+								</dt>
+								<dd id="dd-addr" th:text="${accountInfo.province}+' '+${accountInfo.city}+' '+${accountInfo.area}+' '+${accountInfo.address}"   style="word-break:break-all;width:340px;"></dd>
+								
+		          				<input type="hidden" id="province" th:value="${accountInfo.province}" />
+		          				<input type="hidden" id="city" th:value="${accountInfo.city}" />
+		          				<input type="hidden" id="area" th:value="${accountInfo.area}" />
+		          				<input type="hidden" id="address" th:value="${accountInfo.address}" />
+							</dl>
+							<dl class="info2" style="width:45%;">
+								<dt>代理商ID：</dt>
+								<dd th:text="${accountInfo.agentId }"></dd>
+								<dt>状态报告获取方式：</dt>
+								<dd th:switch="${accountInfo.needreport}">
+									<span th:case="0">不获取</span>
+									<span th:case="1">推送简单状态报告</span>
+									<span th:case="2">推送透传状态报告</span>
+									<span th:case="3">用户主动拉取</span>
+								</dd>
+								<dt>是否需要审核：</dt>
+								<dd th:switch="${accountInfo.needaudit}">
+									<span th:case="0">不需要</span>
+									<span th:case="1">营销需要</span>
+									<span th:case="2">全部需要</span>
+									<span th:case="3">审核关键字</span>
+								</dd>
+								<dt>上行获取方式：</dt>
+								<dd th:switch="${accountInfo.needmo}">
+								  <span th:case="0">不需要</span>
+								  <span th:case="1">SMSP主动推送</span>
+								  <span th:case="3">用户主动拉取</span>
+								</dd>
+								
+								
+								<dt>IP白名单：<input type="hidden" id="hid-ip" th:value="${accountInfo.ip }"/></dt>
+								<dd id='dd-ip'></dd>
+
+								<div th:if="${session.LOGIN_USER_INFO.smsfrom eq 6}">
+									<dt>状态报告回调地址：</dt>
+									<dd id='dd-deliveryurl'  th:text="${accountInfo.deliveryurl }" style="word-break:break-all;width:340px;"></dd>
+									<input type="hidden" id="dl" th:value="${accountInfo.deliveryurl}"/>
+									<dt>上行回调地址：</dt>
+									<dd id='dd-mourl' th:text="${accountInfo.mourl}"  style="word-break:break-all;width:340px;"></dd>
+									<input type="hidden" id="ml" th:value="${accountInfo.mourl}"/>
+									<!-- 通知回调地址 -->
+									<dt>通知回调地址：</dt>
+									<dd id='dd-noticeurl' th:text="${accountInfo.noticeurl}"  style="word-break:break-all;width:340px;"></dd>
+									<input type="hidden" id="nl" th:value="${accountInfo.noticeurl}"/>
+								</div>
+								<div th:if="${session.LOGIN_USER_INFO.smsfrom eq 4}">
+									<dt>SGIP协议-客户上行IP：</dt>
+									<dd id='dd-moip'  th:text="${accountInfo.moip }" style="word-break:break-all;width:300px;"></dd>
+									<input type="hidden" id="mp" th:value="${accountInfo.deliveryurl}"/>
+									<dt>SGIP协议-客户上行端口：</dt>
+									<dd id='dd-moport' th:text="${accountInfo.moport}"  style="word-break:break-all;width:300px;"></dd>
+									<input type="hidden" id="mt" th:value="${accountInfo.moport}"/>
+									<dt>SGIP协议-客户节点编码：</dt>
+									<dd id='dd-nodeid' th:text="${accountInfo.nodeid}"  style="word-break:break-all;width:300px;"></dd>
+									<input type="hidden" id="nd" th:value="${accountInfo.nodeid}"/>
+								</div>
+								<dt>自扩展：</dt>
+								<dd  th:switch="${accountInfo.needextend}">
+								  <span th:case="0">不支持</span>
+								  <span th:case="1">支持</span>
+								</dd>
+								<dt>备注：</dt>
+								<dd th:text="${accountInfo.remarks }"></dd>
+							</dl>
+						</div>
+						<div class="modify-info">
+						<a href="javascript:;" onclick="toUpdate(this)" class="green-btn">修改资料</a>
+						<a href="javascript:;" id="back" style="visibility:hidden" onclick="back(this)" class="green-btn">返回</a>
+						</div>
+		
+					</div>
+					<div class="btm-copyright">
+						<p>© 2016 ucpaas.com 版权所有 粤ICP备14046848号</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 右边内容 ef -->
+	</div>
+<script type="text/javascript" src="/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>	
+<script type="text/javascript" src="/js/common.js" th:src="@{/js/common.js}"></script>
+<script type="text/javascript" src="/js/cityCascade/jquery.cityselect.js" th:src="@{/js/cityCascade/jquery.cityselect.js}"></script>
+<script src="/js/jquery.form.js" th:src="@{/js/jquery.form.js}"></script>
+
+<script type="text/javascript" src="/js/layer/layer.js" th:src="@{/js/layer/layer.js}"></script>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+ 	var ip = '';
+	var addrFlag = true;
+	var ipFlag = true;
+    var portFlag = true;
+    var urlFlag = true;
+	var moUrlFlag = true;
+	var noticeUrlFlag = true;
+    var smsfrom = [[${session.LOGIN_USER_INFO.smsfrom}]];
+	$(function(){
+//		$("#city_cascade").citySelect({
+//			 prov: "深圳",
+//          nodata: "none"
+//     });
+		
+		
+		var strs= new Array(); //定义一数组 
+		strs=$("#hid-ip").val().split(","); //字符分割 
+		for (i=0;i<strs.length ;i++ ){
+			if(strs[i] != null && strs[i] != '*'){
+				ip += strs[i] + ',';
+			}
+		} 
+		if(ip != ''){
+			ip = ip.substring(0, ip.lastIndexOf(','));
+		}
+//		if (ip != null && ip.indexOf('*,') >= 0) {
+//			ip = ip.replace('*,', '');
+//		}
+//		if (ip != null && ip.indexOf(',*') >= 0) {
+//			ip = ip.replace(',*', '');
+//		}
+		$("#dd-ip").text(ip);
+	});
+
+	
+	function toUpdate(btn){
+		var prov = $('#province').val();
+		var city =$('#city').val();
+		var dist = $('#area').val() ? $('#area').val(): 'none';
+		var addr = $('#address').val();
+		var dl = $("#dl").val();
+		var ml = $("#ml").val();
+		var nl = $("#nl").val();
+		$(btn).text("确认修改");
+		$(btn).attr('onclick','updateInfo(this)');
+		$("#back").removeAttr("style");
+		$("#dd-addr").html("<select class='prov' id='province' name='province'></select><select class='city' id='city' name='city' disabled='disabled'></select><select class='dist' name='area' id='area' disabled='disabled'></select><br/><input type='text' id='address' name='address' placeholder='详细地址（字数不能超过200）' value='"+addr+"' oninput='checkAddr()' onpropertychange='checkAddr()'/><span class='error'></span>");
+		if(smsfrom == 6){
+            $("#dd-deliveryurl").html("<input type='text' id='deliveryurl' name='deliveryurl' placeholder='输入回调地址 http(s)://' onblur='checkUrl()' value='"+dl+"'/><span class='error'></span>");
+            $("#dd-mourl").html("<input type='text' id='mourl' name='mourl' placeholder='输入回调地址 http(s)://' onblur='checkMoUrl()' value='"+ml+"'/><span class='error'></span>");
+            $("#dd-noticeurl").html("<input type='text' id='noticeurl' name='noticeurl' placeholder='输入回调地址 http(s)://' onblur='checkNoticeUrl()' value='"+nl+"'/><span class='error'></span>");
+        }else if(smsfrom == 4){
+            $("#dd-moip").html("<input type='text' id='moip' name='moip' placeholder='请输入上行IP' onblur='checkIp(this)' value='"+$("#dd-moip").text()+"'/><span class='error'></span>");
+            $("#dd-moport").html("<input type='text' id='moport' name='moport' placeholder='请输入上行端口' onblur='checkPort(this)' value='"+$("#dd-moport").text()+"'/><span class='error'></span>");
+            $("#dd-nodeid").html("<input type='text' id='nodeid' name='nodeid' placeholder='请输入节点编码' onblur='checkNodeid(this)' value='"+$("#dd-nodeid").text()+"'/><span class='error'></span>");
+        }
+
+		// 省市区三级联动(默认地址)
+		$("#dd-addr").citySelect({prov:prov, city:city, dist:dist}); 
+	}
+	
+	function back(btn){
+		$(btn).attr("disabled",true);
+		window.location.reload();
+	}
+
+    function checkAddr(){
+        var str = $("#address").val();
+        addrFlag = false;
+        if(str.trim() == ''){
+            $("#address ~ .error").html("详细地址不能为空");
+            return addrFlag;
+        }
+        if(str.length > 200){
+            $("#address ~ .error").html("字数不能超过200");
+            return addrFlag;
+        }
+        $("#address ~ .error").html("");
+        addrFlag = true;
+        return addrFlag;
+    }
+
+    function checkIp(thiss){
+        var str = thiss.value;
+        ipFlag = false;
+        if(str.trim() == ''){
+            $(thiss).siblings('.error').html("IP地址不能为空");
+            return ipFlag;
+        }
+        if(str.length > 512){
+            $(thiss).siblings('.error').html("IP地址长度不能超过512");
+            return ipFlag;
+        }
+        var ipArray = str.split(",");
+        for ( var pos in ipArray) {
+            var ip = $.trim(ipArray[pos]);
+            var reg = /^(((1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|[1-9])\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d|\*|\d+\/\d+)))$/;
+            if(!reg.test(ip)){
+//				$("#ip ~ .error").html("请输入合法的IP地址");
+                $(thiss).siblings('.error').html("请输入合法的IP地址");
+                return ipFlag;
+            }
+        }
+        $(thiss).siblings('.error').html("");
+        ipFlag = true;
+        return ipFlag;
+    }
+
+    function checkNodeid(thiss){
+        var str = thiss.value;
+        portFlag = false;
+        if(str.trim() == ''){
+            $(thiss).siblings('.error').html("节点编码不能为空");
+            return portFlag;
+        }
+        if(!/^\d{1,10}$/.test(str)){
+            $(thiss).siblings('.error').html("节点编码只能是1~10位的数字");
+            return portFlag;
+        }
+
+        $(thiss).siblings('.error').html("");
+        portFlag = true;
+        return portFlag;
+    }
+
+
+    function checkPort(thiss){
+        var str = thiss.value;
+        portFlag = false;
+        if(str.trim() == ''){
+            $(thiss).siblings('.error').html("端口号不能为空");
+            return portFlag;
+        }
+        if(!/^\d+$/.test(str)){
+            $(thiss).siblings('.error').html("端口号只能是数字");
+            return portFlag;
+        }
+        if(str > 65535 || str < 1){
+            $(thiss).siblings('.error').html("端口号取值范围 (0,65536]");
+            return portFlag;
+        }
+
+        $(thiss).siblings('.error').html("");
+        portFlag = true;
+        return portFlag;
+    }
+
+    function checkUrl(){
+        var value = $("#deliveryurl").val();
+        urlFlag = false;
+        if(value.trim() == ''){
+            urlFlag = true;
+            return urlFlag;
+        }
+        if(value.length > 100){
+            $("#deliveryurl ~ .error").html("回调地址长度不能超过100");
+            return urlFlag;
+        }
+        //下面的代码中应用了转义字符"\"输出一个字符"/"
+        var Expression = /^http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w-] .\/?%&=*)?/;
+        var objExp = new RegExp(Expression);
+        if(!objExp.test(value)){
+            $("#deliveryurl ~ .error").html("请输入合法的回调地址");
+            return urlFlag;
+        }
+        $("#deliveryurl ~ .error").html("");
+        urlFlag = true;
+        return urlFlag;
+    }
+	
+	function checkMoUrl(){
+		var value = $("#mourl").val();
+		moUrlFlag = false;
+		if(value.trim() == ''){
+			moUrlFlag = true;
+			return moUrlFlag;
+		}
+		if(value.length > 100){
+			$("#mourl ~ .error").html("回调地址长度不能超过100");
+			return moUrlFlag;
+		}
+		//下面的代码中应用了转义字符"\"输出一个字符"/"
+		var Expression = /^http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w-] .\/?%&=*)?/;
+		var objExp = new RegExp(Expression);
+		if(!objExp.test(value)){
+			$("#mourl ~ .error").html("请输入合法的回调地址");
+			return moUrlFlag;
+		}
+		$("#mourl ~ .error").html("");
+		moUrlFlag = true;
+		return moUrlFlag;
+	}
+	
+	function checkNoticeUrl(){
+		var value = $("#noticeurl").val();
+		noticeUrlFlag = true;
+		if(value.trim() == ''){
+
+			noticeUrlFlag = true;
+
+			return noticeUrlFlag;
+		}
+		if(value.length > 100){
+			$("#noticeurl ~ .error").html("回调地址长度不能超过100");
+			return noticeUrlFlag;
+		}
+		//下面的代码中应用了转义字符"\"输出一个字符"/"
+		var Expression = /^http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w-] .\/?%&=*)?/;
+		var objExp = new RegExp(Expression);
+		if(!objExp.test(value)){
+			$("#noticeurl ~ .error").html("请输入合法的回调地址");
+			return noticeUrlFlag;
+		}
+		$("#noticeurl ~ .error").html("");
+		noticeUrlFlag = false;
+		return noticeUrlFlag;
+	}
+	
+	function updateInfo(btn){
+//		$(btn).attr("disabled",true);
+
+		var clientId = $("#clientId").val();
+		var prov = $("#province").val();
+		var city = $("#city").val();
+		var area = $("#area").val();
+		var addr = $("#address").val();
+// 		var ip = $("#ip").val();
+		var deliveryurl = $("#deliveryurl").val();
+		var mourl = $("#mourl").val();
+		var noticeurl = $("#noticeurl").val();
+
+		checkAddr();
+        if(smsfrom == 6){
+
+            checkUrl();
+            checkMoUrl();
+            checkNoticeUrl();
+        }else if(smsfrom == 4){
+
+            checkIp($('#moip')[0]);
+            checkPort($('#moport')[0]);
+            checkNodeid($('#nodeid')[0]);
+        }
+
+        if (!addrFlag || !ipFlag || !portFlag || !urlFlag || !moUrlFlag) {
+
+            return false;
+        }
+		var url = /*[[@{/console/account/update}]]*/'/account/update';
+		layer.confirm("确认修改?", function(index){
+
+            var options = {
+                success : function(data) {
+
+                    if(data == ""){
+                        //session超时
+                        return;
+                    }
+
+//                    $(btn).attr("disabled", false);
+                    if (data.result == null) {
+                        layer.msg("服务器错误，请联系管理员" , {icon: 2});
+                        return;
+                    }
+                    if(data.result == "success"){
+                        layer.alert(data.msg, {icon: 1},function(){
+                            window.location.reload();
+                        });
+                    }else{
+                        layer.alert(data.msg, {icon: 2});
+                    }
+                },
+                async: true,
+                url :  url,
+                type : "post",
+                timeout : 30000
+            };
+            $("#mainForm").ajaxSubmit(options);
+
+//			$.ajax({
+//				type : "post",
+//				url : url,
+//				data : {
+//					clientId: clientId,
+//					province:prov,
+//					city:city,
+//					area:area,
+//					address:addr,
+//// 					ip : ip,
+//					deliveryurl : deliveryurl,
+//					mourl : mourl,
+//					noticeurl : noticeurl
+//				},
+//				complete:function(XMLHttpRequest,textStatus){
+//			         var sessionstatus=XMLHttpRequest.getResponseHeader("sessionstatus"); //通过XMLHttpRequest取得响应头，sessionstatus，
+//				         if(sessionstatus=="timeout"){
+////				        	alert("登录超时,请重新登录！");
+//				            //如果超时就处理 ，指定要跳转的页面
+//				        	var url = "${ctx}/login";
+//		 					location.href = url;
+//				         }
+//			          },
+
+//			});
+		});
+	}
+	
+
+	/*]]>*/
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8"/>
+	<meta content="云之讯,云通讯,云通讯平台" name="keywords"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<title>云之讯—融合通讯开放平台让通讯更简单</title>
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"/>
+	<link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+    <link rel='stylesheet' type='text/css' href='/css/reset.css' th:href="@{/css/reset.css}"/>
+    <link rel="stylesheet" type="text/css" href="/css/swiper.min.css" th:href="@{/css/swiper.min.css}"/>
+    <link rel='stylesheet' type='text/css' href="/css/style.css" th:href="@{/css/style.css}"/>
+    <script type="text/javascript" src="/js/jquery-3.0.0.min.js" th:src="@{/js/jquery-3.0.0.min.js}"></script>	
+    <script type="text/javascript" src="/js/validate/smsp.validate.js" th:src="@{/js/validate/smsp.validate.js}"></script>
+    <script type="text/javascript" src="/js/base.js" th:src="@{/js/base.js}"></script>
+    <script type="text/javascript" src="/js/swiper.min.js" th:src="@{/js/swiper.min.js}"></script> 
+    <script type="text/javascript" src="/js/jquery.form.js" th:src="@{/js/jquery.form.js}"></script> 
+    <script type="text/javascript" src="/js/layer/layer.js" th:src="@{/js/layer/layer.js}"></script>
+    <script type="text/javascript" src="/js/validate/jquery.validate.min.js" th:src="@{/js/validate/jquery.validate.min.js}"></script>
+    <!--[if lt IE 9]>
+    <style type="text/css">
+    	div.header{position:inherit};
+    </style>
+    <![endif]--> 
+</head>
+<!-- 在线体验 -->
+<body>  
+    <!--[if lt IE 9]>
+ 	<div style="background:yellow;width:100%;text-align:center;"><span style="color:red">您的浏览器版本过低，支持浏览器：Chrome 42+、Firefox 41+、IE 9+、Opera 29+</span></div>
+ 	<![endif]--> 
+	<!--公共头部 bof-->
+    <div class="header">
+        <div class="header_wp clearfix">
+            <div class="logo ft-l">
+                <h1>                
+                    <a href="/official/index.html" title="云之讯" th:href="@{/}"><img src="/img/logo.png" alt="云之讯.短信平台" th:src="@{/img/logo.png}"/></a>
+                </h1>
+            </div>
+            <div class="ft-r clearfix">
+                <div class="nav ft-l">
+                    <ul>
+                        <li><a href="/official/index.html"  th:href="@{/}">首页</a></li>
+                        <li  class="active"><a href="/official/product.html"  th:href="@{/}">产品介绍</a></li>
+                        <li><a href="/official/experience.html" th:href="@{/experience.html}">免费体验</a></li>
+                        <li class="alert-d"><a href="javascript:void(0)">招商代理</a></li>
+                    </ul>
+                </div>
+                <div class="login ft-l" >
+            		<a href="/console/login.html" class="login"  th:href="@{/console/login}" th:if="${account == null}">登录</a>
+            		<a href="/console/index.html" class="login" th:href="@{/console}" th:if="${account !=null}">进入控制台</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--公共头部 eof-->
+    
+    <!--主体部分 bof-->
+    <div class="content index">
+    	<div class="ft_banner banner_box" id="banner_box">
+            <div class="swiper-container reset-container">
+                <div class="swiper-wrapper">
+                
+                    <div class="swiper-slide slide2">
+                        <div class="slide-txt">
+                        	<img  alt="短信招商" src="/img/banner2-img.png" th:src="@{/img/banner2-img.png}" />
+                            <a href="javascript:void(0)">立即参加</a>
+                        </div>     
+                    </div>
+                    <div class="swiper-slide slide1">
+                        <div class="slide-txt">
+                            <h1><span style="font-size:80px;margin-right: 20px;">短信验证</span>实时、稳定、易用</h1>
+                            <b></b>
+                            <p>终端用户2亿以上，90000+注册开发者的选择</p>
+                            <a href="/official/experience.html" th:href="@{/experience.html}">免费体验</a> 
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination" style="padding-bottom: 20px;"></div>
+                <div class="swiper-button-next swiper-btn"></div>
+                <div class="swiper-button-prev swiper-btn"></div>
+            </div>
+    	</div>
+
+        <div class="item_box box1">
+            <div class="item_box_wp">
+                <div class="title">
+                    <h3>三大短信产品</h3>
+                </div>
+                <div class="con">
+                    <ul class="clearfix">
+                        <li>
+                            <span class="icon"></span>
+                            <h5>行业短信</h5>
+                            <p>首创通道调度平台/5秒响应/实时反馈/稳定高效免维护</p>
+                        </li>
+                        <li>
+                            <span class="icon"></span>
+                            <h5>会员营销短信</h5>
+                            <p>实时互动，双向连接，企业与客户最佳联络者</p>
+                        </li>
+                        <li>
+                            <span class="icon"></span>
+                            <h5>国际短信</h5>
+                            <p>覆盖全球220+国家和地区，为企业海外市场拓展和客户服务增值</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="item_box box2">
+            <div class="item_box_wp">
+                <div class="title">
+                    <h3>使用场景</h3>
+                </div>
+                <div class="con tabs">
+                    <ul class="clearfix">
+                        <li><a class="tab active" data-item="userReg" data-toggle="pill" href="javascript:void(0)">用户注册</a></li>
+                        <li><a class="tab" data-item="payValid" data-toggle="pill" href="javascript:void(0)">支付认证</a></li>
+                        <li><a class="tab" data-item="logistic" data-toggle="pill" href="javascript:void(0)">物流提醒</a></li>
+                        <li><a class="tab" data-item="member" data-toggle="pill" href="javascript:void(0)">会员服务</a></li>
+                        <li><a class="tab" data-item="booking" data-toggle="pill" href="javascript:void(0)">订票信息</a></li>
+                        <li><a class="tab" data-item="bigEvent" data-toggle="pill" href="javascript:void(0)">重大事件通知</a></li>
+                    </ul>
+                    <div class="tab-content">
+                    <p id="userReg" class="tab-pane cur">通过手机号码验证用户身份，确保身份的真实性，验证码最快5秒到达，保证新用户不再流失。</p>
+                    <p id="payValid">确认支付、快捷支付、确认收货等资金转移的重要环节，通过手机短信验证身份，确保资金流向安全。</p>
+                    <p id="logistic">通过短信提醒告知买家商品的快点单号、物流状态，助力提升店铺服务质量，再创用户体验新高度。</p>
+                    <p id="member">会员短信提醒服务，节假日活动通知，促销活动推广。</p>
+                    <p id="booking">发送客户购票提醒短信，使客户掌握一手票务信息。</p>
+                    <p id="bigEvent">对社会生活、设备平台维护工作中的突发重大安全事件、设备故障发出警告，将警告信息第一时间通知到相关处理人员，确保重大事件、故障得到及时响应。</p>
+                    </div>
+                </div>
+                <div class="device-wp">
+                     <div class="devices">
+                        <div id="userReg2" class="device active">
+                            <div class="screen">
+                                <img src="/img/scene-img1.png" alt="用户注册" th:src="@{/img/scene-img1.png}"/>
+                            </div>
+                        </div>
+                        <div id="payValid2" class="device type-last">
+                            <div class="screen">
+                                <img src="/img/scene-img2.png" alt="支付认证" th:src="@{/img/scene-img2.png}"/>
+                            </div>
+                        </div>
+                        <div id="logistic2" class="device">
+                            <div class="screen">
+                                <img src="/img/scene-img3.png" alt="物流提醒" th:src="@{/img/scene-img3.png}"/>
+                            </div>
+                        </div>
+                        <div id="member2" class="device">
+                            <div class="screen">
+                                <img src="/img/scene-img4.png" alt="会员服务" th:src="@{/img/scene-img4.png}"/>
+                            </div>
+                        </div>
+                        <div id="booking2" class="device">
+                            <div class="screen">
+                                <img src="/img/scene-img5.png" alt="订票信息" th:src="@{/img/scene-img5.png}"/>
+                            </div>
+                        </div>
+                        <div id="bigEvent2" class="device type-first">
+                            <div class="screen">
+                                <img src="/img/scene-img6.png" alt="重大事件通知" th:src="@{/img/scene-img6.png}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="item_box box3">
+            <div class="item_box_wp">
+                <div class="title">
+                    <h3>我们的优势</h3>
+                </div>
+                <div class="con">
+                    <dl class="clearfix">
+                        <div>
+                            <dt>高到达率</dt>
+                            <dd>通过自主开发的分发系统以及资源配置系统做到智能路由，到达率高达99%</dd>
+                            <span class="mark"></span>
+                        </div>
+                        <div>
+                            <dt>接入方便</dt>
+                            <dd>开放的API接口，简单、高效对接多种主流开发语言与运行环境</dd>
+                            <span class="mark"></span>
+                        </div>
+                        <div>
+                            <dt>稳定安全</dt>
+                            <dd>多点部署，主力通道+备份通道；异常监控，规避突发风险，确保发送不堵车</dd>
+                            <span class="mark"></span>
+                        </div>
+                        <div>
+                            <dt>全球送达</dt>
+                            <dd>高冗余、多备份短信通道，支持全球215+国家和地区短信内容</dd>
+                            <span class="mark"></span>
+                        </div>
+                    </dl>              
+                </div>
+            </div>
+        </div>
+
+        <div class="item_box box4">
+            <div class="item_box_wp">
+                <div class="con">
+                    <ul>
+                        <li>
+                            <span class="icon"></span>
+                            <h5>三网合一</h5>
+                            <p>移动、联通、电信（106、1069）三网合一，支持170号段+自定义签名</p>
+                        </li>
+                        <li>
+                            <span class="icon"></span>
+                            <h5>实时监控</h5>
+                            <p>实时监控、响应资源峰值并发，实时查询、发送明细及状态报告</p>
+                        </li>
+                        <li>
+                            <span class="icon"></span>
+                            <h5>王者服务</h5>
+                            <p>7*24小时在线解答客户疑惑，提供一对一技术支持</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="item_box box5">
+            <div class="item_box_wp">
+                <div class="title">
+                    <h3>合作伙伴</h3>
+                    <p>云之讯的服务已涵盖各个领域，用户队伍在不断壮大</p>
+                </div>
+                <div class="con">
+                    <ul class="clearfix">
+                        <li>
+                            <img src="/img/msg-logo-1.png" alt="触宝" th:src="@{/img/msg-logo-1.png}"/>
+                            <h6>触宝</h6>
+                        </li>
+                        <li>
+                            <img src="/img/msg-logo-2.png" alt="光音网络" th:src="@{/img/msg-logo-2.png}" />
+                            <h6>光音网络</h6>
+                        </li>
+                        <li>
+                            <img src="/img/msg-logo-3.png" alt="有信" th:src="@{/img/msg-logo-3.png}" />
+                            <h6>有信</h6>
+                        </li>
+                        <li>
+                            <img src="/img/msg-logo-4.png" alt="康美医疗" th:src="@{/img/msg-logo-4.png}" />
+                            <h6>康美医疗</h6>
+                        </li>
+                        <li>
+                            <img src="/img/msg-logo-5.png" alt="快速问医生" th:src="@{/img/msg-logo-5.png}" />
+                            <h6>快速问医生</h6>
+                        </li>
+                        <li>
+                            <img src="/img/msg-logo-6.png" alt="杏仁医生" th:src="@{/img/msg-logo-6.png}" />
+                            <h6>杏仁医生</h6>
+                        </li>
+                        <li>
+                            <img src="/img/msg-logo-7.png" alt="泰笛洗涤" th:src="@{/img/msg-logo-7.png}" />
+                            <h6>泰笛洗涤</h6>
+                        </li>
+                        <li>
+                            <img src="/img/msg-logo-8.png" alt="云之家" th:src="@{/img/msg-logo-8.png}" />
+                            <h6>云之家</h6>
+                        </li>
+                    </ul>
+                    <div class="l-btn">
+                        <a class="last-btn" href="/official/experience.html" th:href="@{/experience.html}">立即体验</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--主体部分 eof-->
+
+    <!--公共底部 bof-->
+    <div class="footer">
+        <div class="footer_wp clearfix">
+            <div class="f-1 ft">
+                <h6>公司</h6>
+                <ul>
+                    <li><a href="javascript:void(0)">关于我们</a></li>
+                    <li><a href="javascript:void(0)">合作伙伴</a></li>
+                    <li><a href="javascript:void(0)">联系我们</a></li>
+                    <li><a href="javascript:void(0)">加入我们</a></li>
+                </ul>
+            </div>
+            <div class="f-2 ft">
+                <h6>商务合作</h6>
+                <dl>
+                    <dt>电话</dt>
+                    <dd>0755-86682088(8016) <br/> 13922820251</dd>
+                    <dt style="margin-top: 10px;">邮箱</dt>
+                    <dd>hezuo@ucpaas.com</dd>
+                </dl>
+            </div>
+            <div class="f-3 ft">
+                <img src="/img/qr-code.png" alt="云之讯官方微信" th:src="@{/img/qr-code.png}"/>
+                <p>官方微信</p>
+            </div>
+        </div>
+        <p class="copyright">© 2014-2018 深圳市云之讯网络技术有限公司   粤ICP备14046848号   增值电信业务经营许可证：粤B2-20140246 </p>
+    </div>
+    <!--公共底部 eof-->
+    
+    <!-- 代理商申请弹出框 -->
+	<div id="agentApplayBox"></div>
+	
+	<!--[if lt IE 9]>
+		<script  type="text/javascript">
+			alert('您的浏览器版本过低，请升级后再使用。');
+		</script>
+	<![endif] -->
+	<script  th:inline="javascript">
+	/*<![CDATA[*/
+    <!-- Initialize Swiper -->
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        paginationClickable: true,
+        spaceBetween: 30,
+        centeredSlides: true,
+        autoplay: 6000,
+        autoplayDisableOnInteraction: false,
+        loop:true
+    });
+
+	/*]]>*/
+	</script>
+ 
+</body>
+</html>

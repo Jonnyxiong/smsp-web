@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="smsSend">
+
+	<!-- 查询ip和手机号码体验短信次数 -->
+	<select id="smsExperienceCheck" resultType="map">
+		SELECT
+			SUM(IF(t.ip = #{ip}, 1, 0)) AS ipExpNum,
+			SUM(IF(t.mobile = #{mobile}, 1, 0)) AS mobileExpNum
+		FROM
+			t_sms_experience t
+		WHERE
+			t.createdate = #{date}
+		AND t.status = 1
+	</select>
+	
+	<!-- 插入体验短信记录 -->
+	<insert id="insertExpRecord">
+		INSERT INTO `t_sms_experience` (
+			`id`,
+			`mobile`,
+			`ip`,
+			`smsid`,
+			`smstype`,
+			`status`,
+			`createdate`
+		)
+		VALUES
+			(
+				NULL,
+				#{mobile},
+				#{ip},
+				#{smsid},
+				#{smstype},
+				#{status},
+				NOW()
+			)
+	</insert>
+	
+	<!-- 查询客户可用订单数 -->
+	<select id="smsAccUsableCheck" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			t_sms_client_order
+		WHERE
+			client_id = #{client_id}
+		AND product_type in (#{product_type},#{product_type1})
+		AND status = 1
+	</select>
+	
+	<!-- 查询clientId的付费类型 0：预付费，1：后付费 -->
+	<select id="getClientPaytype" resultType="java.lang.Integer">
+		SELECT paytype FROM t_sms_account WHERE clientid = #{clientId};
+	</select>
+	
+	<select id="getClientAccountStatus" resultType="map">
+		SELECT
+			oauth_status AS oauthStatus,
+			status AS accountStatus
+		FROM
+			t_sms_account
+		WHERE
+			clientid = #{clientId}
+	</select>	
+	
+	<select id="checkIsExistOauthPicInfo" resultType="map">
+		SELECT 
+			count(*) as picNum 
+		FROM 
+			t_sms_oauth_pic
+		WHERE 
+			client_id = #{client_id}
+	</select>
+</mapper> 

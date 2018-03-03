@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>云之讯-短信平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="baidu-site-verification" content="zNwez22Bcq" />
+    <meta name="google-site-verification" content="6hC_46bMT6_bGxmL_Ec5V_7xnPSnQBhQBl8y3MtfoFc" />
+    <meta name="Baiduspider" content="noarchive"/>
+	<link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+    <link rel='stylesheet' type='text/css' href='/font/iconfont.css' th:href="@{/font/iconfont.css}"/>
+    <link rel='stylesheet' type='text/css' href='/css/main.css' th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" type="text/css" href="/js/jquery-ui/css/theme/all.css" th:href="@{/js/jquery-ui/css/theme/all.css}"/>
+    <link rel='stylesheet' type='text/css' href='/js/jedate/skin/jedate.css' th:href="@{/js/jedate/skin/jedate.css}"/>
+</head>
+<!-- 短信发送 -->
+<body class="sent">
+	<div id="wrap" class="clearfix">
+		<!-- 左侧导航栏 bf-->
+		<div id="sidebar">
+			<div class="logo">
+                <a href="/" title="云之讯"><img src="/img/logo2.png" alt="云之讯" /></a>
+            </div>
+            <div class="nav">
+                <ul>
+					<li><a href="/console" th:if="${accountModel.paytype ne 1}" ><span class="iconfont icon-shouyeshouye"></span>首页</a></li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-duanxin"></span>传统短信<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/bussiness/send.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信发送<span></span></a></li>
+                            <li><a href="/console/bussiness/template.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信模板管理<span></span></a></li>
+                            <li><a href="/console/bussiness/record.html"  class="">短信发送记录<span></span></a></li>
+                            <li><a href="/console/bussiness/statistics.html" class="">短信数据统计<span></span></a></li>
+                            <li><a href="/console/bussiness/price.html"  class="">国际短信报价<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li class="cur" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">
+                        <a href="javascript:void(0)" class="cur"><span class="iconfont icon-caixin2"></span>彩印<i class="show"></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/mms/send.html" class="">彩印发送<span></span></a></li>
+                            <li><a href="/console/mms/template.html" class="">彩印模版管理<span></span></a></li>
+                            <li><a href="/console/mms/record.html"  class="">彩印发送记录<span></span></a></li>
+                            <li><a href="/console/mms/ussdday.html" class="cur">彩印数据统计<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-qianbi01"></span>财务管理<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/order/list.html" class="">我的订单<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class=""><span class="iconfont icon-shenfenzheng"></span>账户管理<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/account/info.html" class="">账户资料<span></span></a></li>
+                            <li><a href="/console/account/security.html" class="">账户安全<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-bangzhuzhongxin"></span>帮助中心<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/help/smsAccessIntroduce.html" class="">短信接入<span></span></a></li>
+                            <li><a href="/console/help/FAQ.html" class="">FAQ<span></span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+		</div>
+		<!-- 左侧导航栏 ef -->
+
+		<!-- 右边内容 bf -->
+		<div id="main">
+			<div class="main-con">
+				<div class="top business-top clearfix">
+					<h1>短信数据统计</h1>
+					<div class="ft-r ">
+                        <a href="/console/login.html" class="lay-out btn-white btn-small btn" th:href="@{/console/quit}">退出</a>
+                    </div>
+                    <!-- 
+                    <div class="top-r ft-r">
+						<span class="contact-phone" th:text="'联系电话：'+${accountModel.agentMobile}">联系电话：18689206965</span>
+					</div> -->
+				</div>
+				<div class="con-out">
+					<div class="crumbs">
+						<a href="/console/mms/ussdday.html" th:href="@{/console/mms/ussdday}">USSD日统计</a>
+						<a href="/console/mms/ussdmonthly.html"  th:href="@{/console/mms/ussdmonthly}">USSD月统计</a>
+						<a href="/console/mms/flashday.html"  th:href="@{/console/mms/flashday}">闪信日统计</a>
+						<a href="/console/mms/flashmonthly.html" class="active"  th:href="@{/console/mms/flashmonthly}">闪信月统计</a>
+					</div>
+
+					<div class="col-option">
+						<div class="order-option clearfix">
+							<div class="option-r ft-r">
+								<a href="avascript:;" class="btn btn-green" onclick="exportSmsRecord(this)">导出</a>
+							</div>
+						</div>
+					</div>
+					<form id="dayStatForm" action="${ctx}/bussiness/bussinessData" method="post" th:action="@{/console/mms/flashmonthly}">
+						<div class="content count-content">
+							<div class="count count1">
+								<!-- <h3>日发送统计</h3> -->
+								<div class="table-out">
+									<table>
+										<thead>
+											<tr>
+												<th>时间</th>
+												<th>提交条数</th>
+												<th>发送条数</th>
+												<th>成功条数</th>
+												<th>平台拦截条数</th>
+												<th>失败条数</th>
+												<th>计费条数</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="v: ${monthStatPage.list}">
+												<td th:text="${v.date}"></td>
+												<td th:text="${v.usersmstotal}"></td>
+												<td th:text="${v.sendTotal}"></td>
+												<td th:text="${v.successTotal}"></td>
+												<td th:text="${v.interceptTotal}"></td>
+												<td th:text="${v.failTotal}"></td>
+												<td th:text="${v.chargeTotal}"></td>
+											</tr>
+											
+											<!-- 分页工具条 -->
+											<tr>
+												<td colspan="3" class="clearfix" style="width:40%;text-align:left">
+													<span style="font-size: 12px;padding-left:20px;">
+													注：因状态报告返回有时延，72小时以内的数据仅供参考。
+													</span>
+												</td>
+												<td colspan="5" class="clearfix" style="width: 60%;">
+													<div class="pagination ft-r clearfix" >
+														<div class="show-count ft-l">共有<span class="allCount" th:text="${monthStatPage.totalCount}"> 100 </span>条，每页显示
+															<span class="select"><span th:text="${monthStatPage.pageRowCount}">5</span>
+															<ul class="show-num">
+																<li>5</li>
+																<li>10</li>
+																<li>15</li>
+																<li>20</li>
+															</ul>
+															</span> 条
+														</div>
+														
+														<ul class="pre-after ft-l">
+															<li class="first"><a href="javascript:;" onclick="topPage('#dayStatForm')"></a></li>
+															<li class="pre"><a href="javascript:;" onclick="previousPage('#dayStatForm')"></a></li>
+															<li class="now"><a href="" th:text="${monthStatPage.currentPage}+'/'+${monthStatPage.totalPage}">10</a></li>
+															<li class="after"><a href="javascript:;" onclick="nextPage('#dayStatForm')"></a></li>
+															<li class="last"><a href="javascript:;" onclick="bottomPage('#dayStatForm')"></a></li>
+														</ul>
+														<div class="ft-l">
+															<input id="jump2PageNum" type="text" class="jump-to" name="jump-to" style="position: relative; top: -5px;width:24px;"/>
+															<a href="javascript:;" onclick="jump2Page()" class="btn-page">跳转</a>
+														</div>
+													</div>	
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<input id="dayStatForm_currentPage" type="hidden" name="currentPage" th:value="${monthStatPage.currentPage}"/>
+						<input id="pageRowCount" type="hidden" name="pageRowCount" th:value="${monthStatPage.pageRowCount}"/>
+						<input id="dayStatForm_totalCount" type="hidden" th:value="${monthStatPage.totalCount}"/>
+						<input id="dayStatForm_totalPage" type="hidden" th:value="${monthStatPage.totalPage}"/>
+						<input id="fileName" type="hidden" name="fileName" />
+					</form>
+					<div class="btm-copyright">
+						<p>© 2016 ucpaas.com 版权所有 粤ICP备14046848号</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 右边内容 ef -->
+	</div>
+ 
+</body>
+<script src="/js/jquery.min.js"  th:src="@{/js/jquery.min.js}"></script>
+<script src="/js/layer/layer.js"  th:src="@{/js/layer/layer.js}"></script>
+<script src="/js/jedate/jedate.js" th:src="@{/js/jedate/jedate.js}"></script>
+<script type="text/javascript" src="/js/jquery.form.js" th:src="@{/js/jquery.form.js}"></script>
+<script src="/js/common.js" th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+
+	//查询某一页
+	function getPageByNum($searchForm, pageNum){
+		var formId = $searchForm.attr("id");
+		if(/^[1-9]\d*$/.test(pageNum)){
+			$searchForm.find("#" + formId + "_currentPage").val(pageNum);
+		}
+        if(!isSessionValid()){return}
+        $searchForm.submit();
+	}
+	
+	// 首页
+	function topPage(searchForm){
+		var $searchForm = $(searchForm);
+		var formId = $searchForm.attr("id");
+		var currentPage = Number($searchForm.find("#" + formId + "_currentPage").val());
+		if(currentPage == 1){
+			return;
+		}
+		getPageByNum($searchForm, 1);
+	}
+	
+	// 最后一页
+	function bottomPage(searchForm){
+		var $searchForm = $(searchForm);
+		var formId = $searchForm.attr("id");
+		var currentPage = Number($searchForm.find("#" + formId + "_currentPage").val());
+		var totalPage = Number($searchForm.find("#" + formId + "_totalPage").val());
+		if(currentPage == totalPage){
+			return;
+		}
+		getPageByNum($searchForm, totalPage);
+	}
+	
+	// 上一页
+	function previousPage(searchForm){
+		var $searchForm = $(searchForm);
+		var formId = $searchForm.attr("id");
+		var currentPage = Number($searchForm.find("#" + formId + "_currentPage").val());
+		var previousPage = currentPage - 1;
+		if(currentPage == 1){
+			return;
+		}
+		getPageByNum($searchForm, previousPage);
+	}
+	
+	// 下一页
+	function nextPage(searchForm){
+		var $searchForm = $(searchForm);
+		var formId = $searchForm.attr("id");
+		var currentPage = Number($searchForm.find("#" + formId + "_currentPage").val());
+		var totalPage = Number($searchForm.find("#" + formId + "_totalPage").val());
+		var nextPage = currentPage + 1;
+		if(currentPage == totalPage){
+			return;
+		}
+		getPageByNum($searchForm, nextPage);
+	}
+	
+	function jump2Page(){
+		var jump2PageNum = $('#jump2PageNum').val();
+		var totalPage = Number($("#dayStatForm_totalPage").val());
+		if(jump2PageNum<1 || jump2PageNum>totalPage){
+			return;
+		}
+		getPageByNum($('#dayStatForm'), jump2PageNum);
+	}
+
+
+
+function checkRowCount(){
+    return $("tbody").children("tr").length > 1
+}
+// 导出Excel
+function exportSmsRecord(obj){
+
+
+    //查看是否有数据
+    var flag = checkRowCount();
+    if(flag == false){
+        layer.alert('根据条件查询到的记录数为0，导出Excel文件失败', {icon: 2});
+        return;
+    }
+
+
+    var options = {
+        beforeSubmit : function() {
+            ityzl_SHOW_LOAD_LAYER("正在生成报表，请稍后...");
+        },
+        success : function(result) {
+            layer.closeAll(); //疯狂模式，关闭所有层
+            if(result.success){
+                $("#fileName").val(result.data);
+                var form = $("#dayStatForm");
+                var action = form.attr("action");
+                form.attr("action",  /*[[@{/console/bussiness/downloadExcel}]]*/"bussiness/downloadExcel").submit();
+                form.attr("action", action);
+            }
+        },
+        async: true,
+        url :  /*[[@{/console/mms/exportFlashMonthly}]]*/"/console/bussiness/exportflashmonthly",
+        type : "post",
+        timeout : 30000
+    };
+    $("#dayStatForm").ajaxSubmit(options);
+}
+	/*]]>*/
+	</script>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8"/>
+	<title>云之讯-短信平台</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="baidu-site-verification" content="zNwez22Bcq"/>
+	<meta name="google-site-verification" content="6hC_46bMT6_bGxmL_Ec5V_7xnPSnQBhQBl8y3MtfoFc" />
+	<meta name="Baiduspider" content="noarchive"/>
+	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/> 
+	<link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+	<link rel='stylesheet' href='/font/iconfont.css' th:href="@{/font/iconfont.css}"/>
+	<link rel='stylesheet' href='/css/main.css' th:href="@{/css/main.css}"/>
+	<script src="/js/jquery.min.js"  th:src="@{/js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/layer/layer.js}"></script>
+
+</head>
+<body>
+	<div id="wrap" class="clearfix">
+		<!-- 左侧导航栏 bf-->
+		<div id="sidebar">
+			<div class="logo">
+                <a href="/" title="云之讯"><img src="/img/logo2.png" alt="云之讯" /></a>
+            </div>
+            <div class="nav">
+                <ul>
+					<li><a href="/console" th:if="${accountModel.paytype ne 1}" ><span class="iconfont icon-shouyeshouye"></span>首页</a></li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-duanxin"></span>传统短信<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/bussiness/send.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信发送<span></span></a></li>
+                            <li><a href="/console/bussiness/template.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信模板管理<span></span></a></li>
+                            <li><a href="/console/bussiness/record.html"  class="">短信发送记录<span></span></a></li>
+                            <li><a href="/console/bussiness/statistics.html" class="">短信数据统计<span></span></a></li>
+                            <li><a href="/console/bussiness/price.html"  class="">国际短信报价<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li th:if="${session.LOGIN_USER_INFO.smsfrom==6}">
+                        <a href="javascript:void(0)"><span class="iconfont icon-caixin2"></span>彩印<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/mms/send.html" class="">彩印发送<span></span></a></li>
+                            <li><a href="/console/mms/template.html" class="">彩印模版管理<span></span></a></li>
+                            <li><a href="/console/mms/record.html"  class="">彩印发送记录<span></span></a></li>
+                            <li><a href="/console/mms/ussdday.html" class="">彩印数据统计<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-qianbi01"></span>财务管理<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/order/list.html" class="">我的订单<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class=""><span class="iconfont icon-shenfenzheng"></span>账户管理<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/account/info.html" class="">账户资料<span></span></a></li>
+                            <li><a href="/console/account/security.html" class="">账户安全<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li class="cur">
+                        <a href="javascript:void(0)" class="cur"><span class="iconfont icon-bangzhuzhongxin"></span>帮助中心<i class="show"></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/help/smsAccessIntroduce.html" class="">短信接入<span></span></a></li>
+                            <li><a href="/console/help/FAQ.html" class="cur">FAQ<span></span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+		</div>
+		<!-- 左侧导航栏 ef -->
+
+		<!-- 右边内容 bf -->
+		<div id="main">
+			<div class="main-con">
+				<div class="top help-top clearfix">
+					<h1>帮助中心</h1>
+					<div class="ft-r ">
+                        <a href="/console/login.html" class="lay-out btn-white btn-small btn" th:href="@{/console/quit}">退出</a>
+                    </div>
+                    <!-- 
+					<div class="top-r ft-r">
+						<span class="contact-phone" th:text="'联系电话：'+${accountModel.agentMobile}">联系电话：18689206965</span>
+					</div> -->
+				</div>
+				<div class="con-out">
+					<div class="crumbs not"><i style="color:#838f97;">帮助中心  /</i>  常见问题FAQ</div>
+					<div class="content help-content clearfix">
+						<div class="help-r">
+							<div class="QA">
+								<h3>常见问题FAQ</h3>
+								<div class="q-list">
+									<dl>
+										<dt><span class="mark">Q</span>你们公司做短信多少年了？</dt>
+										<dd>我们公司是14年4月成立的，但我们团队05年就一直做电信增值业务，主要是代理三大运营商语音线路、短信通道等。</dd>
+										<dt><span class="mark">Q</span>能发三网吗？</dt>
+										<dd>能，我们和三大运营商都有合作关系，短信能发三网（170号段也支持）。。</dd>
+										<dt><span class="mark">Q</span>三网显什么号码？</dt>
+										<dd>我们用的是106、1069三网合一通道（1069工信部申请特批，三大运商落地，三网手机统一显示1069）。</dd>
+										<dt><span class="mark">Q</span>能自定义签名吗？</dt>
+										<dd>可以自定义签名，但需要报备。</dd>
+										<dt><span class="mark">Q</span>短信发送几秒收到？</dt>
+										<dd>最快3-5秒，平均10秒。</dd>
+										<dt><span class="mark">Q</span>会不会有延时？</dt>
+										<dd>我们短信通道最大下发能力可扩展至1000条/秒，所以不会造成堵塞延时，一般延时都是手机端信号原因造成的，不会到1%。</dd>
+										<dt><span class="mark">Q</span>会不会有收不到的情况？</dt>
+										<dd>手机号码黑名单、第三方软件拦截、手机收件箱满等，会有1%左右的概率。</dd>
+										<dt><span class="mark">Q</span>怎么保障短信的稳定？</dt>
+										<dd>我们公司和全国30多个地市的运营商都有合作，短信通道充足，确保某条通道出问题能随时有备份。另外，我们公司有系统自动监测机制（系统根据回执自动统计短信发送数度和成功率）和人工自动监测机制（设置短信每1小时发送到监控人员手机，随时了解短信发送情况）通过智能路由功能自动切换优质通道。</dd>
+										<dt><span class="mark">Q</span>你们公司有哪些知名客户？</dt>
+										<dd>阿里、触宝、嗒嗒巴士、优步（和优步美国供应商合作）、聚美优品（语音短信）等。</dd>
+										<dt><span class="mark">Q</span>怎么和你们对接？</dt>
+										<dd>我们有HTTP、API、rest等接口可以对接，通过双方对接人建QQ讨论组沟通。</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="btm-copyright">
+						<p>© 2016 ucpaas.com 版权所有 粤ICP备14046848号</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 右边内容 ef -->
+	</div>
+<script src="/js/jquery.min.js"  th:src="@{/js/jquery.min.js}"></script>
+<script src="/js/common.js" th:src="@{/js/common.js}"></script>
+<script type="text/javascript">
+	$(function() {
+		$(".help-l li").click(function(event) {
+			$(this).children('a').toggleClass('cur').end().siblings().children('a').removeClass('cur');
+		});
+	})
+</script>
+</body>
+</html>

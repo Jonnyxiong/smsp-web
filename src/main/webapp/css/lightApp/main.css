@@ -1,0 +1,392 @@
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2017-02-04 18:02:08
+ * @version $Id$
+ */
+@-webkit-keyframes bling {
+  0% {
+    background-color: #00C9FB; }
+  25% {
+    background-color: #006D93; }
+  50% {
+    background-color: #005A79; }
+  75% {
+    background-color: #005870; } }
+@keyframes bling {
+  0% {
+    background-color: #00C9FB; }
+  25% {
+    background-color: #006D93; }
+  50% {
+    background-color: #005A79; }
+  75% {
+    background-color: #005870; } }
+
+@-webkit-keyframes border {
+  0% {
+    border-color: #00C9FB; }
+  25% {
+    border-color: #006D93; }
+  50% {
+    border-color: #005A79; }
+  75% {
+    border-color: #005870; } }
+
+@keyframes border {
+  0% {
+    border-color: #00C9FB; }
+  25% {
+    border-color: #006D93; }
+  50% {
+    border-color: #005A79; }
+  75% {
+    border-color: #005870; } }
+
+@-webkit-keyframes rotateMusic {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+@keyframes rotateMusic {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+.spinner {
+  margin: 100px auto;
+  width: 50px;
+  height: 60px;
+  text-align: center;
+  font-size: 10px; }
+
+.spinner > div {
+  background-color: #67CF22;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+  animation: stretchdelay 1.2s infinite ease-in-out; }
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s; }
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s; }
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s; }
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s; }
+
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% {
+    -webkit-transform: scaleY(0.4); }
+  20% {
+    -webkit-transform: scaleY(1); } }
+
+@keyframes stretchdelay {
+  0%, 40%, 100% {
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4); }
+  20% {
+    transform: scaleY(1);
+    -webkit-transform: scaleY(1); } }
+
+.load {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 99;
+  background: -webkit-gradient(linear, left top, left bottom, from(#050A14), to(#043F5B));
+  background: -webkit-linear-gradient(top, #050A14 0%, #043F5B 100%);
+  background: linear-gradient(to bottom, #050A14 0%, #043F5B 100%); }
+
+img {
+  border: 0 none; }
+
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box; }
+
+body {
+  background-color: #040E17; }
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; }
+
+.hide {
+  display: none; }
+
+.wrap {
+  background-image: url(../../img/lightApp/bg-h5.png);
+  -webkit-background-size: 100% 100%;
+          background-size: 100% 100%;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1; }
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10; }
+
+.music-switch {
+  width: 0.35rem;
+  height: 0.35rem;
+  -webkit-background-size: 100% 100%;
+          background-size: 100% 100%;
+  position: absolute;
+  z-index: 60;
+  top: 15px;
+  right: 15px; }
+
+.music-switch-on {
+  background-image: url(../../img/lightApp/music-on.png); }
+
+.music-switch-off {
+  background-image: url(../../img/lightApp/music-off.png); }
+
+.page-tip {
+  position: absolute;
+  z-index: 11;
+  width: 0.125rem;
+  bottom: 0.35rem;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
+  text-align: center; }
+  .page-tip div {
+    border-radius: 50%;
+    margin-right: auto;
+    margin-left: auto; }
+  .page-tip .circle-1 {
+    width: 0.125rem;
+    height: 0.125rem;
+    border: 2px solid #00C9FB; }
+  .page-tip .circle-point {
+    width: 0.08rem;
+    height: 0.08rem;
+    background-color: #006D94;
+    margin-top: 2px; }
+  .page-tip .circle-1 {
+    -webkit-animation: border 1s linear infinite;
+            animation: border 1s linear infinite; }
+  .page-tip .circle-2 {
+    -webkit-animation: bling 1s linear infinite;
+            animation: bling 1s linear infinite;
+    -webkit-animation-delay: 0.25s;
+            animation-delay: 0.25s; }
+  .page-tip .circle-3 {
+    -webkit-animation: bling 1s linear infinite;
+            animation: bling 1s linear infinite;
+    -webkit-animation-delay: 0.5s;
+            animation-delay: 0.5s;
+    opacity: .8; }
+  .page-tip .circle-4 {
+    -webkit-animation: bling 1s linear infinite;
+            animation: bling 1s linear infinite;
+    -webkit-animation-delay: 0.75s;
+            animation-delay: 0.75s;
+    opacity: .6; }
+
+.view {
+  position: relative;
+  width: 100%;
+  max-width: 750px;
+  margin: 0 auto;
+  height: 100%; }
+  .view .page {
+    width: 100%;
+    height: 100%; }
+  .view .animate-el {
+    -webkit-background-size: 100% 100%;
+            background-size: 100% 100%;
+    position: absolute;
+    z-index: 50; }
+  .view .page1-logo {
+    width: 0.8rem;
+    height: 0.25rem;
+    top: 0.23em;
+    left: 50%;
+    margin-left: -0.4rem; }
+  .view .page1-title {
+    width: 100%;
+    height: 3.45rem;
+    top: 13.48039%; }
+  .view .page2-title {
+    width: 100%;
+    height: 1.63rem;
+    top: 0;
+    left: 0; }
+  .view .page2-bk1 {
+    width: 1.96rem;
+    height: 0.46rem;
+    top: 32.67974%;
+    left: 0.895rem; }
+  .view .page2-bk2 {
+    width: 1.805rem;
+    height: 1.8rem;
+    top: 44.93464%;
+    left: 0.955rem; }
+  .view .page2-logo {
+    width: 0.65rem;
+    height: 0.2rem;
+    bottom: 0.77rem;
+    left: 50%;
+    margin-left: -0.325rem; }
+  .view .page3-title {
+    width: 100%;
+    height: 1.63rem;
+    top: 0;
+    left: 0; }
+  .view .page3-bk1 {
+    width: 1.57rem;
+    height: 3.15rem;
+    left: 0.265rem;
+    top: 28.59477%; }
+  .view .page3-bk2 {
+    width: 1.6rem;
+    height: 1.105rem;
+    right: 0.225rem;
+    top: 28.59477%; }
+  .view .page3-bk3 {
+    width: 1.6rem;
+    height: 1.86rem;
+    right: 0.225rem;
+    top: 49.4281%; }
+  .view .page4-title {
+    width: 100%;
+    height: 1.63rem;
+    top: 0;
+    left: 0; }
+  .view .page4-bk1 {
+    width: 1.57rem;
+    height: 3.185rem;
+    left: 0.265rem;
+    top: 28.59477%; }
+  .view .page4-bk2 {
+    width: 1.6rem;
+    height: 1.105rem;
+    right: 0.225rem;
+    top: 28.59477%; }
+  .view .page4-bk3 {
+    width: 1.6rem;
+    height: 1.86rem;
+    right: 0.225rem;
+    top: 49.4281%; }
+  .view .page5-title {
+    width: 100%;
+    height: 1.63rem;
+    top: 0;
+    left: 0; }
+  .view .page5-bk1 {
+    width: 1.15rem;
+    height: 1.15rem;
+    top: 47.38562%;
+    left: 1.21rem;
+    z-index: 51; }
+  .view .page5-bk2 {
+    width: 1.37rem;
+    height: 2.52rem;
+    left: 0.335rem;
+    top: 34.15033%; }
+  .view .page5-bk3 {
+    width: 1.37rem;
+    height: 2.52rem;
+    right: 0.335rem;
+    top: 34.15033%; }
+  .view .page6-title {
+    width: 100%;
+    height: 30.14706%;
+    top: 0;
+    left: 0; }
+  .view .page6-bk1 {
+    width: 100%;
+    height: 64.37908%;
+    top: 30.14706%;
+    left: 0; }
+  .view .page7-title {
+    width: 100%;
+    height: 1.63rem;
+    top: 0;
+    left: 0; }
+  .view .page7-bk1 {
+    width: 1.37rem;
+    height: 3.3rem;
+    top: 27.77778%;
+    left: 0.36rem; }
+  .view .page7-bk2 {
+    width: 1.565rem;
+    height: 3.3rem;
+    top: 27.77778%;
+    right: 0.265rem; }
+  .view .page8-title {
+    width: 100%;
+    height: 1.63rem;
+    top: 0;
+    left: 0; }
+  .view .page8-bk1 {
+    width: 1.37rem;
+    height: 3.3rem;
+    top: 27.77778%;
+    left: 0.36rem; }
+  .view .page8-bk2 {
+    width: 1.565rem;
+    height: 3.3rem;
+    top: 27.77778%;
+    right: 0.265rem; }
+  .view .page9-title {
+    width: 100%;
+    height: 1.63rem;
+    top: 0;
+    left: 0; }
+  .view .page9-bk1 {
+    width: 54.93333%;
+    left: 0.845rem;
+    top: 30.22876%; }
+  .view .page9-bk2 {
+    width: 89.33333%;
+    height: 17.15686%;
+    top: 67.81046%;
+    left: 0.23rem; }
+
+@media (min-width: 500px) {
+  .page-tip {
+    width: 18px;
+    bottom: 48px; }
+    .page-tip .circle-1 {
+      width: 18px;
+      height: 18px; }
+    .page-tip .circle-point {
+      width: 12px;
+      height: 12px; } }
+
+.page2-logo {
+  display: none; }
+
+.rotate360 {
+  -webkit-animation: rotateMusic 2s linear infinite;
+          animation: rotateMusic 2s linear infinite; }

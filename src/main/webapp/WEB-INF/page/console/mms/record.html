@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>云之讯-短信平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="baidu-site-verification" content="zNwez22Bcq" />
+    <meta name="google-site-verification" content="6hC_46bMT6_bGxmL_Ec5V_7xnPSnQBhQBl8y3MtfoFc" />
+    <meta name="Baiduspider" content="noarchive"/>
+	<link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+    <link rel='stylesheet' type='text/css' href='/font/iconfont.css'  th:href="@{/font/iconfont.css}"/>
+    <link rel='stylesheet' type='text/css' href='/css/main.css' th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" type="text/css" href="/js/jquery-ui/css/theme/all.css" th:href="@{/js/jquery-ui/css/theme/all.css}"/>
+    <link rel='stylesheet' type='text/css' href='/js/jedate/skin/jedate.css' th:href="@{/js/jedate/skin/jedate.css}"/>
+</head>
+<body>
+	<div id="wrap" class="clearfix">
+		<!-- 左侧导航栏 bf-->
+		<div id="sidebar">
+			<div class="logo">
+                <a href="/" title="云之讯"><img src="/img/logo2.png" alt="云之讯" /></a>
+            </div>
+            <div class="nav">
+                <ul>
+					<li><a href="/console" th:if="${accountModel.paytype ne 1}" ><span class="iconfont icon-shouyeshouye"></span>首页</a></li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-duanxin"></span>传统短信<i  class="show"></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/bussiness/send.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信发送<span></span></a></li>
+                            <li><a href="/console/bussiness/template.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信模板管理<span></span></a></li>
+                            <li><a href="/console/bussiness/record.html"  class="">短信发送记录<span></span></a></li>
+                            <li><a href="/console/bussiness/statistics.html" class="">短信数据统计<span></span></a></li>
+                            <li><a href="/console/bussiness/price.html"  class="">国际短信报价<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li class="cur" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">
+                        <a href="javascript:void(0)" class="cur"><span class="iconfont icon-caixin2"></span>彩印<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/mms/send.html" class="">彩印发送<span></span></a></li>
+                            <li><a href="/console/mms/template.html" class="">彩印模版管理<span></span></a></li>
+                            <li><a href="/console/mms/record.html"  class="cur">彩印发送记录<span></span></a></li>
+                            <li><a href="/console/mms/ussdday.html" class="">彩印数据统计<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-qianbi01"></span>财务管理<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/order/list.html" class="">我的订单<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class=""><span class="iconfont icon-shenfenzheng"></span>账户管理<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/account/info.html" class="">账户资料<span></span></a></li>
+                            <li><a href="/console/account/security.html" class="">账户安全<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-bangzhuzhongxin"></span>帮助中心<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/help/smsAccessIntroduce.html" class="">短信接入<span></span></a></li>
+                            <li><a href="/console/help/FAQ.html" class="">FAQ<span></span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+		</div>
+		<!-- 左侧导航栏 ef -->
+
+		<!-- 右边内容 bf -->
+		<div id="main">
+			<div class="main-con">
+				<div class="top notes-top clearfix">
+					<h1>彩信发送记录</h1>
+					<div class="ft-r ">
+                        <a href="/console/login.html" class="lay-out btn-white btn-small btn" th:href="@{/console/quit}">退出</a>
+                    </div>
+                    <!-- 
+                    <div class="top-r ft-r">
+						<span class="contact-phone" th:text="'联系电话：'+${accountModel.agentMobile}">联系电话：18689206965</span>
+					</div>  -->
+				</div>
+				<div class="con-out">
+					<div class="crumbs"><a class="active">彩信发送记录</a></div>
+					<form id="smsRecordForm" action="${ctx}/mms/query-sms-record" method="post" th:action="@{/console/mms/record}">
+						<div class="content notes-content shortMessage">
+							<div class="order-option clearfix">
+								<div class="option-r ft-l" style="margin-top: 0px;">
+									<label>手机号码</label>
+									<input type="text" name="mobile" id="mobile" th:value="${mobile}"/>
+									<label class="ml20">内容</label>
+									<input type="text" name="content" id="content" th:value="${content}"/>
+								</div>
+								<div class="option-l ft-l">
+									<label class="ml20">时间</label>
+									<input type="text" id="date_start" name="start_time" placeholder="开始时间" readonly="readonly" th:value='${start_time}'/>
+									<label>至</label>
+									<input type="text" id="date_end" name="end_time" placeholder="结束时间" readonly="readonly" th:value='${end_time}'/>
+									<input class="green-btn" id="submitBtn" type="button" value="搜索" onclick="submitForm()"/>
+								</div>
+								<div class="option-r ft-l ml20">
+									<a href="javascript:;" class="btn btn-white tx-c" onclick="exportSmsRecord(this)"  style="width:80px;">批量导出</a>
+								</div>
+							</div>
+							<div class="msm-notes clearfix grid-record-table">
+								<table class="grid-table bg-white grid-table-tx-c grid-table-border">
+									<thead>
+										<tr>
+											<th class="td1">序号</th>
+											<th class="td2">手机号</th>
+											<th class="td3">短信类型</th>
+											<th class="td4">发送内容</th>
+											<th class="td5">发送状态</th>
+											<th class="td3" style="width:240px">状态码</th>
+											<th class="td6" style="width:148px">提交时间</th>
+											<th class="td7" style="width:148px">发送时间</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="v:${page.list}">
+											<td th:text="${v.rownum}"></td>
+											<td class="col-phone" th:text="${v.phone}"></td>
+											<td th:text="${v.smstype_name}">短信类型</td>
+											<td class="temp-cont"><p class="col-content" th:text="${v.content}"></p></td>
+											<td th:text="${v.status}"></td>
+											<td th:text="${v.errorcode_name}" style="cursor: pointer;max-width:100%;text-overflow:ellipsis;">状态码说明</td>
+											<td th:text="${v.subTime}"></td>
+											<td th:text="${v.sendTime}"></td>
+										</tr>
+										<tr>
+											<td colspan="8" class="clearfix">
+												<div class="pagination ft-r clearfix" >
+													<div class="show-count ft-l">共有<span class="allCount" th:text="${page.totalCount}"> 20 </span>条，每页显示
+														<span id="pageRowCountSpan" class="select"><span th:text="${page.pageRowCount}">5</span>
+														<ul class="show-num">
+															<li>5</li>
+															<li>10</li>
+															<li>15</li>
+															<li>20</li>
+														</ul>
+														</span> 条
+													</div>
+													<ul class="pre-after ft-l">
+														<li class="first"><a href="javascript:;" onclick="topPage()"></a></li>
+														<li class="pre"><a href="javascript:;" onclick="previousPage()"></a></li>
+														<li class="now"><a href="" th:text="${page.currentPage}+'/'+${page.totalPage}">10</a></li>
+														<li class="after"><a href="javascript:;" onclick="nextPage()"></a></li>
+														<li class="last"><a href="javascript:;" onclick="bottomPage()"></a></li>
+													</ul>
+													<div class="ft-l">
+														<input id="jump2PageNum" type="text" class="jump-to" name="jump-to" style="position: relative; top: -5px;width:24px;"/>
+														<a href="javascript:;" onclick="jump2Page()" class="btn-page">跳转</a>
+													</div>
+												</div>	
+											</td>
+										</tr>
+	
+									</tbody>
+								</table>
+								
+							</div>
+						</div>
+						<input id="currentPage" type="hidden" name="currentPage" th:value="${page.currentPage}"/>
+						<input id="pageRowCount" type="hidden" name="pageRowCount" th:value="${page.pageRowCount}"/>
+						<input id="totalCount" type="hidden" th:value="${page.totalCount}"/>
+						<input id="totalPage" type="hidden" th:value="${page.totalPage}"/>
+						<input id="fileName" type="hidden" name="fileName" />
+					</form>
+					<div class="btm-copyright">
+						<p>© 2016 ucpaas.com 版权所有 粤ICP备14046848号</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 右边内容 ef -->
+	</div>
+</body>
+<script src="/js/jquery.min.js"  th:src="@{/js/jquery.min.js}"></script>
+<script src="/js/jquery-ui/js/datepicker.js" th:src="@{/js/jquery-ui/js/datepicker.js}"></script>
+<script src="/js/datepicker.js" th:src="@{/js/datepicker.js}"></script>
+<script src="/js/jedate/jedate.js" th:src="@{/js/jedate/jedate.js}"></script>
+<script type="text/javascript" src="/js/common.js" th:src="@{/js/common.js}"></script>
+<script src="/js/layer/layer.js"  th:src="@{/js/layer/layer.js}"></script>
+<script type="text/javascript" src="/js/jquery.form.js" th:src="@{/js/jquery.form.js}"></script>
+<script src="/js/keywords.js" th:src="@{/js/keywords.js}"></script>
+<script type="text/javascript" src="/js/avalon.js"></script>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	$(function() {
+    	$( "#datepicker" ).datepicker();
+        var content = $("#content").val();
+        var mobile = $("#mobile").val();
+        if(content){
+            var contentArr = $(".col-content");
+            for(var i = 0;i < contentArr.length;i++){
+                if(	!/^[\d]+$/.test(i)){
+                    continue;
+                }
+                handleKeyWords(contentArr[i],content);
+            }
+        }
+        if(mobile){
+            var mobileArr = $(".col-phone");
+            for(var i = 0;i < mobileArr.length;i++){
+                if(!/^[\d]+$/.test(i)){
+                    continue;
+                }
+                handleKeyWords(mobileArr[i],mobile);
+            }
+        }
+	})
+	
+	//Date对象：date1 date2
+	function isTheSameDay(date1,date2){
+		if(date1.getFullYear() == date2.getFullYear() && date1.getMonth() == date2.getMonth() && date1.getDay() == date2.getDay()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function submitForm(){
+		
+		var date_start = $("#date_start").val();
+		var date_end = $("#date_end").val();
+		if(date_start == '' || date_end == ''){
+			layer.alert('请输入开始时间和结束时间', {icon: 2}); 
+			return;
+		}
+		
+		var d_start = new Date(date_start);
+		var d_end = new Date(date_end);
+		var flag = isTheSameDay(d_start,d_end);
+		if(flag == false){
+			layer.alert('请输入同一天的日期', {icon: 2}); 
+			return;
+		}
+        if(!isSessionValid()){return}
+        $("#smsRecordForm").submit();
+	}
+	
+	
+	function checkSmsRecordNum(){
+		
+		var flag;
+		$.ajax({
+			type: "POST",
+			url:/*[[@{/console/mms/checkSmsRecordNum}]]*/"${ctx}/mms/checkSmsRecordNum",
+			data:$('#smsRecordForm').serialize(),
+			async: false,
+			success: function(data){
+				flag = data.isSuccess;
+          	}
+		});
+		
+		return flag;
+	}
+	
+	
+	// 导出短信记录Excel
+	function exportSmsRecord(obj){
+		
+// 		var totalCount = ${page.totalCount};
+// 		if (totalCount == 0) {
+// 			layer.alert('根据条件查询到的记录数为0，导出Excel文件失败', {icon: 2}); 
+// 			return;
+// 		}
+		
+		var date_start = $("#date_start").val();
+		var date_end = $("#date_end").val();
+		if(date_start == '' || date_end == ''){
+			layer.alert('请输入开始时间和结束时间', {icon: 2}); 
+			return;
+		}
+		
+		var d_start = new Date(date_start);
+		var d_end = new Date(date_end);
+		var flag = isTheSameDay(d_start,d_end);
+		if(flag == false){
+			layer.alert('请输入同一天的日期', {icon: 2}); 
+			return;
+		}
+		
+		//导出，实时校验数据库的数据
+		var flag = checkSmsRecordNum();
+		if(flag == false){
+			layer.alert('根据条件查询到的记录数为0，导出Excel文件失败', {icon: 2}); 
+			return;
+		}
+		
+		
+		var options = {
+				beforeSubmit : function() { 
+					ityzl_SHOW_LOAD_LAYER("正在生成报表，请稍后...");
+				},
+				success : function(result) {
+					layer.closeAll(); //疯狂模式，关闭所有层
+					if(result.success){
+						$("#fileName").val(result.fileName);
+						var form = $("#smsRecordForm");
+						var action = form.attr("action");
+						form.attr("action",  /*[[@{/console/bussiness/downloadExcel}]]*/"bussiness/downloadExcel").submit();
+						form.attr("action", action);
+					}
+				},
+				async: true,
+				url :  /*[[@{/console/mms/exportRecord}]]*/"bussiness/export-sms-record",
+				type : "post",
+				timeout : 600000
+			};
+		$("#smsRecordForm").ajaxSubmit(options);
+		 
+	}
+	
+	// 短信内容tips显示
+	function showContentTip(obj){
+		var contentId = "#" + obj.id;
+		var contentDetail = obj.innerHTML;
+		layer.tips(contentDetail, obj, { tips: [2, '#2ea967'], tmie:500 });
+	}
+
+	
+	// ---------------- 分页 ----------------
+	//查询某一页
+	function getPageByNum(searchForm, pageNum){
+		if(/^[1-9]\d*$/.test(pageNum)){
+			// 设置当前页数
+			searchForm.find("#currentPage").val(pageNum);
+		}
+		
+		var date_start = $("#date_start").val();
+		var date_end = $("#date_end").val();
+		if(date_start == '' || date_end == ''){
+			layer.alert('请输入开始时间和结束时间', {icon: 2}); 
+			return;
+		}
+		
+		var d_start = new Date(date_start);
+		var d_end = new Date(date_end);
+		var flag = isTheSameDay(d_start,d_end);
+		if(flag == false){
+			layer.alert('请输入同一天的日期', {icon: 2}); 
+			return;
+		}
+        if(!isSessionValid()){return}
+        searchForm.submit();
+	}
+	
+	var reloadFun = function(){
+		var goalPage = $('#currentPage').val();
+		getPageByNum(searchForm,goalPage);
+	}
+	
+	var searchForm = $("#smsRecordForm");
+	var currentPage = Number($('#currentPage').val());
+	var totalPage = Number($('#totalPage').val());
+	
+	
+	// 首页
+	function topPage(){
+		if(currentPage == 1){
+			return;
+		}
+		getPageByNum(searchForm, 1);
+	}
+	
+	// 最后一页
+	function bottomPage(){
+		if(currentPage == totalPage){
+			return;
+		}
+		getPageByNum(searchForm, totalPage);
+	}
+	
+	// 上一页
+	function previousPage(){
+		var previousPage = currentPage - 1;
+		if(currentPage == 1){
+			return;
+		}
+		getPageByNum(searchForm, previousPage);
+	}
+	
+	// 下一页
+	function nextPage(){
+		var nextPage = currentPage + 1;
+		if(currentPage == totalPage){
+			return;
+		}
+		getPageByNum(searchForm, nextPage);
+	}
+	
+	function jump2Page(){
+		var jump2PageNum = $('#jump2PageNum').val();
+		if(jump2PageNum<1 || jump2PageNum>totalPage){
+			return;
+		}
+		getPageByNum(searchForm, jump2PageNum);
+	}
+	// ---------------- 分页 ----------------
+
+    jeDate({
+        dateCell: '#date_start',
+        festival:false,
+        format: 'YYYY-MM-DD hh:mm:ss',
+        maxDate: /*[[${max_time}]]*/,
+        minDate: /*[[${min_time}]]*/
+    });
+    jeDate({
+        dateCell: '#date_end',
+        festival:false,
+        format: 'YYYY-MM-DD hh:mm:ss',
+        maxDate: /*[[${max_time}]]*/,
+        minDate: /*[[${min_time}]]*/
+    });
+
+
+//	$.jeDate('#date_start' ,{
+//	    festival:false,
+//	    isTime : true,
+//	    format: 'YYYY-MM-DD hh:mm:ss',
+//	    maxDate: /*[[${max_time}]]*/,
+//	    minDate: /*[[${min_time}]]*/
+//	});
+//
+//	$.jeDate('#date_end',{
+//	    festival:false,
+//	    isTime : true,
+//	    format: 'YYYY-MM-DD hh:mm:ss',
+//	    maxDate: /*[[${max_time}]]*/,
+//	    minDate: /*[[${min_time}]]*/
+//	});
+/*]]>*/
+</script>
+
+</html>

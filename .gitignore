@@ -1,0 +1,15 @@
+target/
+logs/
+bin/
+.settings/
+.classpath
+.project
+log/
+rebel.xml
+.externalToolBuilders/
+.idea/
+*.iml
+**/dist/
+**/node_modules/
+**/npm-debug.log
+/pom.xml

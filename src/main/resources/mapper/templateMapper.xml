@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 模版管理 -->
+<mapper namespace="templateMapper">
+
+	<resultMap type="com.ucpaas.smsp.model.Template" id="BaseMap">
+		<id column="template_id" property="template_id"/>
+		<result column="type" property="type"/>
+		<result column="type_name" property="type_name"/>
+		<result column="sms_type" property="sms_type"/>
+		<result column="sms_type_name" property="sms_type_name"/>
+		<result column="content" property="content"/>
+		<result column="sign" property="sign"/>
+		<result column="client_id" property="client_id"/>
+		<result column="agent_id" property="agent_id"/>
+		<result column="check_status"  jdbcType="INTEGER"  property="check_status"/>
+		<result column="check_status_name" property="check_status_name"/>
+		<result column="admin_id" property="admin_id"/>
+		<result column="create_time" property="create_time"/>
+		<result column="submit_type" property="submit_type"/>
+		<result column="update_time" property="update_time"/>
+		<result column="update_type" property="update_type"/>
+	</resultMap>
+
+	<sql id="queryTemplateTemporaryListConditon">
+		<where>
+			te.agent_id = #{agent_id}
+			<if test="templateInfo != null">
+				and (
+						te.template_id like CONCAT('%',#{templateInfo},'%' ) 
+						or te.client_id like CONCAT('%',#{templateInfo},'%' ) 
+					)
+			</if>
+			<if test="start_time_day != null">
+				and te.create_time >= #{start_time_day}
+			</if>
+			<if test="end_time_day != null">
+				and te.create_time <![CDATA[<= #{end_time_day} ]]>
+			</if>
+			and te.sign like '测试%'
+		</where>
+	</sql>
+	
+	<select id="queryTemplateTemporaryList" resultType="map">
+		SELECT 
+			te.template_id,
+			te.type,
+			case te.type
+				when 0 then '通知模板'
+				when 4 then '验证码模板'
+				when 5 then '营销模板'
+				when 7 then 'USSD模板'
+				when 8 then '闪信模板'
+				when 9 then '挂机短信模板'
+			end as type_name,
+			te.sms_type,
+			case te.sms_type
+				when 0 then '通知短信'
+				when 4 then '验证码短信'
+				when 5 then '营销短信'
+				when 6 then '告警短信'
+				when 7 then 'USSD'
+				else '闪信'
+			end as sms_type_name,
+			te.content,
+			te.sign,
+			te.client_id,
+			te.agent_id,
+			te.check_status,
+			case te.check_status
+				when 0 then '待审核'
+				when 1 then '审核通过'
+				when 2 then '审核中' 
+				when 4 then '已删除'
+				else '审核不通过'
+			end as check_status_name,
+			te.admin_id,
+			te.create_time,
+			te.submit_type,
+			case te.submit_type
+				when 0 then '客户提交'
+				else '代理商提交'
+			end as submit_type_name,
+			date_format(te.update_time,'%Y-%c-%d %H:%i:%S') as update_time,
+			te.update_type,
+			te2.check_status as old_check_status
+		FROM 
+			t_sms_template_temporary te
+			inner join t_sms_template te2 on te.template_id = te2.template_id
+		<include refid="queryTemplateTemporaryListConditon" />
+		ORDER BY update_time desc
+		${limit}
+	</select>
+	
+	<select id="queryTemplateTemporaryListCount" resultType="map">
+		SELECT count(0) as totalCount from(
+			SELECT 
+				0
+			FROM 
+				t_sms_template_temporary te 
+				inner join t_sms_account ac on te.client_id = ac.clientid
+				inner join t_sms_template te2 on te.template_id = te2.template_id
+				<include refid="queryTemplateTemporaryListConditon" />
+		) m
+	</select>
+	
+	
+	<select id="queryClientInfoByAgentId" resultType="map">
+		SELECT 
+			clientid,
+			name,
+			CONCAT(clientid,' - ',name) as clientid_name
+		FROM 
+			t_sms_account 
+		WHERE 
+			agent_id = #{agent_id}
+	</select>
+	
+	<insert id="saveTemplate" useGeneratedKeys="true" keyProperty="template_id">
+		INSERT INTO `t_sms_template` (
+			`type`,
+			`sms_type`,
+			`content`,
+			`sign`,
+			`client_id`,
+			`agent_id`,
+			`check_status`,
+			`admin_id`,
+			`create_time`,
+			`submit_type`,
+			`update_time`,
+			`update_type`
+		)
+		VALUES
+			(
+				#{type},
+				#{sms_type},
+				#{content},
+				#{sign},
+				#{client_id},
+				#{agent_id},
+				#{check_status},
+				#{admin_id},
+				#{create_time},
+				#{submit_type},
+				#{update_time},
+				#{update_type}
+			);
+	</insert>
+	
+	<insert id="saveTemplateTemporary">
+		INSERT INTO `t_sms_template_temporary` (
+			`template_id`,
+			`type`,
+			`sms_type`,
+			`content`,
+			`sign`,
+			`client_id`,
+			`agent_id`,
+			`check_status`,
+			`admin_id`,
+			`create_time`,
+			`submit_type`,
+			`update_time`,
+			`update_type`
+		)
+		VALUES
+			(
+				#{template_id},
+				#{type},
+				#{sms_type},
+				#{content},
+				#{sign},
+				#{client_id},
+				#{agent_id},
+				#{check_status},
+				#{admin_id},
+				#{create_time},
+				#{submit_type},
+				#{update_time},
+				#{update_type}
+			);
+	</insert>
+	
+	
+	<select id="queryTemplateInfo" resultMap="BaseMap">
+		SELECT 
+			`template_id`,
+			`type`,
+				case type
+				when 0 then '通知模板'
+				when 4 then '验证码模板'
+				when 5 then '营销模板'
+				when 7 then 'USSD模板'
+				when 8 then '闪信模板'
+				else '挂机短信模板'
+				end as type_name,
+			`sms_type`,
+				case sms_type
+				when 0 then '通知'
+				when 4 then '验证码'
+				when 5 then '会员营销'
+				when 6 then '告警短信'
+				when 7 then 'USSD'
+				else '闪信'
+				end as sms_type_name,
+			`content`,
+			`sign`,
+			`client_id`,
+			`agent_id`,
+			`check_status`,
+				case check_status
+				when 0 then '待审核'
+				when 1 then '审核通过'
+				when 2 then '审核中' 
+				when 3 then '审核不通过' 
+				when 4 then '已删除'
+				else '审核不通过'
+				end as check_status_name,
+			`admin_id`,
+			date_format(create_time,'%Y-%m-%d %H:%i:%S') as create_time,
+			`submit_type`,
+			update_time,
+			`update_type`
+		FROM 
+			t_sms_template
+		WHERE 
+			template_id = #{template_id}
+		  <if test="check_status!=null">
+			  and check_status = #{check_status}
+		  </if>
+			<if test="client_id!=null">
+				and client_id = #{client_id}
+			</if>
+	</select>
+
+	<select id="queryTemplateTemporaryInfo" resultMap="BaseMap">
+		SELECT
+			`template_id`,
+			`type`,
+				case type
+				when 0 then '通知模板'
+				when 4 then '验证码模板'
+				when 5 then '营销模板'
+				when 7 then 'USSD模板'
+				when 8 then '闪信模板'
+				when 9 then '挂机短信模板'
+				end as type_name,
+			`sms_type`,
+				case sms_type
+				when 0 then '通知'
+				when 4 then '验证码'
+				when 5 then '会员营销'
+				when 6 then '告警短信'
+				when 7 then 'USSD'
+				when 8 then '闪信'
+				end as sms_type_name,
+			`content`,
+			`sign`,
+			`client_id`,
+			`agent_id`,
+			`check_status`,
+				case check_status
+				when 0 then '待审核'
+				when 1 then '审核通过'
+				when 2 then '审核中' 
+				when 4 then '已删除'
+				else '审核不通过'
+				end as check_status_name,
+			`admin_id`,
+			date_format(create_time,'%Y-%m-%d %H:%i:%S') as create_time,
+			`submit_type`,
+			date_format(update_time,'%Y-%m-%d %H:%i:%S') as update_time,
+			`update_type`
+		FROM
+			t_sms_template_temporary
+		WHERE
+			template_id = #{template_id}
+	</select>
+	
+	<update id="updateTemplateTemporary">
+		UPDATE 
+			`t_sms_template_temporary`
+		SET 
+		    `type` = #{type},
+		    `sms_type` = #{sms_type},
+		    `content` = #{content},
+		    `sign` = #{sign},
+		    `client_id` = #{client_id},
+		    `agent_id` = #{agent_id},
+		    `check_status` = #{check_status},
+		    `update_time` = #{update_time},
+		    update_type = #{update_type}
+		WHERE
+			`template_id` = #{template_id}
+		and update_time = #{old_update_time}
+	</update>
+
+	<update id="updateTemplate">
+		UPDATE
+			`t_sms_template`
+		SET
+		    `type` = #{type},
+		    `sms_type` = #{sms_type},
+		    `content` = #{content},
+		    `sign` = #{sign},
+		    `client_id` = #{client_id},
+		    `agent_id` = #{agent_id},
+		    `check_status` = #{check_status},
+		    `update_time` = #{update_time},
+		    update_type = #{update_type}
+		WHERE
+			`template_id` = #{template_id}
+		and update_time = #{old_update_time}
+	</update>
+
+
+
+	<select id="queryTemplateList" resultType="map">
+		SELECT
+			te.template_id,
+			te.type,
+			case te.type
+				when 0 then '通知模板'
+				when 4 then '验证码模板'
+				when 5 then '营销模板'
+				when 7 then 'USSD模板'
+				when 8 then '闪信模板'
+				else '挂机短信模板'
+				end as type_name,
+			te.sms_type,
+				case te.type
+				when 0 then '通知'
+				when 4 then '验证码'
+				when 5 then '会员营销'
+				when 6 then '告警短信'
+				when 7 then 'USSD'
+				else '闪信'
+				end as sms_type_name,
+			te.content,
+			te.sign,
+			te.client_id,
+
+			te.agent_id,
+			te.check_status,
+				case te.check_status
+				when 0 then '待审核'
+				when 1 then '审核通过'
+				when 2 then '审核中' 
+				when 3 then '审核不通过' 
+				when 4 then '已删除'
+				else '审核不通过'
+				end as check_status_name,
+			te.admin_id,
+			te.create_time,
+			te.submit_type,
+				case te.submit_type
+				when 0 then '客户提交'
+				else '代理商提交'
+				end as submit_type_name,
+			date_format(te.update_time,'%Y-%c-%d %H:%i:%S') as update_time,
+			te.update_type
+
+		FROM
+			t_sms_template te
+		WHERE
+			te.`check_status` != 4 
+			AND te.client_id = #{client_id}
+		<if test="check_status!=null">
+			and te.check_status = #{check_status}
+		</if>
+		<if test="smsTypes!=null">
+			and te.sms_type in
+			<foreach item="item" index="index" collection="smsTypes" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="types!=null">
+			and te.type in
+			<foreach item="item" index="index" collection="types" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		ORDER BY te.template_id desc
+		${limit}
+	</select>
+
+	<!-- 不计算删除状态下的模板 -->
+	<select id="queryTemplateListCount" resultType="map">
+		SELECT
+			count(te.template_id) as totalCount
+		FROM
+			t_sms_template te
+		WHERE 
+			te.`check_status` != 4 
+			AND te.client_id = #{client_id}
+		<if test="check_status!=null">
+			and te.check_status = #{check_status}
+		</if>
+		<if test="smsTypes!=null">
+			and te.sms_type in
+			<foreach item="item" index="index" collection="smsTypes" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="types!=null">
+			and te.type in
+			<foreach item="item" index="index" collection="types" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+
+	<!-- 不获取删除状态的模板 -->
+	<select id="queryTemporaryTemplateList" resultType="map">
+		SELECT
+		te.template_id,
+		te.type,
+			case te.type
+			when 0 then '通知模板'
+			when 4 then '验证码模板'
+			when 5 then '营销模板'
+			when 7 then 'USSD模板'
+			when 8 then '闪信模板'
+			else '挂机短信模板'
+			end as type_name,
+		te.sms_type,
+			case te.sms_type
+			when 0 then '通知'
+			when 4 then '验证码'
+			when 5 then '会员营销'
+			when 6 then '告警短信'
+			when 7 then 'USSD'
+			else '闪信'
+			end as sms_type_name,
+		te.content,
+		te.sign,
+		te.client_id,
+		te.agent_id,
+		te.check_status,
+			case te.check_status
+			when 0 then '待审核'
+			when 1 then '审核通过'
+			when 2 then '审核中' 
+			when 3 then '审核不通过' 
+			when 4 then '已删除' 
+			else '审核不通过'
+			end as check_status_name,
+		te.admin_id,
+		date_format(te.create_time,'%Y-%c-%d %H:%i:%S') as create_time,
+		te.submit_type,
+		case te.submit_type
+		when 0 then '客户提交'
+		else '代理商提交'
+		end as submit_type_name,
+		date_format(te.update_time,'%Y-%c-%d %H:%i:%S') as update_time,
+		te.update_type
+
+		FROM
+		t_sms_template_temporary te
+		WHERE
+		te.`check_status` != 4 
+		AND te.client_id = #{client_id}
+		<if test="smsTypes!=null">
+			and te.sms_type in
+			<foreach item="item" index="index" collection="smsTypes" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="types!=null">
+			and te.type in
+			<foreach item="item" index="index" collection="types" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		ORDER BY te.update_time desc
+		${limit}
+	</select>
+
+	<!-- 不计数删除状态的模板 -->
+	<select id="queryTemporaryTemplateListCount" resultType="map">
+		SELECT
+		count(te.template_id) as totalCount
+		FROM
+		t_sms_template_temporary te
+		WHERE 
+		te.`check_status` != 4
+		AND te.client_id = #{client_id}
+		<if test="check_status!=null">
+			and te.check_status = #{check_status}
+		</if>
+		<if test="smsTypes!=null">
+			and te.sms_type in
+			<foreach item="item" index="index" collection="smsTypes" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="types!=null">
+			and te.type in
+			<foreach item="item" index="index" collection="types" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+	
+	<!-- 逻辑删除templat模板 -->
+	<update id="deleteTemplateLogically">
+		UPDATE t_sms_template 
+		SET `check_status` = 4, `update_time` = #{update_time}
+		WHERE `template_id` = #{template_id}
+	</update>
+	
+	<!-- 逻辑删除template_temporary模板 -->
+	<update id="deleteTemplateTemporaryLogically">
+		UPDATE t_sms_template_temporary 
+		SET `check_status` = 4, `update_time` = #{update_time}
+		WHERE `template_id` = #{template_id}
+	</update>
+	
+	<!-- 判断是否具有相同内容、签名、账号的模板 -->
+	<select id="querySameTemplate" resultMap="BaseMap">
+		SELECT
+			`template_id`,
+			`type`,
+				case type
+				when 0 then '通知模板'
+				when 4 then '验证码模板'
+				when 5 then '营销模板'
+				when 7 then 'USSD模板'
+				when 8 then '闪信模板'
+				when 9 then '挂机短信模板'
+				end as type_name,
+			`sms_type`,
+				case sms_type
+				when 0 then '通知'
+				when 4 then '验证码'
+				when 5 then '会员营销'
+				when 6 then '告警短信'
+				when 7 then 'USSD'
+				when 8 then '闪信'
+				end as sms_type_name,
+			`content`,
+			`sign`,
+			`client_id`,
+			`agent_id`,
+			`check_status`,
+				case check_status
+					when 0 then '待审核'
+					when 1 then '审核通过'
+					when 2 then '审核中' 
+					when 3 then '审核不通过'
+					when 4 then '已删除'
+					end as check_status_name,
+			`admin_id`,
+			date_format(create_time,'%Y-%m-%d %H:%i:%S') as create_time,
+			`submit_type`,
+			date_format(update_time,'%Y-%m-%d %H:%i:%S') as update_time,
+			`update_type`
+		FROM
+			t_sms_template_temporary
+		WHERE
+			`client_id` = #{client_id} 
+			AND `content` = #{content} 
+			AND `sign` = #{sign} 
+		ORDER BY `template_id` DESC LIMIT 1
+	</select>
+
+	<!-- 获取转审模板 的审核结果 -->
+	<select id="queryAuditStatus" resultType="int">
+		SELECT IF(COUNT(`id`)>0,`status`,0) FROM t_sms_template_audit 
+		WHERE `template_id` = #{template_id} 
+		LIMIT 1
+	</select>
+	
+</mapper> 

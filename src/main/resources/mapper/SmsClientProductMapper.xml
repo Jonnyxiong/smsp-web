@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="order.SmsClientProductMapper" >
+
+  <resultMap id="BaseResultMap" type="com.ucpaas.smsp.model.SmsClientProduct" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="client_id" property="clientId" jdbcType="VARCHAR" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="price_discount" property="priceDiscount" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updator" property="updator" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseResultPOMap" type="com.ucpaas.smsp.model.po.SmsClientProductPo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="client_id" property="clientId" jdbcType="VARCHAR" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="price_discount" property="priceDiscount" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updator" property="updator" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, client_id, agent_id, product_id, price_discount, create_time, updator, update_time, 
+    remark
+  </sql>
+  
+  <select id="getSmsClientProductList" resultMap="BaseResultPOMap">
+	SELECT 
+		 id, 
+		 client_id, 
+		 agent_id, 
+		 product_id, 
+		 price_discount, 
+		 create_time, 
+		 updator, 
+		 update_time, 
+	   	 remark
+	FROM 
+		t_sms_client_product 
+	WHERE 
+	<foreach collection="list" index="index" item="item" open="(" separator="or" close=")">
+		 client_id = #{item.clientid} AND product_id = #{item.productId}
+	</foreach>  		
+  </select>
+  
+</mapper>

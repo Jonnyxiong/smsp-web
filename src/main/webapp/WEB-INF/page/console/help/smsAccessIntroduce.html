@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8"/>
+	<title>云之讯-短信平台</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="baidu-site-verification" content="zNwez22Bcq"/>
+	<meta name="google-site-verification" content="6hC_46bMT6_bGxmL_Ec5V_7xnPSnQBhQBl8y3MtfoFc" />
+	<meta name="Baiduspider" content="noarchive"/>
+	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/> 
+	<link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+	<link rel='stylesheet' href='/font/iconfont.css' th:href="@{/font/iconfont.css}"/>
+	<link rel='stylesheet' href='/css/main.css' th:href="@{/css/main.css}"/>
+    <link rel='stylesheet' href='/css/tipso.min.css' th:href="@{/css/tipso.min.css}"/>
+    <script src="/js/jquery.min.js"  th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/layer/layer.js}"></script>
+
+</head>
+<body>
+	<div id="wrap" class="clearfix">
+		<!-- 左侧导航栏 bf-->
+		<div id="sidebar">
+			<div class="logo">
+                <a href="/" title="云之讯"><img src="/img/logo2.png" alt="云之讯" /></a>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li><a href="/console" th:if="${accountModel.paytype ne 1}" ><span class="iconfont icon-shouyeshouye"></span>首页</a></li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-duanxin"></span>传统短信<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/bussiness/send.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信发送<span></span></a></li>
+                            <li><a href="/console/bussiness/template.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信模板管理<span></span></a></li>
+                            <li><a href="/console/bussiness/record.html"  class="">短信发送记录<span></span></a></li>
+                            <li><a href="/console/bussiness/statistics.html" class="">短信数据统计<span></span></a></li>
+                            <li><a href="/console/bussiness/price.html"  class="">国际短信报价<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li th:if="${session.LOGIN_USER_INFO.smsfrom==6}">
+                        <a href="javascript:void(0)"><span class="iconfont icon-caixin2"></span>彩印<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/mms/send.html" class="">彩印发送<span></span></a></li>
+                            <li><a href="/console/mms/template.html" class="">彩印模版管理<span></span></a></li>
+                            <li><a href="/console/mms/record.html"  class="">彩印发送记录<span></span></a></li>
+                            <li><a href="/console/mms/ussdday.html" class="">彩印数据统计<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-qianbi01"></span>财务管理<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/order/list.html" class="">我的订单<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class=""><span class="iconfont icon-shenfenzheng"></span>账户管理<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/account/info.html" class="">账户资料<span></span></a></li>
+                            <li><a href="/console/account/security.html" class="">账户安全<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li class="cur">
+                        <a href="javascript:void(0)" class="cur"><span class="iconfont icon-bangzhuzhongxin"></span>帮助中心<i class="show"></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/help/smsAccessIntroduce.html" class="cur">短信接入<span></span></a></li>
+                            <li><a href="/console/help/FAQ.html" class="">FAQ<span></span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+		</div>
+		<!-- 左侧导航栏 ef -->
+
+		<!-- 右边内容 bf -->
+		<div id="main">
+			<div class="main-con">
+				<div class="top help-top clearfix">
+					<h1>帮助中心</h1>
+					<div class="ft-r ">
+                        <a href="/console/login.html" class="lay-out btn-white btn-small btn" th:href="@{/console/quit}">退出</a>
+                    </div>
+                    <!-- 
+					<div class="top-r ft-r">
+						<span class="contact-phone" th:text="'联系电话：'+${accountModel.agentMobile}">联系电话：18689206965</span>
+					</div> -->
+				</div>
+				<div class="con-out">
+					<div class="crumbs not"><i style="color:#838f97;">帮助中心  /</i>  短信接入简介</div>
+
+					<div class="content help-content clearfix">
+						<div class="help-r">
+							<div class="info">
+								<div class="info-list">
+									<dl>
+										<dt>
+                                            <span class="mark">1.验证码/通知、会员营销、国际短信接口文档，详见附件
+                                                <img src="img/question.png" data-tipso='若出现:“Word无法打开, 因为文件格式与文件扩展名不匹配”类似提示，请尝试将文件后缀名doc改成docx或者将后缀docx改成doc再尝试打开' id="introduction" th:src="@{/img/question.png}"/>
+                                                &nbsp;&nbsp;&nbsp;
+                                            </span>
+                                            <a href="/console/helpCenter/smsIntroduceDoc" th:href="@{/console/help/smsIntroduceDoc}"><i class="doc">云之讯新短信https接口文档V1.0.docx</i></a>
+                                            <a href="${ctx}/help/smsCmppIntroduceDoc" th:href="@{/console/help/smsCmppIntroduceDoc}"><i class="doc">短信cmpp接口文档V2.0.doc</i></a>&nbsp;
+                                            <a href="${ctx}/help/smsSgipIntroduceDoc" th:href="@{/console/help/smsSgipIntroduceDoc}"><i class="doc">短信sgip接口文档V1.2.doc</i></a>&nbsp;
+                                            <a href="${ctx}/help/smsSmgpIntroduceDoc" th:href="@{/console/help/smsSmgpIntroduceDoc}"><i class="doc">短信smgp接口文档V3.0.doc</i></a>&nbsp;
+                                            <a href="${ctx}/help/smsSmppIntroduceDoc" th:href="@{/console/help/smsSmppIntroduceDoc}"><i class="doc">短信smpp接口文档V3.4.pdf</i></a>&nbsp;
+                                        </dt>
+									</dl>
+									<dl>
+                                        <dt><span class="mark">2.USSD和闪信接口文档，详见附件&nbsp;&nbsp;&nbsp;</span><a href="/console/help/smsCaiyinDoc" th:href="@{/console/help/smsCaiyinDoc}"><i class="doc">云之讯彩印https接口文档V1.0.docx</i></a></dt>
+                                    </dl>
+									<!--  暂不提供后台接口文档
+                                    <dl>
+                                        <dt><span class="mark">3.挂机短信接口文档，详见附件&nbsp;&nbsp;&nbsp;</span><a href="/console/help/smsGuajiDoc" th:href="@{/console/help/smsGuajiDoc}"><i class="doc">云之讯挂机短信https接口文档V1.0.docx</i></a></dt>
+                                    </dl>
+                                     -->
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="btm-copyright">
+						<p>© 2016 ucpaas.com 版权所有 粤ICP备14046848号</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 右边内容 ef -->
+	</div>
+<script src="/js/jquery.min.js"  th:src="@{/js/jquery.min.js}"></script>
+<script src="/js/common.js" th:src="@{/js/common.js}"></script>
+<script src="js/tipso.min.js" th:src="@{/js/tipso.min.js}"></script>
+
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+
+    $(function () {
+        $('#introduction').tipso({
+            background: '#2EA967',
+            useTitle: false,
+            delay: 100,
+            hideDelay: 100,
+            size: 'tiny',
+            width: '16%',
+            position: 'bottom'
+        });
+    });
+    /*]]>*/
+
+</script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="smsAccount">
+
+   <resultMap id="smsAccountModel" type="com.ucpaas.smsp.model.SmsAccountModel" >
+    	 <id column="id" property="id" jdbcType="VARCHAR" />
+    	 <result column="clientid" property="clientId" jdbcType="VARCHAR"/>
+   		 <result column="password" property="password" jdbcType="VARCHAR" />
+   		 <result column="name" property="name" jdbcType="VARCHAR" />
+   		 <result column="sid" property="sid" jdbcType="VARCHAR" />
+   		 <result column="status" property="status" jdbcType="INTEGER" />
+   		 <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+   		 <result column="oauth_status" property="oauthStatus" jdbcType="INTEGER" />
+   		 <result column="oauth_date" property="oauthDate" jdbcType="DATE" />
+   		 <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+   		 <result column="email" property="email" jdbcType="VARCHAR" />
+   		 <result column="address" property="address" jdbcType="VARCHAR" />
+   		 <result column="realname" property="realname" jdbcType="VARCHAR" />
+   		 <result column="client_level" property="clientLevel" jdbcType="INTEGER" />
+   		 <result column="client_type" property="clientType" jdbcType="INTEGER" />
+   		 <result column="needreport" property="needreport" jdbcType="INTEGER" />
+   		 <result column="needmo" property="needmo" jdbcType="INTEGER" />
+   		 <result column="needaudit" property="needaudit" jdbcType="INTEGER" />
+   		 <result column="createtime" property="createtime" jdbcType="DATE" />
+   		 <result column="ip" property="ip" jdbcType="VARCHAR" />
+   		 <result column="deliveryurl" property="deliveryurl" jdbcType="VARCHAR" />
+   		 <result column="mourl" property="mourl" jdbcType="VARCHAR" />
+   		 <result column="nodenum" property="nodenum" jdbcType="INTEGER" />
+   		 <result column="paytype" property="paytype" jdbcType="INTEGER" />
+   		 <result column="needextend" property="needextend" jdbcType="INTEGER" />
+   		 <result column="signextend" property="signextend" jdbcType="INTEGER" />
+   		 <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+   		 <result column="identify" property="identify" jdbcType="INTEGER" />
+   		 <result column="create_time" property="createTime" jdbcType="DATE" />
+   		 <result column="update_time" property="updateTime" jdbcType="DATE" />
+ 	 </resultMap>
+ 	 
+   <resultMap id="smsAccountModelPo" type="com.ucpaas.smsp.model.po.SmsAccountModelPo" >
+    	 <id column="id" property="id" jdbcType="VARCHAR" />
+    	 <result column="clientid" property="clientId" jdbcType="VARCHAR"/>
+   		 <result column="password" property="password" jdbcType="VARCHAR" />
+   		 <result column="name" property="name" jdbcType="VARCHAR" />
+   		 <result column="sid" property="sid" jdbcType="VARCHAR" />
+   		 <result column="status" property="status" jdbcType="INTEGER" />
+   		 <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+   		 <result column="oauth_status" property="oauthStatus" jdbcType="INTEGER" />
+   		 <result column="oauth_date" property="oauthDate" jdbcType="DATE" />
+   		 <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+   		 <result column="email" property="email" jdbcType="VARCHAR" />
+   		 <result column="address" property="address" jdbcType="VARCHAR" />
+   		 <result column="realname" property="realname" jdbcType="VARCHAR" />
+   		 <result column="client_level" property="clientLevel" jdbcType="INTEGER" />
+   		 <result column="client_type" property="clientType" jdbcType="INTEGER" />
+   		 <result column="needreport" property="needreport" jdbcType="INTEGER" />
+   		 <result column="needmo" property="needmo" jdbcType="INTEGER" />
+   		 <result column="needaudit" property="needaudit" jdbcType="INTEGER" />
+   		 <result column="createtime" property="createtime" jdbcType="DATE" />
+   		 <result column="ip" property="ip" jdbcType="VARCHAR" />
+   		 <result column="deliveryurl" property="deliveryurl" jdbcType="VARCHAR" />
+   		 <result column="mourl" property="mourl" jdbcType="VARCHAR" />
+   		 <result column="nodenum" property="nodenum" jdbcType="INTEGER" />
+   		 <result column="paytype" property="paytype" jdbcType="INTEGER" />
+   		 <result column="needextend" property="needextend" jdbcType="INTEGER" />
+   		 <result column="signextend" property="signextend" jdbcType="INTEGER" />
+   		 <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+   		 <result column="create_time" property="createTime" jdbcType="DATE" />
+   		 <result column="update_time" property="updateTime" jdbcType="DATE" />
+   		 <result column="agent_name" property="agentName" jdbcType="VARCHAR" />
+   		 <result column="agent_mobile" property="agentMobile" jdbcType="VARCHAR" />
+   		 <result column="province" property="province" jdbcType="VARCHAR" />
+   		 <result column="city" property="city" jdbcType="VARCHAR" />
+   		 <result column="area" property="area" jdbcType="VARCHAR" />
+   		 <result column="smsfrom" property="smsfrom" jdbcType="INTEGER" />
+   		 <result column="http_protocol_type" property="httpProtocolType" jdbcType="INTEGER" />
+   		 <result column="smstype" property="smstype" jdbcType="INTEGER" />
+ 	 </resultMap>
+ 	 
+	
+	<select id="getAccountInfo" resultType="map">
+		select 
+			id,
+			name,
+			password
+		from 
+		t_sms_account 
+		where 1 = 1
+		and (email = #{loginAccount} or mobile = #{loginAccount})
+	</select>
+	
+	<select id="getAccountInfoByLoginAccount" resultMap="smsAccountModelPo">
+		select
+			 ac.id,
+			 ac.clientid,
+			 ac.password,
+		     ac.name,
+		     ac.sid,
+		     ac.status,
+	         ac.agent_id,
+	         ac.oauth_status,
+	         ac.oauth_date,
+	         ac.mobile,
+	         ac.email,
+	         ac.address,
+	         ac.realname,
+	         ac.client_level,
+	         ac.createtime,
+	         ac.paytype,
+	         ac.smsfrom,
+	         ac.http_protocol_type,
+	         ag.agent_name as agent_name,
+	         ag.mobile as agent_mobile
+		from 
+			t_sms_account ac
+			LEFT JOIN t_sms_agent_info ag
+			ON ac.agent_id = ag.agent_id
+		where 1 = 1
+		and ( ac.clientid = #{loginAccount} or ac.email = #{loginAccount} or ac.mobile = #{loginAccount})
+	</select>
+	
+	<select id="getAccountInfoByClientId" resultMap="smsAccountModel">
+		SELECT
+		     clientid,
+		     name,
+		     sid,
+		     status,
+	         agent_id,
+	         oauth_status,
+	         oauth_date,
+	         mobile,
+	         email,
+	         address,
+	         realname,
+	         client_level,
+	         needreport,
+	         needmo,
+	         needaudit,
+	         createtime,
+	         ip,
+	         deliveryurl,
+	         mourl,
+	         nodenum,
+	         paytype,
+	         needextend,
+	         signextend,
+	         remarks,
+	         identify,
+	         smstype,
+	         smsfrom
+		FROM 
+			t_sms_account
+		WHERE 1 =1 
+		AND clientid = #{clientId}
+	</select>
+	
+	<select id="getApiClientInfo" resultMap="smsAccountModel">
+		SELECT
+		     clientid,
+		     name,
+			`password`,
+		     status,
+         	agent_id
+		FROM 
+			t_sms_account
+		WHERE 1 =1 
+		AND clientid = #{clientid}
+	</select>
+
+
+	<select id="getAgentInfoByAgentId" resultType="map">
+		SELECT
+		agent_id,
+		agent_type
+		FROM
+		t_sms_agent_info
+		WHERE 1 =1
+		AND agent_id = #{agent_id}
+	</select>
+	
+	
+<!-- 	<select id="getAccountInformation" resultMap="smsAccountModel"> -->
+<!-- 		SELECT name,clientid,sid,status,paytype,createtime,agent_id,oauth_status,oauth_date,needreport,realname,address, -->
+<!-- 		mobile,email,needmo,needaudit,deliveryurl,mourl,nodenum,client_level,client_type,needextend,signextend,ip,remarks,province, -->
+<!-- 		city,area -->
+<!--        FROM -->
+<!-- 	     t_sms_account -->
+<!--        WHERE -->
+<!--         clientid = #{accountId} -->
+<!-- 	    limit 1 -->
+<!-- 	</select> -->
+	
+	
+<!-- 	<update id="updateAccountInfo" parameterType="com.ucpaas.smsp.model.SmsAccountModel"> -->
+<!-- 	    update t_sms_account set  -->
+<!-- 	    address = #{address}, -->
+<!-- 	    realname = #{realname}, -->
+<!-- 	    ip = #{ip}, -->
+<!-- 	    deliveryurl = #{deliveryurl}, -->
+<!-- 	    mourl = #{mourl}, -->
+<!-- 	    province =#{province}, -->
+<!-- 	    city = #{city}, -->
+<!-- 	    area = #{area} -->
+<!-- 	    where clientid = #{clientId}     -->
+<!-- 	</update> -->
+	
+<!-- 	<update id="updateClientPassword" parameterType="com.ucpaas.smsp.model.SmsAccountModel"> -->
+<!-- 	     update t_sms_account set password = #{password}  -->
+<!-- 	     where ( -->
+<!-- 	        clientid = #{clientId} -->
+<!-- 	     ) -->
+<!-- 	</update> -->
+	
+<!-- 	<select id="getPasswordByClientId" resultType="String"> -->
+<!-- 	     select password from t_sms_account where clientid = #{clientId} -->
+<!-- 	</select> -->
+	
+<!-- 	<update id="updateClientRealname" parameterType="com.ucpaas.smsp.model.SmsOauthPic"> -->
+<!-- 	     update t_sms_account set realname = #{realname},client_type = #{clientType} where clientid=#{clientId} -->
+<!-- 	</update> -->
+	
+<!-- 	<select id="getOauthStatusByClientId" resultType="com.ucpaas.smsp.model.SmsAccountModel"> -->
+<!-- 	    select oauth_status oauthStatus,client_type clientType,remarks remarks from t_sms_account where clientid=#{accountId} -->
+<!-- 	</select> -->
+	
+<!-- 	<update id="updateClientOauthStatus"> -->
+<!-- 	   update t_sms_account set oauth_status = 2 where clientid = #{clientId} -->
+<!-- 	</update> -->
+</mapper> 

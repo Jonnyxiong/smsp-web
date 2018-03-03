@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>[云之讯]彩印新产品.让您与众不同</title>
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"/>
+	<link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+	<link rel="stylesheet" href="/css/lightApp/main.css" th:href="@{/css/lightApp/main.css}">
+	<link rel="stylesheet" href="/css/lightApp/swiper-3.4.1.min.css" th:href="@{/css/lightApp/swiper-3.4.1.min.css}">
+	<link rel="stylesheet" href="/css/lightApp/animate.min.css" th:href="@{/css/lightApp/animate.min.css}">
+	<script src="/js/jquery-3.0.0.min.js" th:src="@{/js/jquery-3.0.0.min.js}"></script>
+	<script src="/js/lightApp/swiper-3.4.1.jquery.min.js" th:src="@{/js/lightApp/swiper-3.4.1.jquery.min.js}"></script>
+	<script src="/js/lightApp/swiper.animate.min.js" th:src="@{/js/lightApp/swiper.animate.min.js}"></script>
+	<script src="/js/lightApp/canvas.js" th:src="@{/js/lightApp/canvas.js}"></script>
+	<script src="/js/lightApp/index.js?v=1.0" th:src="@{/js/lightApp/index.js?v=1.0}"></script>
+	<script>
+		var rem = window.innerWidth > 750 ? 750 /3.75 : window.innerWidth/3.75;
+		function initRem(){
+			document.documentElement.style.fontSize = rem + 'px';
+		}
+	</script>
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "https://hm.baidu.com/hm.js?672a25a0ce4b1852b619ff596828cc22";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+</head>
+<body onload="initRem()">
+	<img src="/img/lightApp/share.png" alt=""  style="position: absolute;top:-100000px;left:-1000000px;">
+	<audio src="/img/audio/1.mp3" preload="load" loop="loop" style="display: none;position: absolute;top:-10000px;left:-100000px;"></audio>
+	
+	<div class="load">
+		<div class="spinner">
+			<div class="rect1"></div>
+			<div class="rect2"></div>
+			<div class="rect3"></div>
+			<div class="rect4"></div>
+			<div class="rect5"></div>
+		</div>
+	</div>
+	<canvas id="stars"></canvas>
+	<div class="music-switch music-switch-off"></div>
+	<div class="wrap"></div>
+	<div class="view swiper-container" style="z-index:11;">
+		<div class="swiper-wrapper">
+			<div class="page page-1 swiper-slide">
+				<img class=" page1-logo animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page1-logo.png"  swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page1-title animate-el swiper-lazy ani fadeInUp" data-src="/img/lightApp/page1-title.png"  swiper-animate-effect="fadeInUp" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
+			</div>
+			<div class="page page-2 swiper-slide">
+				<img class=" page2-logo animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page1-logo.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page2-title animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page2-title.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s" swiper-animate-duration="0.5s">
+				<img class=" page2-bk1 animate-el swiper-lazy ani fadeInUp" data-src="/img/lightApp/page2-bk1.png" swiper-animate-effect="fadeInUp" swiper-animate-duration="0.5s" swiper-animate-delay="0.5s">
+				<img class=" page2-bk2 animate-el swiper-lazy ani zoomIn" data-src="/img/lightApp/page2-bk2.png" swiper-animate-effect="zoomIn" swiper-animate-delay="1s">
+			</div>
+			<div class="page page-3 swiper-slide">
+				<img class=" page2-logo animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page1-logo.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page2-title animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page3-title.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page3-bk1 animate-el swiper-lazy ani fadeInLeft" data-src="/img/lightApp/page3-bk1.png" swiper-animate-effect="fadeInLeft" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
+				<img class=" page3-bk2 animate-el swiper-lazy ani fadeInUp" data-src="/img/lightApp/page3-bk2.png" swiper-animate-effect="fadeInUp" swiper-animate-duration="0.5s" swiper-animate-delay="1s">
+				<img class=" page3-bk3 animate-el swiper-lazy ani zoomIn" data-src="/img/lightApp/page3-bk3.png" swiper-animate-effect="zoomIn" swiper-animate-duration="0.5s" swiper-animate-delay="1s">
+			</div>
+			<div class="page page-4 swiper-slide">
+				<img class=" page2-logo animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page1-logo.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page2-title animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page4-title.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page4-bk1 animate-el swiper-lazy ani fadeInLeft" data-src="/img/lightApp/page4-bk1.png" swiper-animate-effect="fadeInLeft" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
+				<img class=" page4-bk2 animate-el swiper-lazy ani fadeInUp" data-src="/img/lightApp/page4-bk2.png" swiper-animate-effect="fadeInUp" swiper-animate-duration="0.5s" swiper-animate-delay="1s">
+				<img class=" page4-bk3 animate-el swiper-lazy ani zoomIn" data-src="/img/lightApp/page4-bk3.png" swiper-animate-effect="zoomIn" swiper-animate-duration="0.5s" swiper-animate-delay="1s">
+			</div>
+			<div class="page page-5 swiper-slide">
+				<img class=" page2-logo animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page1-logo.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page2-title animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page5-title.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page5-bk1 animate-el swiper-lazy ani tada" data-src="/img/lightApp/page5-bk1.png"  swiper-animate-effect="tada" swiper-animate-duration="0.5s" swiper-animate-delay="1.3s">
+				<img class=" page5-bk2 animate-el swiper-lazy ani fadeInLeft" data-src="/img/lightApp/page5-bk2.png" swiper-animate-effect="fadeInLeft" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
+				<img class=" page5-bk3 animate-el swiper-lazy ani fadeInRight" data-src="/img/lightApp/page5-bk3.png" swiper-animate-effect="fadeInRight" swiper-animate-duration="0.5s" swiper-animate-delay="1s">
+			</div>
+			<div class="page page-6 swiper-slide">
+				<img class=" page2-logo animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page1-logo.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page6-title animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page6-title.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page6-bk1 animate-el swiper-lazy ani zoomIn" data-src="/img/lightApp/page6-bk1.png" swiper-animate-effect="zoomIn" swiper-animate-duration="0.5s" swiper-animate-delay="0.5s">
+			</div>
+			<div class="page page-7 swiper-slide">
+				<img class=" page2-logo animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page1-logo.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page2-title animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page7-title.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page7-bk1 animate-el swiper-lazy ani fadeInLeft" data-src="/img/lightApp/page7-bk1.png" swiper-animate-effect="fadeInLeft" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">
+				<img class=" page7-bk2 animate-el swiper-lazy ani fadeInRight" data-src="/img/lightApp/page7-bk2.png" swiper-animate-effect="fadeInRight" swiper-animate-duration="0.5s" swiper-animate-delay="0.8s">
+			</div>
+			<div class="page page-8 swiper-slide">
+				<img class=" page2-logo animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page1-logo.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page2-title animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page8-title.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page8-bk1 animate-el swiper-lazy ani fadeInLeft" data-src="/img/lightApp/page8-bk1.png" swiper-animate-effect="fadeInLeft" swiper-animate-duration="0.5s" swiper-animate-delay="0.3s">	
+				<img class=" page8-bk2 animate-el swiper-lazy ani fadeInRight" data-src="/img/lightApp/page8-bk2.png" swiper-animate-effect="fadeInRight" swiper-animate-duration="0.5s" swiper-animate-delay="0.8s">
+			</div>
+			<div class="page page-9 swiper-slide last-page">
+				<img class=" page2-logo animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page1-logo.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page2-title animate-el swiper-lazy ani fadeIn" data-src="/img/lightApp/page9-title.png" swiper-animate-effect="fadeIn" swiper-animate-duration="0.5s">
+				<img class=" page9-bk1 animate-el swiper-lazy ani zoomIn" data-src="/img/lightApp/page9-bk1.png" swiper-animate-effect="zoomIn" swiper-animate-duration="0.5s" swiper-animate-delay="0.5s">
+				<img class=" page9-bk2 animate-el swiper-lazy ani fadeInUp" data-src="/img/lightApp/page9-bk2.png" swiper-animate-effect="fadeInUp" swiper-animate-duration="0.5s" swiper-animate-delay="0.9s">
+			</div>
+		</div>
+	</div>
+	<!-- 翻页提示 -->
+	<div class="page-tip">
+		<div class="circle-1"></div>
+		<div class="circle-2 circle-point"></div>
+		<div class="circle-3 circle-point"></div>
+		<div class="circle-4 circle-point"></div>
+	</div>
+	<!-- 翻页提示 end -->
+</body>
+</html>

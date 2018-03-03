@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bussiness">
+
+	<!-- 查询短信日发送统计记录 -->
+	<select id="queryDayStat" resultType="map">
+		SELECT
+			date,
+			sum(usersmstotal) AS usersmstotal,
+			sum(sendtotal) AS sendTotal,
+			sum((reportsuccess + submitsuccess)) AS successTotal,
+			sum((sendtotal - reportsuccess - submitsuccess)) AS failTotal,
+			sum((usersmstotal - sendtotal)) AS interceptTotal,
+			sum(chargetotal) AS chargeTotal
+		FROM
+			t_sms_access_channel_statistics
+		WHERE clientid = #{clientid}
+		AND stattype = 0
+		AND date &gt;= #{startDate}
+		AND date &lt;= #{endDate}
+		<if test="productTypes!=null">
+			and product_type in
+			<foreach item="item" index="index" collection="productTypes" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+
+		GROUP BY
+		date
+		ORDER BY date DESC
+		${limit}
+	</select>
+	<!-- 查询短信日发送统计记录总数 -->
+	<select id="queryDayStatCount" resultType="map">
+		SELECT
+			COUNT(t.date) AS totalCount
+		from (
+		SELECT
+			date
+		FROM
+			t_sms_access_channel_statistics
+		WHERE clientid = #{clientid}
+		AND stattype = 0
+		AND date &gt;= #{startDate}
+		AND date &lt;= #{endDate}
+		<if test="productTypes!=null">
+			and product_type in
+			<foreach item="item" index="index" collection="productTypes" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+
+		GROUP BY
+		date ) t
+	</select>
+
+	<!-- 查询短信日发送统计记录总数 -->
+	<select id="queryDayStatCountInt" resultType="int">
+		SELECT
+		COUNT(t.date) AS totalCount
+		from (
+		SELECT
+		date
+		FROM
+		t_sms_access_channel_statistics
+		WHERE clientid = #{clientid}
+		AND stattype = 0
+		AND date &gt;= #{startDate}
+		AND date &lt;= #{endDate}
+		<if test="productTypes!=null">
+			and product_type in
+			<foreach item="item" index="index" collection="productTypes" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+
+		GROUP BY
+		date ) t
+	</select>
+
+
+	<!-- 查询短信月发送统计记录 -->
+	<select id="queryMonthStat" resultType="map">
+		SELECT
+		t.date,
+		sum(t.usersmstotal) AS usersmstotal,
+		sum(t.sendtotal) AS sendTotal,
+		sum(t.successTotal) AS successTotal,
+		sum(t.failTotal) AS failTotal,
+		sum(t.interceptTotal) AS interceptTotal,
+		sum(t.chargetotal) AS chargeTotal
+		FROM
+		(
+		SELECT
+			date_format(str_to_date(date,'%Y%m'),'%Y%m') as date,
+			usersmstotal AS usersmstotal,
+		  	sendtotal AS sendTotal,
+			(reportsuccess + submitsuccess) AS successTotal,
+			(sendtotal - reportsuccess - submitsuccess) AS failTotal,
+			(usersmstotal - sendtotal) AS interceptTotal,
+			chargetotal AS chargeTotal
+		FROM
+			t_sms_access_channel_statistics
+		WHERE clientid = #{clientid}
+		AND stattype = 0
+		<if test="productTypes!=null">
+			and product_type in
+			<foreach item="item" index="index" collection="productTypes" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		) t
+		GROUP BY t.date
+		ORDER BY t.date DESC
+		${limit}
+	</select>
+	<!-- 查询短信月发送统计记录总数 -->
+	<select id="queryMonthStatCount" resultType="map">
+		SELECT
+			COUNT(tt.date) AS totalCount
+		FROM(
+		SELECT
+			t.date
+		FROM
+		(
+		SELECT
+		date_format(str_to_date(date,'%Y%m'),'%Y%m') as date,
+		usersmstotal AS usersmstotal,
+		sendtotal AS sendTotal,
+		(reportsuccess + submitsuccess) AS successTotal,
+		(sendtotal - reportsuccess - submitsuccess) AS failTotal,
+		(usersmstotal - sendtotal) AS interceptTotal,
+		chargetotal AS chargeTotal
+		FROM
+		t_sms_access_channel_statistics
+		WHERE clientid = #{clientid}
+		AND stattype = 0
+		<if test="productTypes!=null">
+			and product_type in
+			<foreach item="item" index="index" collection="productTypes" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		) t
+		GROUP BY t.date
+		) tt
+
+	</select>
+	
+	<sql id="querySmsSendRecordCommon">
+		<where>
+			<if test="start_time != null and end_time != null">
+				date BETWEEN #{start_time} AND #{end_time}
+			</if>
+			<if test="mobile != null">
+				AND phone LIKE CONCAT("%",#{mobile},"%")
+			</if>
+			<if test="content != null">
+				AND content LIKE CONCAT("%",#{content},"%")
+			</if>
+			<if test="state != null and state !='' ">
+				AND state in(${state})
+			</if>
+			<if test="smsTypes!=null">
+				and smstype in
+				<foreach item="item" index="index" collection="smsTypes" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			
+			AND clientid = #{clientid}
+		</where>
+	</sql>
+	
+	<sql id="queryField">
+		t.phone AS phone,
+		t.content AS content,
+		CASE t.state
+			WHEN 0 THEN "待审核"
+			WHEN 1 THEN "发送成功"
+			WHEN 3 THEN "发送成功"
+			WHEN 4 THEN "拦截"
+			WHEN 5 THEN "拦截"
+			WHEN 6 THEN "发送失败"
+			WHEN 7 THEN "拦截"
+			WHEN 8 THEN "拦截"
+			WHEN 9 THEN "拦截"
+			WHEN 10 THEN "拦截"
+		END AS status, 
+		t.errorcode,
+		CASE 
+			WHEN t.state IN (0,1,3) THEN "-"
+			WHEN t.state = 6 THEN CONCAT("其它错误",IFNULL(t.report, ""))
+			WHEN t.state = 4 THEN CONCAT("其它错误",IFNULL(t.submit, ""))
+			WHEN t.errorcode = 'YX:1000' THEN "系统超频错误"
+			WHEN t.errorcode = 'YX:5009' THEN "订单余额不足"
+			WHEN t.errorcode = 'YX:7000' THEN "审核不通过"
+			WHEN t.errorcode = 'YX:9001' THEN "号码格式错误"
+			WHEN t.errorcode = 'YX:9002' THEN "账号不存在"
+			WHEN t.errorcode = 'YX:9004' THEN "无可用通道组"
+			WHEN t.errorcode = 'YX:9006' THEN "无可选用通道"
+			ELSE CONCAT("其它错误", IFNULL(t.errorcode,""))
+		END AS errorcode_name,
+		IF(t.date IS NULL,'',DATE_FORMAT(t.date,'%Y-%m-%d %H:%i:%S')) AS subTime,
+		IF(t.submitdate IS NULL,'',DATE_FORMAT(t.submitdate,'%Y-%m-%d %H:%i:%S')) AS sendTime,
+		t.smstype_name
+	</sql>
+	
+	<!-- 查询短信发送记录 -->
+	<select id="querySmsSendRecord" resultType="map">
+		SELECT
+			<include refid="queryField" />
+		FROM
+		(
+			<foreach collection="table_list" item="i" separator=" UNION ALL ">
+				SELECT
+					r.phone,
+					r.content,
+					r.state,
+					r.date,
+					r.submitdate,
+				case r.smstype
+				when 0 then '通知'
+				when 4 then '验证码'
+				when 5 then '会员营销'
+				when 6 then '告警短信'
+				when 7 then 'USSD'
+				else '闪信'
+				end as smstype_name,
+				r.errorcode, 
+				r.report,
+				r.submit
+				FROM
+					${i} r
+				<include refid="querySmsSendRecordCommon"/>
+			</foreach>
+		) t
+		where 
+			t.date between #{start_time} and #{end_time}
+		ORDER BY t.date DESC
+		${limit}
+	</select>
+	
+	<!-- 查询短信发送记录总数 -->
+	<select id="querySmsSendRecordCount" resultType="map">
+		SELECT
+			COUNT(1) AS totalCount
+		FROM
+		(
+			<foreach collection="table_list" item="i" separator=" UNION ALL ">
+				SELECT
+					r.phone,
+					r.content,
+					r.state,
+					r.date,
+					r.submitdate
+				FROM
+					${i} r
+				<include refid="querySmsSendRecordCommon"/>
+			</foreach>
+		) t
+		where 
+			t.date between #{start_time} and #{end_time}
+	</select>
+	
+	
+	<!-- 查询短信发送记录 Excel导出 -->
+	<select id="querySmsSendRecord4Excel" resultType="map">
+		SELECT
+			<include refid="queryField" />
+		FROM
+		(
+			<foreach collection="table_list" item="i" separator=" UNION ALL ">
+				SELECT
+					r.phone,
+					r.content,
+					r.state,
+					r.date,
+					r.submitdate,
+				case r.smstype
+				when 0 then '通知'
+				when 4 then '验证码'
+				when 5 then '会员营销'
+				when 6 then '告警短信'
+				when 7 then 'USSD'
+				else '闪信'
+				end as smstype_name,
+				r.errorcode, 
+				r.report,
+				r.submit
+				FROM
+					${i} r
+				<include refid="querySmsSendRecordCommon"/>
+			</foreach>
+		) t
+		ORDER BY t.date DESC
+	</select>
+
+
+	<!-- 查询短信日发送统计记录
+                     发送总数num_all：短信状态0/1/3/4/5/6/7/8/9/10
+            待发送数num_pending：状态 0
+            成功数num_sucs：短信状态 3
+            失败数num_fail：短信状态 4/5/6/7/8/9/10
+            未知数num_known：短信状态 1
+        -->
+	<!--后付费-->
+	<select id="queryStatistic1" resultType="map">
+		SELECT
+		tc.date,
+		case
+		WHEN ts.smstype is null then '-'
+		WHEN ts.smstype = 0 then '0'
+		WHEN ts.smstype = 4 then '4'
+		WHEN ts.smstype = 5 then '5'
+		WHEN ts.smstype = 6 then '6'
+		WHEN ts.smstype = 7 then '7'
+		WHEN ts.smstype = 8 then '8'
+		ELSE ts.smstype
+		END  AS smstype,
+		case
+		WHEN ts.product_type is null then '-'
+		WHEN ts.product_type = 99 then '99'
+		WHEN ts.product_type = 0 then '0'
+		WHEN ts.product_type = 1 then '1'
+		WHEN ts.product_type = 2 then '2'
+		ELSE ts.product_type
+		end AS product_type,
+		SUM(IFNULL(ts.usersmstotal,0)) AS num_all,
+		SUM(IFNULL(ts.chargetotal,0)) AS chargetotal,
+		SUM(IFNULL(ts.reportsuccess,0)) AS num_sucs,
+		SUM(IFNULL(ts.submitsuccess,0)) AS num_known,
+		SUM(IFNULL(ts.submitfail,0) +  IFNULL(ts.reportfail,0)) AS num_fail,
+		SUM(IFNULL(ts.notsend,0)) AS notsend,
+		SUM(IFNULL(ts.subretfail,0)+IFNULL(ts.auditfail,0)+IFNULL(ts.recvintercept,0)+IFNULL(ts.sendintercept,0)+IFNULL(ts.overrateintercept,0)) AS interceptTotal
+		FROM
+		(select * from
+		t_sms_access_channel_statistics
+		WHERE clientid = #{clientId}
+		AND stattype = 0
+		<if test="smstype != null and smstype != ''">
+			AND smstype = #{smstype}
+		</if>
+		<if test="producttype == null or producttype == ''">
+			AND product_type !=2  AND operatorstype!=4
+		</if>
+		<if test="producttype != null and producttype != ''and producttype !=2">
+			AND product_type = #{producttype}
+		</if>
+		<if test="producttype != null and producttype != ''and producttype ==2">
+			AND operatorstype=4
+		</if>
+		) ts
+		right join
+		(select * from
+		t_sms_calendar
+		where date &gt;= #{startDate}
+		AND date &lt; #{endDate}) tc on ts.date = tc.date
+		GROUP BY ts.clientid,ts.smstype,tc.date
+		ORDER BY tc.date DESC
+		${limit}
+	</select>
+
+	<!--预付费-->
+	<select id="queryStatistic" resultType="map">
+		SELECT
+		tc.date,
+		case
+		WHEN ts.smstype is null then '-'
+		WHEN ts.smstype = 0 then '0'
+		WHEN ts.smstype = 4 then '4'
+		WHEN ts.smstype = 5 then '5'
+		WHEN ts.smstype = 6 then '6'
+		WHEN ts.smstype = 7 then '7'
+		WHEN ts.smstype = 8 then '8'
+		ELSE ts.smstype
+		END  AS smstype,
+		case
+		WHEN ts.product_type is null then '-'
+		WHEN ts.product_type = 99 then '99'
+		WHEN ts.product_type = 0 then '0'
+		WHEN ts.product_type = 1 then '1'
+		WHEN ts.product_type = 2 then '2'
+		ELSE ts.product_type
+		end AS product_type,
+		SUM(IFNULL(ts.usersmstotal,0)) AS num_all,
+		SUM(IFNULL(ts.chargetotal,0)) AS chargetotal,
+		SUM(IFNULL(ts.reportsuccess,0)) AS num_sucs,
+		SUM(IFNULL(ts.submitsuccess,0)) AS num_known,
+		SUM(IFNULL(ts.submitfail,0) +  IFNULL(ts.reportfail,0)) AS num_fail,
+		SUM(IFNULL(ts.notsend,0)) AS notsend,
+		SUM(IFNULL(ts.subretfail,0)+IFNULL(ts.auditfail,0)+IFNULL(ts.recvintercept,0)+IFNULL(ts.sendintercept,0)+IFNULL(ts.overrateintercept,0)) AS interceptTotal
+		FROM
+		(select * from
+		t_sms_access_channel_statistics
+		WHERE clientid = #{clientId}
+		AND stattype = 0
+		<if test="smstype != null and smstype != ''">
+			AND smstype = #{smstype}
+		</if>
+		<if test="producttype == null or producttype == ''">
+			AND product_type !=2  AND operatorstype!=4
+		</if>
+		<if test="producttype != null and producttype != ''and producttype !=2">
+			AND product_type = #{producttype}
+		</if>
+		<if test="producttype != null and producttype != ''and producttype ==2">
+			AND operatorstype=4
+		</if>
+		) ts
+		right join
+		(select * from
+		t_sms_calendar
+		where date &gt;= #{startDate}
+		AND date &lt; #{endDate}) tc on ts.date = tc.date
+		GROUP BY ts.clientid,ts.smstype,ts.product_type,tc.date
+		ORDER BY tc.date DESC
+		${limit}
+	</select>
+
+
+	<!--后付费-->
+	<select id="queryStatisticCount1" resultType="map">
+		SELECT
+		COUNT(1) AS totalCount
+		FROM
+		( SELECT
+		tc.date
+		FROM
+		(
+		select * from
+		t_sms_access_channel_statistics
+		WHERE clientid = #{clientId}
+		AND stattype = 0
+		<if test="smstype != null and smstype != ''">
+			AND smstype = #{smstype}
+		</if>
+		<if test="producttype == null or producttype == ''">
+			AND product_type !=2  AND operatorstype!=4
+		</if>
+		<if test="producttype != null and producttype != ''and producttype !=2">
+			AND product_type = #{producttype}
+		</if>
+		<if test="producttype != null and producttype != ''and producttype ==2">
+			AND operatorstype=4
+		</if>
+		) ts
+		right join
+		(select * from
+		t_sms_calendar
+		where date &gt;= #{startDate}
+		AND date &lt; #{endDate}) tc on ts.date = tc.date
+		GROUP BY ts.clientid,ts.smstype,tc.date
+		) total
+	</select>
+
+	<!--预付费-->
+	<select id="queryStatisticCount" resultType="map">
+		SELECT
+		COUNT(1) AS totalCount
+		FROM
+		( SELECT
+		tc.date
+		FROM
+		(select * from
+		t_sms_access_channel_statistics
+		WHERE clientid = #{clientId}
+		AND stattype = 0
+		<if test="smstype != null and smstype != ''">
+			AND smstype = #{smstype}
+		</if>
+		<if test="producttype == null or producttype == ''">
+			AND product_type !=2  AND operatorstype!=4
+		</if>
+		<if test="producttype != null and producttype != ''and producttype !=2">
+			AND product_type = #{producttype}
+		</if>
+		<if test="producttype != null and producttype != ''and producttype ==2">
+			AND operatorstype=4
+		</if>
+		) ts
+		right join
+		(select * from
+		t_sms_calendar
+		where date &gt;= #{startDate}
+		AND date &lt; #{endDate}) tc on ts.date = tc.date
+		GROUP BY ts.clientid,ts.smstype,ts.product_type,tc.date
+		) totals
+	</select>
+
+	<!-- 共计（小计） -->
+	<select id="queryStatisticTotal" resultType="map">
+		SELECT
+		date,
+		SUM(usersmstotal) AS num_all_total,
+		SUM(chargetotal) AS chargeTotal_total,
+		SUM(reportsuccess) AS num_sucs_total,
+		SUM(submitsuccess) AS num_known_total,
+		SUM(submitfail+reportfail) AS num_fail_total,
+		SUM(notsend) AS num_pending_total,
+		SUM(IFNULL(subretfail,0)+IFNULL(auditfail,0)+IFNULL(recvintercept,0)+IFNULL(sendintercept,0)+IFNULL(overrateintercept,0)) AS num_intercept_total
+		FROM
+		t_sms_access_channel_statistics
+		WHERE clientid = #{clientId}
+		AND stattype = 0
+		AND date &gt;= #{startDate}
+		AND date &lt; #{endDate}
+		<if test="smstype != null and smstype != ''">
+			AND smstype = #{smstype}
+		</if>
+		<if test="producttype == null or producttype == ''">
+			AND product_type !=2  AND operatorstype!=4
+		</if>
+		<if test="producttype != null and producttype != ''and producttype !=2">
+			AND product_type = #{producttype}
+		</if>
+		<if test="producttype != null and producttype != ''and producttype ==2">
+			AND operatorstype=4
+		</if>
+		GROUP BY clientid
+	</select>
+	
+</mapper> 

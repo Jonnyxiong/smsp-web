@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="home" >
+
+  <resultMap id="AgentApplyVO" type="com.ucpaas.smsp.model.AgentApplyVO" >
+    <result column="company" property="companyName" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="realname" property="realName" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <insert id="insertAgentApply" parameterType="com.ucpaas.smsp.model.AgentApplyVO" >
+  
+	  INSERT INTO `t_sms_agent_apply` (
+		`id`,
+		`company`,
+		`address`,
+		`realname`,
+		`email`,
+		`mobile`,
+		`city`,
+		`remark`,
+		`status`,
+		`reason`,
+		`create_time`
+	)
+	VALUES
+		(
+			NULL,
+			#{companyName},
+			#{address},
+			#{realName},
+			#{email},
+			#{mobile},
+			#{city},
+			#{remark},
+			0,<!-- status 0:待受理,1:受理不通过,2:已受理 -->
+			"",<!-- reason -->
+			NOW()<!-- create_time -->
+		)
+	
+  </insert>
+  
+  <!-- 查询代理商申请的手机号码和邮件是否在申请表中已存在 -->
+  <select id="agentApplyCheckInApply" resultType="map">
+  		SELECT
+			IF(email = #{email},email,'') AS email,
+			IF(mobile = #{mobile},mobile,'') AS mobile
+		FROM
+			t_sms_agent_apply
+		WHERE
+			(email = #{email} OR mobile = #{mobile})
+			AND status = 0
+		LIMIT 1
+  </select>
+  
+  <!-- 查询代理商申请的手机号码和邮件是否在用户表中已存在 -->
+  <select id="agentApplyCheckInUser" resultType="map">
+  		SELECT
+			IF(email = #{email},email,'') AS email,
+			IF(mobile = #{mobile},mobile,'') AS mobile
+		FROM
+			t_sms_user
+		WHERE
+			web_id IN (2,4)
+			AND
+			(email = #{email} OR mobile = #{mobile})
+		LIMIT 1
+  </select>
+  
+  
+</mapper>

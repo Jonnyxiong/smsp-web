@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8"/>
+	<meta content="云之讯,云通讯,云通讯平台" name="keywords"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<title>云之讯—融合通讯开放平台让通讯更简单</title>
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"/>
+	<link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+	<link rel='stylesheet' type='text/css' href='/css/reset.css' th:href="@{/css/reset.css}"/>
+	<link rel='stylesheet' type='text/css' href="/css/style.css" th:href="@{/css/style.css}"/>
+	<style>
+		.login-wrap .login-con{width: 375px;margin: 50px auto auto;border: 1px solid #e6eaed;border-radius: 5px;padding: 10px 50px;background-color: #fff;box-sizing: border-box;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;}
+		.header_wp{ margin: 0 auto;position: relative;}
+		.logo-wrap{width:600px;text-align: center;position: relative;padding-top:12px;}
+		.logo-wrap .dialog-close{
+			position: absolute;
+			cursor: pointer;
+			line-height: 54px;
+			top:0;
+			right:10px;
+			font-size: 25px;
+			margin-right:10px;
+			width:20px;
+			height:20px;
+		}
+	</style>
+	<script type="text/javascript" src="/js/jquery-3.0.0.min.js" th:src="@{/js/jquery-3.0.0.min.js}"></script>
+	<script type="text/javascript" src="/js/common.js" th:src="@{/js/common.js}"></script>
+	<script type="text/javascript" src="/js/validate/smsp.validate.js" th:src="@{/js/validate/smsp.validate.js}"></script>
+	<script type="text/javascript" src="/js/hex_ha_ha_ha_ha_ha.js" th:src="@{/js/hex_ha_ha_ha_ha_ha.js}"></script>
+	<script type="text/javascript" src="/js/layer/layer.js" th:src="@{/js/layer/layer.js}"></script>
+	<script type="text/javascript" src="/js/base.js" th:src="@{/js/base.js}"></script>
+	<script type="text/javascript" src="/js/jquery.form.js" th:src="@{/js/jquery.form.js}"></script>
+
+	<!--[if lt IE 9]>
+	<style type="text/css">
+		div.header{position:inherit};
+	</style>
+	<![endif]-->
+</head>
+<!--[if lt IE 9]>
+<div style="background:yellow;width:100%;text-align:center;"><span style="color:red">您的浏览器版本过低，支持浏览器：Chrome 42+、Firefox 41+、IE 9+、Opera 29+</span></div>
+<![endif]-->
+<body id="login">
+<div id="wrap">
+	<div class="header">
+		<div class="clearfix">
+			<div class="logo-wrap">
+				<a href="/official/index.html" title="云之讯" th:href="@{/}"><img src="/img/logo.png" alt="云之讯.短信平台" th:href="@{/img/logo.png}"/></a>
+				<i class="dialog-close" onclick="index()">&times;</i>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="login-wrap">
+		<div class="login-con">
+			<h2>登录</h2>
+			<div class="email">
+				<label class="user-name"></label>
+				<input id="loginAccount" type="text" name="email" placeholder="客户账号/邮箱/手机号" />
+				<span id="errorAcc" class="error"></span>
+			</div>
+			<div class="password">
+				<label class="user-password"></label>
+				<input id="password" type="password" name="password" placeholder="密码" />
+				<span id="errorPwd" class="error"></span>
+			</div>
+			<div id="loginErrorBox">
+				<span id="loginInfo" class="error"></span>
+			</div>
+			<div class="submit-btn">
+				<a href="javascript:;" onclick="login()">登录</a>
+			</div>
+			<!--<div class="for-password">-->
+				<!--<span >记住账号<i class=""></i></span>-->
+			<!--</div>-->
+		</div>
+	</div>
+
+</div>
+
+<!-- 代理商申请弹出框 -->
+<div id="agentApplayBox"></div>
+
+</body>
+
+<script  th:inline="javascript">
+	/*<![CDATA[*/
+    $(function(){
+        //获得cookie中保存的账号
+        var loginAcc = $('.client-phone', window.parent.document).html();
+        if($.trim(loginAcc) != ""){
+            $("#loginAccount").val(loginAcc.substring(5));
+        }else{
+            var loginAcc = getCookie("loginAcc");
+            if($.trim(loginAcc) != ""){
+                $("#loginAccount").val(loginAcc);
+            }
+        }
+        $("#password").val("");
+
+        // 登录回车事件
+        document.onkeydown = function(event){
+            var ev = event || window.event;
+            if(ev.keyCode == 13){
+                var password = $.trim($("#password").val());
+                if(password == ""){
+                    $("#password").focus();
+                }else{
+                    login();
+                }
+            }
+        }
+
+        // 再次输入账号和密码是错误信息隐藏
+        $("#loginAccount,#password").keydown(function(){
+            $('#errorAcc').hide();
+            $('#errorPwd').hide();
+        });
+    });
+
+    function login(){
+        var loginAccount = $("#loginAccount").val();
+        var password = $("#password").val();
+        if(!loginValidate(loginAccount, password)){
+            return;
+        }
+
+        password = hex_ha_ha_ha_ha_ha(password);
+        $.ajax({
+            type: "POST",
+            url:/*[[@{/console/loginValidate}]]*/"${ctx}/loginValidate",
+            data:"loginAccount="+loginAccount+"&password="+password,
+            async: false,
+            success: function(data){
+                if(data.isSuccess == true){
+                    var index = parent.layer.getFrameIndex(window.name);
+                    var t = parent.layer.close(index);
+                    console.log(t);
+//                    parent.layer.closeAll();
+                }else{
+                    $("#errorPwd").html(data.message).show();
+                }
+            }
+
+        });
+
+    }
+
+    function index(){
+        parent.location.reload();
+//        parent.location.href=/*[[@{/console}]]*/'';
+    }
+    function loginValidate(loginAccount, password){
+        var valAccount = true;
+        var valPassword = true;
+        if(loginAccount == null || loginAccount == ''){
+            valAccount = false;
+            $('#errorAcc').html("请输入账户").show();
+        }
+
+        if(password == null || password == ''){
+            valPassword = false;
+            $('#errorPwd').html("请输入密码").show();
+            return;
+        }
+
+        return valAccount && valPassword;
+    }
+
+
+    //记住账号
+    function rememberAccount(){
+        var iList = $(".selected");
+        if(iList.length > 0){
+            //添加cookie
+            var value = $('#loginAccount').val();
+            setCookie("loginAcc",value);
+
+        }else{
+            //删除cookie
+            delCookie("loginAcc");
+        }
+    }
+
+	/*]]>*/
+</script>
+
+
+</html>

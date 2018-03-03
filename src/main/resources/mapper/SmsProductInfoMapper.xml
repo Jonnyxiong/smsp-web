@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="order.SmsProductInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.ucpaas.smsp.model.SmsProductInfo" >
+    <id column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_desc" property="productDesc" jdbcType="VARCHAR" />
+    <result column="operator_code" property="operatorCode" jdbcType="INTEGER" />
+    <result column="product_type" property="productType" jdbcType="INTEGER" />
+    <result column="area_code" property="areaCode" jdbcType="INTEGER" />
+    <result column="active_period" property="activePeriod" jdbcType="INTEGER" />
+    <result column="quantity" property="quantity" jdbcType="DECIMAL" />
+    <result column="product_price" property="productPrice" jdbcType="DECIMAL" />
+    <result column="product_cost" property="productCost" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updator" property="updator" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseResultPOMap" type="com.ucpaas.smsp.model.po.SmsProductInfoPo" >
+    <id column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_desc" property="productDesc" jdbcType="VARCHAR" />
+    <result column="operator_code" property="operatorCode" jdbcType="INTEGER" />
+    <result column="product_type" property="productType" jdbcType="INTEGER" />
+    <result column="area_code" property="areaCode" jdbcType="INTEGER" />
+    <result column="active_period" property="activePeriod" jdbcType="INTEGER" />
+    <result column="quantity" property="quantity" jdbcType="DECIMAL" />
+    <result column="product_price" property="productPrice" jdbcType="DECIMAL" />
+    <result column="product_cost" property="productCost" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updator" property="updator" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
+    <result column="product_type_name" property="productTypeName" jdbcType="VARCHAR" />
+    <result column="clientid" property="clientid" jdbcType="VARCHAR" />
+    <result column="create_time_str" property="createTimeStr" jdbcType="VARCHAR" />
+    <result column="active_period_str" property="activePeriodStr" jdbcType="VARCHAR" />
+    <result column="quantity_str" property="quantityStr" jdbcType="VARCHAR" />
+	  <result column="area_codename" property="areaCodeName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    product_id, product_code, product_name, product_desc, operator_code, product_type, 
+    area_code, active_period, quantity, product_price, product_cost, status, creator, 
+    create_time, updator, update_time, remark
+  </sql>
+  
+  <sql id="getProductListByClientIdConditon">
+		<where>
+			sa.clientid = #{clientId} and spi.status = 1
+			<if test="productTypes != null"> 
+			 and product_type in
+			  <foreach item="item" index="index" collection="productTypes"
+			      open="(" separator="," close=")">
+			        #{item}
+			  </foreach>
+			</if>
+		</where>
+  </sql>
+  
+  <select id="getProductListByClientId" resultMap="BaseResultPOMap">
+  	
+  		SELECT
+			spi.product_id,
+			spi.product_code,
+			spi.product_name,
+			spi.product_desc,
+			spi.operator_code,
+			CASE
+				WHEN spi.operator_code = 0 THEN '全网'
+				WHEN spi.operator_code = 1 THEN '移动'
+				WHEN spi.operator_code = 2 THEN '联通'
+				WHEN spi.operator_code = 3 THEN '电信'
+				ELSE '国际'
+			END as operator_name,
+	  		CASE spi.area_code
+	 			 WHEN 0 THEN '全国'
+	  			 WHEN 1 THEN '国际'
+	 			 ELSE '-'
+	  		END as area_codename,
+			spi.product_type,
+			CASE
+				WHEN spi.product_type = 0 THEN '行业'
+				WHEN spi.product_type = 1 THEN '营销'
+	  			WHEN spi.product_type = 2 THEN '验证码'
+	  			WHEN spi.product_type = 3 THEN '通知'
+				WHEN spi.product_type = 7 THEN 'USSD'
+				WHEN spi.product_type = 8 THEN '闪信'
+				WHEN spi.product_type = 9 THEN '挂机短信'
+				ELSE '国际'
+			END as product_type_name,
+			CASE spi.product_type
+				WHEN  2 THEN CONCAT(ROUND(spi.quantity,4),"元")
+				ELSE CONCAT(FLOOR(spi.quantity),"条")
+			END as quantity_str,
+			spi.area_code,
+			spi.active_period,
+			CASE spi.active_period
+				WHEN  0 THEN '无限期'
+				ELSE CONCAT(spi.active_period,"天")
+			END as active_period_str,
+			ROUND(spi.quantity,4) as quantity,
+			ROUND(spi.product_price,4) as product_price,
+			
+			spi.product_cost,
+			spi.status,
+			spi.creator,
+			spi.create_time,
+			DATE_FORMAT(spi.create_time,'%Y-%m-%d %H:%i:%S') as create_time_str,
+			spi.updator,
+			
+			spi.update_time,
+			spi.remark,
+			sa.clientid
+		FROM
+			t_sms_account sa 
+		INNER JOIN t_sms_agent_product sap ON sa.agent_id = sap.agent_id
+		INNER JOIN t_sms_product_info spi ON sap.product_id = spi.product_id
+		<include refid="getProductListByClientIdConditon" />
+		ORDER BY spi.create_time desc
+		LIMIT #{startIndex},#{pageSize}
+  </select>
+  
+  <select id="getProductListByClientIdCount" resultType="java.lang.Integer">
+  		select count(0) from (
+	  		SELECT
+				0
+			FROM
+				t_sms_account sa 
+			INNER JOIN t_sms_agent_product sap ON sa.agent_id = sap.agent_id
+			INNER JOIN t_sms_product_info spi ON sap.product_id = spi.product_id
+			<include refid="getProductListByClientIdConditon" />
+  		) m
+  </select>
+  
+  
+  
+  
+  
+  
+  
+  <select id="getProductListByProductCode" resultMap="BaseResultPOMap">
+  	SELECT 
+  		product_id, 
+  		product_code, 
+  		product_name, 
+  		product_desc, 
+  		operator_code, 
+  		product_type, 
+	    area_code, 
+	    active_period, 
+	    quantity, 
+	    product_price, 
+	    product_cost, 
+	    status, 
+	    creator, 
+	    create_time, 
+	    updator, 
+	    update_time, 
+	    remark
+  	FROM 
+  		t_sms_product_info t
+  	WHERE t.product_code in
+  	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+  		#{item}
+  	</foreach>
+  </select>
+  
+  
+  <select id="queryCountAgentProduct" resultType="int">
+		SELECT 
+			count(id) as Num
+		FROM 
+			t_sms_agent_product
+		WHERE 
+			agent_id = #{agent_id}
+		AND product_id = #{product_id}
+		LIMIT 1;
+  </select>
+  
+  
+  
+</mapper>

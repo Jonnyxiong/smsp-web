@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>云之讯-短信平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="baidu-site-verification" content="zNwez22Bcq" />
+    <meta name="google-site-verification" content="6hC_46bMT6_bGxmL_Ec5V_7xnPSnQBhQBl8y3MtfoFc" />
+    <meta name="Baiduspider" content="noarchive"/>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+    <link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+    <link rel='stylesheet' href='css/tipso.min.css' th:href="@{/css/tipso.min.css}"/>
+    <link rel='stylesheet' type='text/css' href='/font/iconfont.css' th:href="@{/font/iconfont.css}"/>
+    <link rel='stylesheet' type='text/css' href='/css/main.css' th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" type="text/css" href="/js/jquery-ui/css/theme/all.css" th:href="@{/js/jquery-ui/css/theme/all.css}"/>
+    <link rel='stylesheet' type='text/css' href='/js/jedate/skin/jedate.css' th:href="@{/js/jedate/skin/jedate.css}"/>
+
+    <link rel='stylesheet' href='css/reset.css' th:href="@{/css/reset.css}"/>
+    <link rel='stylesheet' href='css/base.css' th:href="@{/css/base.css}"/>
+    <link rel='stylesheet' href='css/oem.css' th:href="@{/css/pin.css}"/>
+
+    <script src="js/jquery-3.0.0.min.js"  th:src="@{/js/jquery-3.0.0.min.js}"></script>
+    <script src="js/common.js" th:src="@{/js/common.js}"></script>
+    <script src="js/layer/layer.js" th:src="@{/js/layer/layer.js}"></script>
+    <script  src="js/jquery-ui/js/datepicker.js" th:src="@{/js/jquery-ui/js/datepicker.js}"></script>
+    <script  src="js/datepicker.js" th:src="@{/js/datepicker.js}"></script>
+    <script  src="js/jquery.form.js" th:src="@{/js/jquery.form.js}"></script>
+    <script  src="js/jquery.form.js" th:src="@{/js/jedate/jedate.js}"></script>
+    <script src="js/tipso.min.js" th:src="@{/js/tipso.min.js}"></script>
+
+    <script type="text/javascript">
+    $(function() {
+        $("#datepicker").datepicker();
+    })
+    </script>
+</head>
+<body>
+    <div id="wrap" class="clearfix">
+        <!-- 左侧导航栏 bf-->
+        <div id="sidebar">
+            <div class="logo">
+                <a href="/" title="云之讯"><img src="/img/logo2.png" alt="云之讯" /></a>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li><a href="/console" th:if="${accountModel.paytype ne 1}" ><span class="iconfont icon-shouyeshouye"></span>首页</a></li>
+                    <li >
+                        <a href="javascript:void(0)" ><span class="iconfont icon-duanxin"></span>传统短信<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/bussiness/send.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信发送<span></span></a></li>
+                            <li><a href="/console/bussiness/template.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信模板管理<span></span></a></li>
+                            <li><a href="/console/bussiness/record.html"  class="">短信发送记录<span></span></a></li>
+                            <li><a href="/console/bussiness/statistics.html" class="">短信数据统计<span></span></a></li>
+                            <li><a href="/console/bussiness/price.html"  class="">国际短信报价<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li th:if="${session.LOGIN_USER_INFO.smsfrom==6}">
+                        <a href="javascript:void(0)" ><span class="iconfont icon-caixin2"></span>彩印<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/mms/send.html" class="">彩印发送<span></span></a></li>
+                            <li><a href="/console/mms/template.html" class="">彩印模版管理<span></span></a></li>
+                            <li><a href="/console/mms/record.html"  class="">彩印发送记录<span></span></a></li>
+                            <li><a href="/console/mms/ussdday.html" class="">彩印数据统计<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li class="cur">
+                        <a href="javascript:void(0)" class="cur"><span class="iconfont icon-qianbi01"></span>财务管理<i class="show"></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/order/list.html" class="cur">我的订单<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class=""><span class="iconfont icon-shenfenzheng"></span>账户管理<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/account/info.html" class="">账户资料<span></span></a></li>
+                            <li><a href="/console/account/security.html" class="">账户安全<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-bangzhuzhongxin"></span>帮助中心<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/help/smsAccessIntroduce.html" class="">短信接入<span></span></a></li>
+                            <li><a href="/console/help/FAQ.html" class="">FAQ<span></span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 左侧导航栏 ef -->
+        <!-- 右边内容 bf -->
+        <div id="main">
+            <div class="main-con">
+                <div class="top order-top clearfix">
+                    <h1>我的订单</h1>
+                    <div class="ft-r ">
+                        <a href="/console/login.html" class="lay-out btn-white btn-small btn" th:href="@{/console/quit}">退出</a>
+                    </div>
+                    
+                    <!-- 
+                    <div class="top-r ft-r">
+                       <span class="contact-phone" th:text="'联系电话: '+${accountModel.agentMobile}">联系电话：13360500910</span>
+					</div>
+					-->
+                </div>
+                <div class="con-out">
+                    <div class="crumbs"><a class="active">我的订单</a></div>
+                    <div class="content order-content">
+                        <div class="order-option clearfix">
+                            <form id="getOrderForm" th:action="@{/console/order/list}" method="post">
+                                <div class="option-l ft-l">
+                                    <label>订单状态</label>
+                                    <span class="state">所有</span>
+                                    <ul class="state-list">
+                                        <li value="100">所有</li>
+                                        <li value="0">审核中</li>
+                                        <li value="1">订单生效</li>
+                                        <li value="2">订单完成</li>
+                                        <li value="3">订单失败</li>
+                                        <li value="4">订单取消</li>
+                                    </ul>
+                                    <input id="orderStatus" name="status" type="hidden" th:value="${getOrderParam.status }" />
+                                        <label>到期时间</label>
+                                        <input type="text" id="date_start" name="startTime"  th:value="${getOrderParam.startTime}" placeholder="开始时间" readonly="readonly" onclick="hideState()" />
+                                        <label>至</label>
+                                        <input type="text" id="date_end" name="endTime" th:value="${getOrderParam.endTime}" placeholder="结束时间" readonly="readonly" onclick="hideState()" />
+                                </div>
+                                <div class="option-r ft-r">
+                                    <label>订单号/产品名称</label>
+                                    <input type="text" name="orderCode_productName" th:value="${getOrderParam.orderCode_productName }" />
+                                    <span><a href="javascript:;" class="green-btn" onclick="getOrderList()">查询</a></span>
+                                    <span><a href="javascript:;" class="green-btn" onclick="exportorder(this)">导出excel</a></span>
+                                </div>
+                                <input id="pageRowCount" type="hidden" name="pageSize" th:value="${pageBean.pageSize}"/>
+                                <input id="goalPage" type="hidden" name="goalPage" value=""/>
+                                <input id="fileName" type="hidden" name="fileName"/>
+                            </form>
+                        </div>
+                        <div class="product-pack order-detail clearfix">
+                            <table>
+                                <thead>
+                                    <tr width="100%;">
+                                        <th style="width: 8%">序号</th>
+                                        <th style="width: 12%">订单号</th>
+                                        <th style="width: 8%">产品代码</th>
+                                        <th style="width: 6%">产品名称</th>
+                                        <th style="width: 6%">产品类型</th>
+                                        <th style="width: 6%">运营商</th>
+                                        <th style="width: 6%">区域</th>
+                                        <th style="width: 8%">总数量</th>
+                                        <th style="width: 8%">剩余数量</th>
+                                        <th style="width: 8%">到期时间</th>
+                                        <th style="width: 8%">订单状态</th>
+                                        <th style="width: 16%">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="orderInfo,iterStat:${pageBean.list }">
+                                        <td style="width: 8%" th:text="${iterStat.count}"></td>
+                                        <td style="width: 12%" class="col-orderId" th:text="${orderInfo.orderId}"></td>
+                                        <td style="width: 8%" class="col-orderId" th:text="${orderInfo.productCode}"></td>
+                                        <td style="cursor: pointer; width: 6%" onclick="showContentTip(this)" class="col-productname" th:text="${orderInfo.productName}"></td>
+                                        <td style="width: 6%" th:text="${orderInfo.productTypeName}"></td>
+                                        <td style="width: 6%" th:text="${orderInfo.operatorCodeName}"></td>
+                                        <td style="width: 6%" th:text="${orderInfo.areaCodeName}"></td>
+                                        <td style="width: 6%" th:text="${orderInfo.quantityStr}"></td>
+                                        <td style="width: 10%" th:text="${orderInfo.remainQuantityStr}"></td>
+                                        <td style="width: 10%" th:text="${orderInfo.endTimeStr}"></td>
+                                        <td style="width: 8%" name="statusName" th:text="${orderInfo.statusName}"></td>
+                                        <td style="width: 12%">
+                                            <i class="check"><a href="javascript:;" id="view" class="js-view" th:attr="data-subid=${orderInfo.subId}">详情</a></i>
+                                            <i class="cancel"><a href="javascript:;" id="cancel" class="js-cancle" th:attr="data-subid=${orderInfo.subId}" th:if="${orderInfo.status eq 0}">取消订单</a></i>
+                                        </td>
+                                    </tr>
+                                    <tr>    
+                                        <td colspan="12" class="clearfix">
+                                            <div class="pagination ft-r clearfix">
+                                                <div class="show-count ft-l">共有<span class="allCount" th:text="${pageBean.totalRows }">  </span>条，每页显示
+                                                    <span class="select"><span th:text="${pageBean.pageSize}"></span>
+														<ul class="show-num">
+															<li>5</li>
+															<li>10</li>
+															<li>15</li>
+															<li>20</li>
+														</ul>
+													</span> 条
+                                                </div>
+                                                <input id="currentPage" type="hidden" th:value="${pageBean.currentPage }"/>
+                                                <input id="totalPages" type="hidden" th:value="${pageBean.totalPages }"/>
+                                                <input id="hasNextPage" type="hidden" th:value="${pageBean.hasNextPage }"/>
+                                                <input id="hasPreviousPage" type="hidden" th:value="${pageBean.hasPreviousPage }"/>
+                                                <ul class="pre-after ft-l">
+                                                    <li class="first">
+                                                        <a href="javascript:;" onclick="firstPage()"></a>
+                                                    </li>
+                                                    <li class="pre">
+                                                        <a href="javascript:;" onclick="prePage()"></a>
+                                                    </li>
+                                                    <li class="now"><a href="javascript:;" th:text="${pageBean.currentPage}+'/'+${pageBean.totalPages}">555555</a></li>
+                                                    <li class="after">
+                                                        <a href="javascript:;" onclick="afterPage()"></a>
+                                                    </li>
+                                                    <li class="last">
+                                                        <a href="javascript:;" onclick="lastPage()"></a>
+                                                    </li>
+                                                </ul>
+                                                <input id="jump-to" type="text" name="jump-to" />
+                                                <a href="javascript:;" class="ft-l" onclick="jumpToPage()">跳转</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <div class="btm-copyright">
+                        <p>© 2016 ucpaas.com 版权所有 粤ICP备14046848号</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 右边内容 ef -->
+    </div>
+</body>
+	<script  th:inline="javascript">
+	/*<![CDATA[*/
+$("#jump-to").keyup(function() {
+    var val = $(this).val();
+    if (!/^[1-9]\d*$/.test(val)) {
+        $(this).val("");
+    }
+});
+
+//确认取消
+function confirmCancel(subId) {
+
+    $.ajax({
+        type: "POST",
+        url: /*[[@{/console/order/cancelOrder}]]*/"/order/cancelOrder",
+        data: 'subId=' + subId,
+        async: false,
+        success: function(data) {
+
+            if (data.isSuccess == null) {
+                layer.alert(data.message, function(index) {
+                    location.reload();
+                    layer.close(index);
+                });
+                return;
+            }
+
+            if (data.isSuccess == true) {
+                layer.alert(data.message, function(index) {
+                    location.reload();
+                    layer.close(index);
+                });
+            } else {
+                layer.alert(data.message, function(index) {
+                    location.reload();
+                    layer.close(index);
+                });
+            }
+        }
+
+    });
+
+}
+
+
+
+var searchForm = $("#getOrderForm");
+
+function getOrderList() {
+    var goalPage = 1;
+    if(!isSessionValid()){return}
+    searchForm.find("#goalPage").val(goalPage);
+    searchForm.submit();
+}
+
+function getPageByNum(goalPage) {
+    if(!isSessionValid()){return}
+    searchForm.find("#goalPage").val(goalPage);
+    searchForm.submit();
+}
+
+var reloadFun = function() {
+    //     		var goalPage = $('#currentPage').val();
+    //     		getPageByNum(goalPage);
+
+    var goalPage = 1;
+    if(!isSessionValid()){return}
+    searchForm.find("#goalPage").val(goalPage);
+    searchForm.submit();
+
+}
+
+function prePage() {
+    var hasPreviousPage = $('#hasPreviousPage').val();
+    if (hasPreviousPage != "true") {
+        layer.alert("已经首页！");
+        return;
+    }
+    var goalPage = $('#currentPage').val() - 1;
+    getPageByNum(goalPage);
+}
+
+function afterPage() {
+    var hasNextPage = $('#hasNextPage').val();
+    if (hasNextPage != "true") {
+        layer.alert("已经是最后一页！");
+        return;
+    }
+    var goalPage = parseInt($('#currentPage').val()) + 1;
+    getPageByNum(goalPage);
+}
+
+function jumpToPage() {
+    var jumpPage = $('#jump-to').val();
+    if (jumpPage == "") {
+        layer.alert("请输入跳转的页数");
+        return;
+    }
+
+    var goalPage = parseInt(jumpPage);
+    if (goalPage < 1) {
+        goalPage = 1;
+    }
+
+    var lastPage = parseInt($('#totalPages').val());
+    if (goalPage > lastPage) {
+        goalPage = lastPage;
+    }
+
+    if (goalPage == 0) {
+        $("#jump-to").val("");
+        return;
+    }
+
+    getPageByNum(goalPage);
+}
+
+function firstPage() {
+
+    /* var totalPages = $('#totalPages').val();
+    if(parseInt(totalPages) == 0){
+    	layer.alert("已经是首页！");
+    	return;
+    } */
+
+    var goalPage = 1;
+    getPageByNum(goalPage);
+}
+
+function lastPage() {
+    var goalPage = $('#totalPages').val();
+
+    /* if(parseInt(goalPage) == 0){
+    	layer.alert("已经是最后一页！");
+    	return;
+    } */
+
+    getPageByNum(goalPage);
+}
+
+    jeDate({
+        dateCell: '#date_start',
+        festival:false,
+        format: 'YYYY-MM-DD hh:mm:ss'
+    });
+    jeDate({
+        dateCell: '#date_end',
+        festival:false,
+        format: 'YYYY-MM-DD hh:mm:ss'
+    });
+
+/*$.jeDate('#date_start',{
+    festival: false,
+    format: 'YYYY-MM-DD hh:mm:ss'
+});
+
+$.jeDate('#date_end',{
+    festival: false,
+    format: 'YYYY-MM-DD hh:mm:ss'
+});*/
+
+function showContentTip(obj) {
+    var contentId = "#" + obj.id;
+    var contentDetail = obj.innerHTML;
+    contentDetail = restoreContent(contentDetail);
+    layer.tips(contentDetail, obj, {
+        tips: [2, '#2ea967'],
+        tmie: 500
+    });
+}
+
+function hideState() {
+    $(".state-list").hide();
+};
+
+$(function() {
+    $(document).bind("click", function(e) {
+        var target = $(e.target);
+        if (target.closest(".state").length == 0 && target.closest(".state-list").length == 0) {
+            $(".state-list").hide();
+        }
+    })
+
+    $("[name='statusName']").each(function(i, e) {
+        if ("审核中" == $(e).html()) {
+            $(e).html("<span style=\"color:#40C57C\">审核中</span>");
+        }
+    });
+    
+    $(".js-view").on("click",function(){
+    	var subId = $(this).data("subid");
+    	var detailUrl = /*[[@{/console/order/getOrderDetail}]]*/"/order/getOrderDetail";
+        location.href = detailUrl+"?subId=" + subId;
+    });
+    $(".js-cancle").on("click",function(){
+    	var subId = $(this).data("subid");
+        layer.confirm('确定取消订单?', function(index) {
+            confirmCancel(subId);
+            layer.close(index);
+        });
+    });
+
+    var orderCode_productName = $("input[name=orderCode_productName]").val();
+    if(orderCode_productName){
+        var productNameArr = $(".col-productname");
+        for(var i = 0;i < productNameArr.length;i++){
+
+            if(	!/^[\d]+$/.test(i)){
+                continue;
+            }
+            handleKeyWords(productNameArr[i],orderCode_productName);
+        }
+        var orderIdArr = $(".col-orderId");
+        for(var i = 0;i < orderIdArr.length;i++){
+
+            if(	!/^[\d]+$/.test(i)){
+                continue;
+            }
+            handleKeyWords(orderIdArr[i],orderCode_productName);
+        }
+    }
+
+});
+
+    // 导出订单Excel
+    function exportorder(obj){
+
+
+        var options = {
+            beforeSubmit : function() {
+                ityzl_SHOW_LOAD_LAYER("正在生成报表，请稍后...");
+            },
+            success : function(result) {
+                layer.closeAll(); //疯狂模式，关闭所有层
+                if(result.success){
+                    $("#fileName").val(result.fileName);
+                    var form = $("#getOrderForm");
+                    var action = form.attr("action");
+                    form.attr("action",  /*[[@{/console/order/downloadExcel}]]*/"order/downloadExcel").submit();
+                    form.attr("action", action);
+                }else{
+                    layer.alert(result.msg, {icon: 2});
+                }
+            },
+            async: true,
+            url :  /*[[@{/console/order/exportOrder}]]*/"order/exportOrder",
+            type : "post",
+            timeout : 30000
+        };
+        $("#getOrderForm").ajaxSubmit(options);
+    }
+
+/*]]>*/
+</script>
+</html>

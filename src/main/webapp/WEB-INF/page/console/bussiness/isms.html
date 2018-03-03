@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8"/>
+	<title>云之讯-短信平台</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="baidu-site-verification" content="zNwez22Bcq" />
+	<meta name="google-site-verification" content="6hC_46bMT6_bGxmL_Ec5V_7xnPSnQBhQBl8y3MtfoFc" />
+	<meta name="Baiduspider" content="noarchive"/>
+	<link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+	<link rel='stylesheet' href='css/tipso.min.css' th:href="@{/css/tipso.min.css}"/>
+	<link rel='stylesheet' type='text/css' href='/font/iconfont.css' th:href="@{/font/iconfont.css}"/>
+	<link rel='stylesheet' type='text/css' href='/css/main.css' th:href="@{/css/main.css}"/>
+	<link rel="stylesheet" type="text/css" href="/js/jquery-ui/css/theme/all.css" th:href="@{/js/jquery-ui/css/theme/all.css}"/>
+	<link rel='stylesheet' type='text/css' href='/js/jedate/skin/jedate.css' th:href="@{/js/jedate/skin/jedate.css}"/>
+
+	<link rel='stylesheet' href='css/reset.css' th:href="@{/css/reset.css}"/>
+	<link rel='stylesheet' href='css/base.css' th:href="@{/css/base.css}"/>
+	<link rel='stylesheet' href='css/oem.css' th:href="@{/css/pin.css}"/>
+
+	<script src="js/jquery-3.0.0.min.js"  th:src="@{/js/jquery-3.0.0.min.js}"></script>
+	<script src="js/common.js" th:src="@{/js/common.js}"></script>
+	<script src="js/layer/layer.js" th:src="@{/js/layer/layer.js}"></script>
+	<script  src="js/jquery-ui/js/datepicker.js" th:src="@{/js/jquery-ui/js/datepicker.js}"></script>
+	<script  src="js/datepicker.js" th:src="@{/js/datepicker.js}"></script>
+	<script  src="js/jquery.form.js" th:src="@{/js/jquery.form.js}"></script>
+	<script  src="js/jquery.form.js" th:src="@{/js/jedate/jedate.js}"></script>
+	<script src="js/tipso.min.js" th:src="@{/js/tipso.min.js}"></script>
+
+
+	<style type="text/css">
+		div[class="tipso_bubble tiny"] {
+			padding-right:0;
+		}
+		.tipso_content{
+			color: black;
+			text-align:center;
+			color: #FFFFFF;
+			padding:0;
+			line-height: 2.2;
+		}
+		.tipso_style{
+			border-bottom:0;
+		}
+
+		div[class="tipso_bubble tiny top"] {
+			height:30px;
+
+		}
+		.form-group{
+			float: left;
+			line-height: 1.4;
+			margin-top: 26px;
+			padding: 5px;
+		}
+
+	</style>
+
+
+</head>
+<!-- 短信发送 -->
+<body class="sent">
+<div id="wrap" class="clearfix">
+
+	<!-- 左侧导航栏 bf-->
+	<div id="sidebar">
+		<div class="logo">
+			<a href="/" title="云之讯"><img src="/img/logo2.png" alt="云之讯" /></a>
+		</div>
+		<div class="nav">
+			<ul>
+				<li><a href="/console" th:if="${accountModel.paytype ne 1}" ><span class="iconfont icon-shouyeshouye"></span>首页</a></li>
+				<li class="cur">
+					<a href="javascript:void(0)" class="cur"><span class="iconfont icon-duanxin"></span>传统短信<i class="show"></i></a>
+					<ul class="sub-nav" style="display: block;">
+						<li><a href="/console/bussiness/send.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信发送<span></span></a></li>
+						<li><a href="/console/bussiness/template.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信模板管理<span></span></a></li>
+						<li><a href="/console/bussiness/record.html"  class="">短信发送记录<span></span></a></li>
+						<li><a href="/console/bussiness/statistics.html" class="cur">短信数据统计<span></span></a></li>
+						<li><a href="/console/bussiness/price.html"  class="">国际短信报价<span></span></a></li>
+					</ul>
+				</li>
+				<li th:if="${session.LOGIN_USER_INFO.smsfrom==6}">
+					<a href="javascript:void(0)"><span class="iconfont icon-caixin2"></span>彩印<i></i></a>
+					<ul class="sub-nav">
+						<li><a href="/console/mms/send.html" class="">彩印发送<span></span></a></li>
+						<li><a href="/console/mms/template.html" class="">彩印模版管理<span></span></a></li>
+						<li><a href="/console/mms/record.html"  class="">彩印发送记录<span></span></a></li>
+						<li><a href="/console/mms/ussdday.html" class="">彩印数据统计<span></span></a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:void(0)"><span class="iconfont icon-qianbi01"></span>财务管理<i></i></a>
+					<ul class="sub-nav">
+						<li><a href="/console/order/list.html" class="">我的订单<span></span></a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:void(0)" class=""><span class="iconfont icon-shenfenzheng"></span>账户管理<i></i></a>
+					<ul class="sub-nav">
+						<li><a href="/console/account/info.html" class="">账户资料<span></span></a></li>
+						<li><a href="/console/account/security.html" class="">账户安全<span></span></a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:void(0)"><span class="iconfont icon-bangzhuzhongxin"></span>帮助中心<i></i></a>
+					<ul class="sub-nav">
+						<li><a href="/console/help/smsAccessIntroduce.html" class="">短信接入<span></span></a></li>
+						<li><a href="/console/help/FAQ.html" class="">FAQ<span></span></a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- 左侧导航栏 ef -->
+
+
+	<!-- 右边内容 bf -->
+	<div id="main">
+		<div class="main-con">
+			<div class="top business-top clearfix">
+				<h1>短信数据统计</h1>
+				<div class="ft-r ">
+					<a href="/console/login.html" class="lay-out btn-white btn-small btn" th:href="@{/console/quit}">退出</a>
+				</div>
+
+				<!--<div class="top-r ft-r">
+					<span class="contact-phone" th:text="'联系电话：'+${accountModel.agentMobile}">联系电话：18689206965</span>
+				</div>-->
+			</div>
+          <div class="con-out">
+           	<div class="crumbs">
+				<a href="${ctx}/bussiness/verifyNotifystatistic" th:href="@{/console/bussiness/statistics}">普通短信统计</a>
+				<!--<a href="${ctx}/bussiness/sendCount" th:href="@{/bussiness/statistics/market}"
+				   th:if="!(${session.LOGIN_USER_INFO.smsfrom ne 6} and ${session.LOGIN_USER_INFO.smstype ne 5})">营销短信统计</a>-->
+				<a href="${ctx}/bussiness/sendCount" class="active" th:href="@{/console//bussiness/statistics/isms}">国际短信统计</a>
+			</div>
+			
+			<form id="dayStatForm" action="${ctx}/bussiness/verifyNotifystatistic" method="post" th:action="@{/console/bussiness/statistics/isms}">
+				<div class="content count-content">
+					<div class="count count1">
+						<div class="table-out">
+							<div class="operation-box">
+								<div class="export-excel">
+									<a href="javascript:;" onclick="exportSmsRecord(this)">
+										<img alt="下载报表" th:src="@{/img/export-excel.png}" />下载报表
+									</a>
+								</div>
+								<div class="form-group">
+									短信类型:<select id="smstype" name="smstype" class="form-control">
+									<option value="">全部</option>
+									<option value="4">验证码</option>
+									<option value="0">通知</option>
+									<option value="5">营销</option>
+								</select>
+									<input type="hidden" name="smstype_value" th:value="${smstype}"/>
+								</div>
+
+								<input type="hidden" name="producttype" value="2"/> <!-- 国际短信 -->
+								<div class="search-box"  th:replace="/console/bussiness/statistics :: search-box">
+									<input type="hidden" name="period_value" th:value="${period}"/>
+									<span id="period_select" style="visibility:hidden">
+									<input type="text" id="start_time" name="start_time" placeholder="开始时间" readonly="readonly" th:value='${start_time}'/>
+									<label>至</label>
+									<input type="text" id="end_time" name="end_time" placeholder="结束时间" readonly="readonly" th:value='${end_time}'/>
+									</span>
+									<label><input name="period" type="radio" value="0" />昨日 </label> 
+									<label><input name="period" type="radio" value="1" />近30天 </label> 
+									<label><input name="period" type="radio" value="2" />时间区间<img th:src="@{/img/question.png}" title="自定义时间区间小于90天" id="period"/> </label>  
+									
+									<label><a class="green-btn smsSubmit" href="javascript:;" onclick="smsSubmit()">查询</a></label> 		
+								</div>
+							</div>
+							<table>
+								<thead>
+								<tr style="font-size:11px;">
+									<th style="width: 10%;">日期</th>
+									<th style="width: 9%;">短信类型</th>
+									<!--<span th:if="${accountModel.paytype eq 0}">-->
+										<!--<th style="width: 9%;">产品类型</th>-->
+										<!--</span>-->
+									<th style="width: 10%;">提交条数（条）</th>
+									<th style="width: 11%;"><label>计费条数（条） <img th:src="@{/img/question.png}" title="70字记一条短信费，超过70个字则以67字每条计费，单个汉字、英文、标点都算一个字" id="charge" style="display:inline"/></label> </th>
+									<th style="width: 10%;">成功条数（条）</th>
+									<th style="width: 10%;">未知条数（条）</th>
+									<th style="width: 10%;">失败条数（条）</th>
+									<th style="width: 11%;"><label>待发送条数（条）<img th:src="@{/img/question.png}" title="待发送指正在审核或出现下发异常情况" id="pending" style="display:inline"/></label>   </th>
+									<th style="width: 10%;">拦截条数(条)</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr  th:each="v: ${statPage.list}">
+									<td style="width: 10%;" th:text="${v.date}"></td>
+									<td style="width: 9%;" th:switch="${v.smstype}" >
+										<span th:case="'0'">通知</span>
+										<span th:case="'4'">验证码</span>
+										<span th:case="'5'">营销</span>
+										<span th:case="'6'">告警</span>
+										<span th:case="'7'">USSD</span>
+										<span th:case="'8'">闪信</span>
+										<span th:case="*">-</span>
+									</td>
+									<!--<span th:if="${accountModel.paytype eq 0}">-->
+											<!--<td style="width: 9%;" th:switch="${v.product_type}">-->
+												<!--<span th:case="'-'">-</span>-->
+												<!--<span th:case="*">国际</span>-->
+											<!--</td>-->
+										<!--</span>-->
+									<td style="width: 10%;" th:text="${v.num_all}"></td>
+									<td style="width: 11%;" th:text="${v.chargetotal}"></td>
+									<td style="width: 10%;" th:text="${v.num_sucs}"></td>
+									<td style="width: 10%;" th:text="${v.num_known}"></td>
+									<td style="width: 10%;" th:text="${v.num_fail}"></td>
+									<td style="width: 11%;" th:text="${v.notsend}"></td>
+									<td style="width: 10%;" th:text="${v.interceptTotal}"></td>
+								</tr>
+
+								<tr>
+									<td style="width: 10%;">共计</td>
+									<td style="width: 9%;">&nbsp;</td>
+									<!--<span th:if="${accountModel.paytype eq 0}">-->
+											<!--<td style="width: 9%;">&nbsp;</td>-->
+									<!--</span>-->
+									<td style="width: 10%;" th:text="${subtotal.num_all_total}">0</td>
+									<td style="width: 11%;" th:text="${subtotal.chargeTotal_total}">0</td>
+									<td style="width: 10%;" th:text="${subtotal.num_sucs_total}">0</td>
+									<td style="width: 10%;" th:text="${subtotal.num_known_total}">0</td>
+									<td style="width: 10%;" th:text="${subtotal.num_fail_total}">0</td>
+									<td style="width: 11%;" th:text="${subtotal.num_pending_total}">0</td>
+									<td style="width: 10%;" th:text="${subtotal.num_intercept_total}">0</td>
+								</tr>
+									
+									<!-- 分页工具条 -->
+									<tr>
+										<td colspan="2" class="clearfix" style="width:40%;text-align:left">
+											<span style="font-size: 12px;padding-left:20px;">
+											注：因状态报告返回有时延，72小时以内的数据仅供参考。
+											</span>
+										</td>
+										<td colspan="3" class="clearfix" style="width:60%;">
+											<div class="pagination ft-r clearfix">
+												<div class="show-count ft-l">共有<span class="allCount" th:text="${statPage.totalCount}"> 0</span>条，每页显示
+													<span class="select"><span th:text="${statPage.pageRowCount}">30</span>
+													<ul class="show-num">
+														<li>5</li>
+														<li>10</li>
+														<li>15</li>
+														<li>20</li>
+													</ul>
+													</span> 条
+												</div>
+												
+												<ul class="pre-after ft-l">
+													<li class="first"><a href="javascript:;" onclick="topPage('#dayStatForm')"></a></li>
+													<li class="pre"><a href="javascript:;" onclick="previousPage('#dayStatForm')"></a></li>
+													<li class="now"><a href="" th:text="${statPage.currentPage}+'/'+${statPage.totalPage}">1/100</a></li>
+													<li class="after"><a href="javascript:;" onclick="nextPage('#dayStatForm')"></a></li>
+													<li class="last"><a href="javascript:;" onclick="bottomPage('#dayStatForm')"></a></li>
+												</ul>
+												<input id="jump2PageNum" type="text" name="jump-to" style="position: relative; top: -5px;"/>
+												<a href="javascript:;" onclick="jump2Page()">跳转</a>
+											</div>	
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<input id="dayStatForm_currentPage" type="hidden" name="currentPage" th:value="${statPage.currentPage}"/>
+				<input id="pageRowCount" type="hidden" name="pageRowCount" th:value="${statPage.pageRowCount}"/>
+				<input id="dayStatForm_totalCount" type="hidden" th:value="${statPage.totalCount}"/>
+				<input id="dayStatForm_totalPage" type="hidden" th:value="${statPage.totalPage}"/>
+				<input id="fileName" type="hidden" name="fileName"/>
+			</form>
+				<input id="minDate" type="hidden" th:value="${minDate}"/>
+				<input id="maxDate" type="hidden" th:value="${maxDate}"/>
+					
+            <div class="btm btm-copyright " >
+              <p>© 2016 szchuzhong.com 版权所有 粤ICP备B2-20160275号</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 右边内容 ef -->
+    </div>
+    </body>
+    
+  <script th:inline="javascript"  th:replace="/console/bussiness/statistics :: js">
+	/*<![CDATA[*/
+	 $(function() { 
+	     $( "#datepicker" ).datepicker();
+		 $('#period').tipso({
+	          background:'#2EA967',
+	          useTitle:true,
+	          delay:100,
+	          hideDelay:100,
+	          size: 'tiny',
+	          width:'16%'
+	        });
+		 $('#pending').tipso({
+	          background:'#2EA967',
+	          useTitle:true,
+	          delay:100,
+	          hideDelay:100,
+	          size: 'tiny',
+	          width:'16%'
+	        });
+		 $('#charge').tipso({
+	          background:'#2EA967',
+	          useTitle:true,
+	          delay:100,
+	          hideDelay:100,
+	          size: 'tiny',
+	          width:'30%'
+	        });
+
+         $('#smstype').change(function(){
+             smsSubmit();
+         });
+         //短信类型
+         var smstype_value = $("input[name='smstype_value']").val();
+         if(smstype_value){
+
+             $("#smstype option[value='"+smstype_value+"']").attr("selected", true);
+         }
+
+		 $("input[name='period']").change(function(){
+			 var period = $(this).val();
+			 if(period == 2){
+				 $("#period_select").css('visibility','visible'); 
+			 }else{
+				 $("#period_select").css('visibility','hidden'); 
+			 }
+		 });
+		 
+		 var period_value = $("input[name='period_value']").val();
+		 if(period_value){
+			 $("input[name='period']").eq(period_value).attr('checked', 'true');
+			 if(period_value==2){
+				 $("#period_select").css('visibility','visible'); 
+			 }
+		 }else{
+			 $("input[name='period']").eq(0).attr('checked', 'true');
+		 }
+	})
+		//查询某一页
+	function getPageByNum($searchForm, pageNum){
+		var formId = $searchForm.attr("id");
+		if(/^[1-9]\d*$/.test(pageNum)){
+			$searchForm.find("#" + formId + "_currentPage").val(pageNum);
+		}
+		$searchForm.submit();
+	}
+	
+	// 首页
+	function topPage(searchForm){
+		var $searchForm = $(searchForm);
+		var formId = $searchForm.attr("id");
+		var currentPage = Number($searchForm.find("#" + formId + "_currentPage").val());
+		if(currentPage == 1){
+			return;
+		}
+		getPageByNum($searchForm, 1);
+	}
+	
+	// 最后一页
+	function bottomPage(searchForm){
+		var $searchForm = $(searchForm);
+		var formId = $searchForm.attr("id");
+		var currentPage = Number($searchForm.find("#" + formId + "_currentPage").val());
+		var totalPage = Number($searchForm.find("#" + formId + "_totalPage").val());
+		if(currentPage == totalPage){
+			return;
+		}
+		getPageByNum($searchForm, totalPage);
+	}
+	
+	// 上一页
+	function previousPage(searchForm){
+		var $searchForm = $(searchForm);
+		var formId = $searchForm.attr("id");
+		var currentPage = Number($searchForm.find("#" + formId + "_currentPage").val());
+		var previousPage = currentPage - 1;
+		if(currentPage == 1){
+			return;
+		}
+		getPageByNum($searchForm, previousPage);
+	}
+	
+	// 下一页
+	function nextPage(searchForm){
+		var $searchForm = $(searchForm);
+		var formId = $searchForm.attr("id");
+		var currentPage = Number($searchForm.find("#" + formId + "_currentPage").val());
+		var totalPage = Number($searchForm.find("#" + formId + "_totalPage").val());
+		var nextPage = currentPage + 1;
+		if(currentPage == totalPage){
+			return;
+		}
+		getPageByNum($searchForm, nextPage);
+	}
+	
+	function jump2Page(){
+		var jump2PageNum = $('#jump2PageNum').val();
+		var totalPage = Number($("#dayStatForm_totalPage").val());
+		if(jump2PageNum<1 || jump2PageNum>totalPage){
+			return;
+		}
+		getPageByNum($('#dayStatForm'), jump2PageNum);
+	}
+	
+	var reloadFun = function(){
+		var currentPage = Number($("#dayStatForm_currentPage").val());
+		var $serachForm = $("#dayStatForm");
+		getPageByNum($serachForm, currentPage);
+	}
+	
+	jeDate({
+	    dateCell: '#start_time',
+	    festival:true,
+	    minDate:$("#minDate").val(),        //最小日期
+	    maxDate:$("#maxDate").val(),        //最大日期
+	    format: 'YYYY-MM-DD'
+	});
+
+	jeDate({
+	    dateCell: '#end_time',
+	    festival:true,
+	    minDate:$("#minDate").val(),        //最小日期
+	    maxDate:$("#maxDate").val(),        //最大日期
+	    format: 'YYYY-MM-DD'
+	});
+	function smsSubmit(){
+		ityzl_SHOW_LOAD_LAYER("正在查询中，请稍后...");
+        if(!isSessionValid()){ return }
+		$("#dayStatForm").submit();
+	}
+	
+	
+	// 导出短信记录Excel
+	function exportSmsRecord(obj){
+		
+		
+		var options = {
+				beforeSubmit : function() { 
+					ityzl_SHOW_LOAD_LAYER("正在生成报表，请稍后...");
+				},
+				success : function(result) {
+					layer.closeAll(); //疯狂模式，关闭所有层
+					if(result.success){
+						$("#fileName").val(result.fileName);
+						var form = $("#dayStatForm");
+						var action = form.attr("action");
+						form.attr("action",  /*[[@{/console/bussiness/downloadExcel}]]*/"bussiness/downloadExcel").submit();
+						form.attr("action", action);
+					}else{
+						layer.alert(result.msg, {icon: 2}); 
+					}
+				},
+				async: true,
+				url :  /*[[@{/console/bussiness/exportStatistics}]]*/"bussiness/export-sms-record",
+				type : "post",
+				timeout : 30000
+			};
+		$("#dayStatForm").ajaxSubmit(options);
+	}
+
+	/*]]>*/
+	</script>
+	
+ 
+</html>

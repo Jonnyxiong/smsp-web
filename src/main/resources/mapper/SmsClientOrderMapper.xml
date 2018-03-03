@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="order.SmsClientOrderMapper" >
+
+  <resultMap id="BaseResultMap" type="com.ucpaas.smsp.model.SmsClientOrder" >
+    <id column="sub_id" property="subId" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="client_id" property="clientId" jdbcType="VARCHAR" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="product_type" property="productType" jdbcType="INTEGER" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_number" property="productNumber" jdbcType="INTEGER" />
+    <result column="order_type" property="orderType" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="active_period" property="activePeriod" jdbcType="INTEGER" />
+    <result column="quantity" property="quantity" jdbcType="DECIMAL" />
+    <result column="remain_quantity" property="remainQuantity" jdbcType="DECIMAL" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="product_cost" property="productCost" jdbcType="DECIMAL" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="effective_time" property="effectiveTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="audit_type" property="auditType" jdbcType="INTEGER" />
+    <result column="auditor" property="auditor" jdbcType="INTEGER" />
+    <result column="admin_id" property="adminId" jdbcType="BIGINT" />
+	 <!--新增字段-->
+	  <result column="operator_code" property="operator_code" jdbcType="INTEGER" />
+	  <result column="area_code" property="area_code" jdbcType="INTEGER" />
+	  <result column="unit_price" property="unit_price" jdbcType="DECIMAL" />
+
+  </resultMap>
+  
+  <resultMap id="BaseResultPoMap" type="com.ucpaas.smsp.model.po.SmsClientOrderPo" >
+    <id column="sub_id" property="subId" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="client_id" property="clientId" jdbcType="VARCHAR" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="product_type" property="productType" jdbcType="INTEGER" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_number" property="productNumber" jdbcType="INTEGER" />
+    <result column="order_type" property="orderType" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="active_period" property="activePeriod" jdbcType="INTEGER" />
+    <result column="quantity" property="quantity" jdbcType="DECIMAL" />
+    <result column="remain_quantity" property="remainQuantity" jdbcType="DECIMAL" />
+    <result column="quantity_str" property="quantityStr" jdbcType="VARCHAR" />
+    <result column="remain_quantity_str" property="remainQuantityStr" jdbcType="VARCHAR" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="product_cost" property="productCost" jdbcType="DECIMAL" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="effective_time" property="effectiveTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="audit_type" property="auditType" jdbcType="INTEGER" />
+    <result column="auditor" property="auditor" jdbcType="INTEGER" />
+    <result column="admin_id" property="adminId" jdbcType="BIGINT" />
+    <result column="status_name" property="statusName" jdbcType="VARCHAR" />
+    <result column="product_type_name" property="productTypeName" jdbcType="VARCHAR" />
+    <result column="order_type_name" property="orderTypeName" jdbcType="VARCHAR" />
+    <result column="end_time_str" property="endTimeStr" jdbcType="VARCHAR" />
+    <result column="active_period_str" property="activePeriodStr" jdbcType="VARCHAR" />
+    <result column="create_time_str" property="createTimeStr" jdbcType="VARCHAR" />
+    <result column="effective_time_str" property="effectiveTimeStr" jdbcType="VARCHAR" />
+    <result column="sale_price_str" property="salePriceStr" jdbcType="VARCHAR" />
+	  <!--新增字段-->
+	  <result column="operator_code" property="operator_code" jdbcType="INTEGER" />
+	  <result column="area_code" property="area_code" jdbcType="INTEGER" />
+	  <result column="unit_price" property="unit_price" jdbcType="DECIMAL" />
+
+	  <result column="operator_codename" property="operatorCodeName" jdbcType="VARCHAR" />
+	  <result column="area_codename" property="areaCodeName" jdbcType="VARCHAR" />
+	  <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    sub_id, order_id, client_id, agent_id, product_id, product_type, product_name,product_number,order_type, status, 
+    active_period, quantity, remain_quantity, sale_price, product_cost, end_time, create_time, 
+    effective_time, update_time, audit_type, auditor, admin_id,operator_code,area_code,unit_price
+  </sql>
+  
+  <select id="getOrderDetailBySubId" resultMap="BaseResultPoMap">
+  	SELECT 
+  		t.sub_id,
+  		t.order_id,
+  		t.client_id,
+  		t.agent_id,
+  		t.product_id,
+  		t.product_type,
+  		tp.product_code,
+  		CASE t.product_type
+			WHEN 0 THEN '行业'
+			WHEN 1 THEN '营销'
+			WHEN 2 THEN '国际'
+			WHEN 3 THEN '验证码'
+	  		WHEN 4 THEN '通知'
+			WHEN 7 THEN 'USSD'
+			WHEN 8 THEN '闪信'
+			WHEN 9 THEN '挂机短信'
+		END as product_type_name,
+			t.operator_code,
+	  	CASE t.operator_code
+	  		WHEN 0 THEN '全网'
+	 		WHEN 1 THEN '移动'
+	  		WHEN 2 THEN '联通'
+	  		WHEN 3 THEN '电信'
+	  		WHEN 4 THEN '国际'
+	  		ELSE '-'
+	  	END as operator_codename,
+	  	t.area_code,
+	 	 CASE t.area_code
+	 		WHEN 0 THEN '全国'
+	  		WHEN 1 THEN '国际'
+	  		ELSE '-'
+	  	  END as area_codename,
+  		t.product_name,
+  		t.product_number,
+  		t.order_type,
+  		CASE t.order_type
+			WHEN 0 THEN '客户购买'
+			WHEN 1 THEN '代理商代买'
+			WHEN 2 THEN '运营代买'
+		END as order_type_name,
+  		t.status,
+  		CASE t.status
+			WHEN 0 THEN '审核中'
+			WHEN 1 THEN '订单生效'
+			WHEN 2 THEN '订单完成'
+			WHEN 3 THEN '订单失败'
+			ELSE '订单取消'
+		END as status_name,
+    	t.active_period,
+    	case t.active_period
+    		when 0 then '无限期'
+    		else t.active_period
+    	end as active_period_str,
+    	t.quantity,
+    	case t.product_type
+  			when 2 then CONCAT(ROUND(t.quantity, 2), "元")
+  			else CONCAT(FLOOR(t.quantity), "条")
+  		end quantity_str,
+    	t.remain_quantity,
+  		case t.product_type
+  			when 2 then CONCAT(ROUND(t.remain_quantity, 2), "元")
+  			else CONCAT(FLOOR(t.remain_quantity), "条")
+  		end remain_quantity_str,
+  		case t.product_type
+  			when 2 then CONCAT(ROUND(t.remain_quantity, 2), "元")
+  			else CONCAT(FLOOR(t.remain_quantity), "条")
+  		end remain_quantity_str,
+    	ROUND(t.sale_price,2) as sale_price,
+    	t.product_cost,
+    	case t.product_type
+    		when 2 then ROUND(t.sale_price,2)
+  			else CONCAT(ROUND(t.sale_price,2), "元")
+    	end sale_price_str,
+    	t.end_time,
+    	DATE_FORMAT(t.end_time,'%Y-%m-%d %H:%i:%S') as end_time_str,
+    	t.create_time,
+    	DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%S') as create_time_str,
+    	t.effective_time,
+    	DATE_FORMAT(t.effective_time,'%Y-%m-%d %H:%i:%S') as effective_time_str,
+    	t.update_time,
+    	DATE_FORMAT(t.update_time,'%Y-%m-%d %H:%i:%S') as update_time_str,
+    	t.audit_type,
+    	t.auditor,
+    	t.admin_id
+  	FROM 
+  		t_sms_client_order t
+  	LEFT JOIN t_sms_product_info tp on tp.product_id=t.product_id
+  	WHERE 
+  	sub_id = #{subId}
+  </select>
+  
+  
+  <insert id="insertOrderBatch">
+  	insert into t_sms_client_order(
+  		order_id,
+  		client_id,
+  		agent_id,
+  		product_id,
+  		product_type,
+  		product_name,
+  		product_number,
+  		order_type,
+  		status,
+  		active_period,
+  		quantity,
+  		remain_quantity,
+  		sale_price,
+  		product_cost,
+  		create_time
+  	) values
+  	<foreach collection="list" item="item" index="index" separator=",">
+  		(
+  			#{item.orderId},
+  			#{item.clientId},
+  			#{item.agentId},
+  			#{item.productId},
+  			#{item.productType},
+  			#{item.productName},
+  			#{item.productNumber},
+  			#{item.orderType},
+  			#{item.status},
+  			#{item.activePeriod},
+  			#{item.quantity},
+  			#{item.remainQuantity},
+  			#{item.salePrice},
+  			#{item.productCost},
+  			#{item.createTime}
+  		)
+  	</foreach>
+  
+  </insert>
+  
+  <sql id="getOrderListInfoConditon">
+		<where>
+			1 = 1
+			AND t.client_id = #{params.clientId}
+		  	<if test="params.orderCode_productName != null and params.orderCode_productName != '' ">
+		  		and (t.order_id like CONCAT('%','${params.orderCode_productName}','%' ) 
+		  		or t.product_name like CONCAT('%','${params.orderCode_productName}','%' ) )
+		  	</if>
+		  	<if test="params.status != null and params.status != '' and params.status !=100 ">
+		  		and t.status = #{params.status}
+		  	</if>
+		  	<if test="params.startTime != null and params.startTime !='' ">
+		  		and t.end_time >= STR_TO_DATE(#{params.startTime},'%Y-%m-%d %H:%i:%S')
+		  	</if>
+		  	<if test="params.endTime != null and params.endTime != '' ">
+		  		and t.end_time <![CDATA[<= STR_TO_DATE(#{params.endTime},'%Y-%m-%d %H:%i:%S') ]]>
+		  	</if>
+		</where>
+  </sql>
+  
+  
+  
+  <select id="getOrderListInfo" resultMap="BaseResultPoMap">
+  	SELECT
+  		t.sub_id,
+  		t.order_id,
+  		t.client_id,
+  		t.agent_id,
+  		t.product_id,
+  		t.product_type,
+	  	tp.product_code,
+	  	CASE  t.product_type
+	  		WHEN 0 THEN '行业'
+	  		WHEN 1 THEN '营销'
+	  		WHEN 2 THEN '国际'
+	  		WHEN 3 THEN '验证码'
+	  		WHEN 4 THEN '通知'
+	  		WHEN 7 THEN 'USSD'
+	  		WHEN 8 THEN '闪信'
+	  		WHEN 9 THEN '挂机短信'
+			ELSE '-'
+	  	END as product_type_name,
+  		t.product_name,
+  		t.product_number,
+  		t.order_type,
+  		t.status,
+  		CASE t.status
+			WHEN 0 THEN '审核中'
+			WHEN 1 THEN '订单生效'
+			WHEN 2 THEN '订单完成'
+			WHEN 3 THEN '订单失败'
+			ELSE '订单取消'
+		END as status_name,
+	  	t.operator_code,
+	  	CASE t.operator_code
+	  		WHEN 0 THEN '全网'
+	 		WHEN 1 THEN '移动'
+	  		WHEN 2 THEN '联通'
+	  		WHEN 3 THEN '电信'
+	  		WHEN 4 THEN '国际'
+	  		ELSE '-'
+	  	END as operator_codename,
+	  	t.area_code,
+	 	 CASE t.area_code
+	 		WHEN 0 THEN '全国'
+	  		WHEN 1 THEN '国际'
+	  		ELSE '-'
+	  	  END as area_codename,
+  		t.active_period,
+  		t.quantity,
+  		t.remain_quantity,
+  		case t.product_type
+  			when 2 then CONCAT(ROUND(t.quantity, 2), "元")
+  			else CONCAT(FLOOR(t.quantity), "条")
+  		end quantity_str,
+  		case t.product_type
+  			when 2 then CONCAT(ROUND(t.remain_quantity, 2), "元")
+  			else CONCAT(FLOOR(t.remain_quantity), "条")
+  		end remain_quantity_str,
+  		t.sale_price,
+  		t.product_cost,
+  		t.create_time,
+  		DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%S') as create_time_str,
+  		t.end_time,
+  		DATE_FORMAT(t.end_time,'%Y-%m-%d %H:%i:%S') as end_time_str
+  	FROM
+  		t_sms_client_order t
+	  LEFT JOIN t_sms_product_info tp on tp.product_id=t.product_id
+  	<include refid="getOrderListInfoConditon" />
+  	ORDER BY t.create_time desc
+	LIMIT #{startIndex},#{pageSize}
+  </select>
+
+	<select id="getOrderListInfo4export" resultType="map">
+		SELECT
+		t.sub_id,
+		t.order_id,
+		t.client_id,
+		t.agent_id,
+		t.product_id,
+		t.product_type,
+		tp.product_code,
+		CASE  t.product_type
+		WHEN 0 THEN '行业'
+		WHEN 1 THEN '营销'
+		WHEN 2 THEN '国际'
+		WHEN 3 THEN '验证码'
+		WHEN 4 THEN '通知'
+		WHEN 7 THEN 'USSD'
+		WHEN 8 THEN '闪信'
+		WHEN 9 THEN '挂机短信'
+		ELSE '-'
+		END as product_type_name,
+		t.product_name,
+		t.product_number,
+		t.order_type,
+		t.status,
+		CASE t.status
+		WHEN 0 THEN '审核中'
+		WHEN 1 THEN '订单生效'
+		WHEN 2 THEN '订单完成'
+		WHEN 3 THEN '订单失败'
+		ELSE '订单取消'
+		END as status_name,
+		t.operator_code,
+		CASE t.operator_code
+		WHEN 0 THEN '全网'
+		WHEN 1 THEN '移动'
+		WHEN 2 THEN '联通'
+		WHEN 3 THEN '电信'
+		WHEN 4 THEN '国际'
+		ELSE '-'
+		END as operator_codename,
+		t.area_code,
+		CASE t.area_code
+		WHEN 0 THEN '全国'
+		WHEN 1 THEN '国际'
+		ELSE '-'
+		END as area_codename,
+		t.active_period,
+		t.quantity,
+		t.remain_quantity,
+		case t.product_type
+		when 2 then CONCAT(ROUND(t.quantity, 2), "元")
+		else CONCAT(FLOOR(t.quantity), "条")
+		end quantity_str,
+		case t.product_type
+		when 2 then CONCAT(ROUND(t.remain_quantity, 2), "元")
+		else CONCAT(FLOOR(t.remain_quantity), "条")
+		end remain_quantity_str,
+		t.sale_price,
+		t.product_cost,
+		t.create_time,
+		DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%S') as create_time_str,
+		t.end_time,
+		DATE_FORMAT(t.end_time,'%Y-%m-%d %H:%i:%S') as end_time_str
+		FROM
+		t_sms_client_order t
+		LEFT JOIN t_sms_product_info tp on tp.product_id=t.product_id
+		<include refid="getOrderListInfoConditon" />
+		ORDER BY t.create_time desc
+		LIMIT #{startIndex},#{pageSize}
+	</select>
+
+
+  
+  <select id="getOrderListInfoCount" resultType="java.lang.Integer">
+  	select count(0) from (
+	  	SELECT
+	  		0
+	  	FROM
+	  		t_sms_client_order t
+	  	<include refid="getOrderListInfoConditon" />
+  	) m
+  
+  </select>
+  
+  
+  <select id="getMostNum" resultType="string">
+  	SELECT 
+  		MAX(substring(CONCAT(t.order_id,""),14)) as num
+  	FROM 
+  		t_sms_client_order t
+  	WHERE 1 = 1 
+  	AND t.order_id like CONCAT('${orderIdPre}','%' )
+  </select>
+  
+  
+  <update id="updateOrderStatus">
+  	UPDATE 
+  		t_sms_client_order
+  	SET 
+  		status = #{status}
+  	WHERE 
+  		sub_id = #{subId}
+  </update>
+  
+  <update id="cancelOrder">
+  	UPDATE 
+  		t_sms_client_order
+  	SET 
+  		status = #{status},
+  		remain_quantity = null
+  	WHERE 
+  		sub_id = #{subId}
+  </update>
+
+    <select id="getOrderRemainQuantity" resultType="map" parameterType="com.ucpaas.smsp.model.SmsAccountModel">
+        SELECT
+          CASE
+            WHEN e.productType = 2
+            THEN IFNULL(TRUNCATE(e.remainQuantity, 4), 0.0000)
+            ELSE IFNULL(TRUNCATE(e.remainQuantity, 0), 0)
+          END AS remainQuantity,
+          e.productType,
+          e.clientId
+        FROM
+        (
+            SELECT
+              SUM(remain_quantity) as remainQuantity,
+              product_type AS productType,
+              client_id AS clientId
+            FROM
+              t_sms_client_order
+            WHERE
+              `status` = 1
+              AND end_time > NOW()
+              AND client_id = #{clientId}
+            GROUP BY product_type
+        ) e
+    </select>
+  
+   <select id="getOrderListByProductType" resultMap="BaseResultPoMap">
+  	SELECT
+  		t.sub_id,
+  		t.order_id,
+  		t.client_id,
+  		t.agent_id,
+  		t.product_id,
+  		t.product_type,
+  		CASE t.product_type
+			WHEN 0 THEN '行业'
+			WHEN 1 THEN '营销'
+			WHEN 2 THEN '国际'
+			WHEN 3 THEN '验证码'
+			WHEN 4 THEN '通知'
+			WHEN 7 THEN 'USSD'
+			WHEN 8 THEN '闪信'
+			ELSE '未知产品' END as product_type_name, 
+  		t.product_name,
+  		t.product_number,
+  		t.order_type,
+  		t.status,
+  		CASE t.status
+			WHEN 0 THEN '审核中'
+			WHEN 1 THEN '订单生效'
+			WHEN 2 THEN '订单完成'
+			WHEN 3 THEN '订单失败'
+			ELSE '订单取消'
+		END as status_name,
+  		t.active_period,
+  		t.quantity,
+  		t.remain_quantity,
+  		case t.product_type
+  			when 2 then CONCAT(ROUND(t.quantity, 2), "元")
+  			else CONCAT(FLOOR(t.quantity), "条")
+  		end quantity_str,
+  		case t.product_type
+  			when 2 then CONCAT(ROUND(t.remain_quantity, 2), "元")
+  			else CONCAT(FLOOR(t.remain_quantity), "条")
+  		end remain_quantity_str,
+  		t.sale_price,
+  		t.product_cost,
+  		t.create_time,
+  		DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') as create_time_str, 
+  		t.end_time,
+  		DATE_FORMAT(end_time,'%Y-%m-%d %H:%i:%S') as end_time_str
+  	FROM
+  		t_sms_client_order t 
+	WHERE
+	   t.client_id = #{params.clientId}
+	   AND t.product_type = #{params.productType} 
+	   AND t.status in(1)
+  	ORDER BY t.create_time desc
+	LIMIT #{startIndex},#{pageSize}
+  </select>
+  
+  <select id="getOrderListByProductTypeCount" resultType="java.lang.Integer">
+  	select count(0) from (
+	  	SELECT
+	  		0
+	  	FROM
+	  		t_sms_client_order t
+		WHERE
+		   t.client_id = #{params.clientId}
+		   AND t.product_type = #{params.productType}
+	  	  AND t.status in(1)
+  	) m
+  
+  </select>
+  
+  
+  
+  
+  
+   <select id="listRemain"  resultType="map">
+   
+   select top.* from (
+   SELECT  sub.product_type,sub.product_type_name,sub.area_code_str,
+			sub.operator_code_str,SUM(sub.remain_quantity) as remain_quantity,
+			sub.end_time_str,sub.end_time,round(sub.sale_price/sub.quantity,4) as price
+			 FROM (
+  	SELECT
+  		t.sub_id,
+  		t.order_id,
+  		t.client_id,
+  		t.agent_id,
+  		t.product_id,
+  		t.product_type,
+  		CASE t.product_type
+			WHEN 0 THEN '行业'
+			WHEN 1 THEN '营销'
+			WHEN 2 THEN '国际'
+			WHEN 3 THEN '验证码'
+			WHEN 4 THEN '通知'
+			WHEN 7 THEN 'USSD'
+			WHEN 8 THEN '闪信'
+			ELSE '未知产品' END as product_type_name,
+			t.operator_code,
+		CASE  t.operator_code
+			WHEN 0 THEN '全网'
+	 		WHEN 1 THEN '移动'
+	  		WHEN 2 THEN '联通'
+	  		WHEN 3 THEN '电信'
+	  		WHEN 4 THEN '国际'
+	  		ELSE '-'
+	  	END as operator_code_str,
+		t.area_code,
+	  	CASE t.area_code
+	 		WHEN 0 THEN '全国'
+	  		WHEN 1 THEN '国际'
+	  		ELSE '-'
+	  	  END as area_code_str,
+  		t.product_name,
+  		t.product_number,
+  		t.order_type,
+  		t.status,
+  		CASE t.status
+			WHEN 0 THEN '审核中'
+			WHEN 1 THEN '订单生效'
+			WHEN 2 THEN '订单完成'
+			WHEN 3 THEN '订单失败'
+			ELSE '订单取消'
+		END as status_name,
+  		t.active_period,
+  		t.quantity,
+  		IFNULL(t.remain_quantity,0) as remain_quantity,
+  		case t.product_type
+  			when 2 then CONCAT(ROUND(t.quantity, 2), "元")
+  			else CONCAT(FLOOR(t.quantity), "条")
+  		end quantity_str,
+  		case t.product_type
+  			when 2 then CONCAT(ROUND(t.remain_quantity, 2), "元")
+  			else CONCAT(FLOOR(t.remain_quantity), "条")
+  		end remain_quantity_str,
+  		IFNULL(t.sale_price,0) as sale_price,
+  		IFNULL(t.product_cost,0) as product_cost,
+  		t.create_time,
+  		DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') as create_time_str, 
+  		t.end_time,
+  		CASE t.active_period
+	when 0 THEN "永久"
+	ELSE
+	DATE_FORMAT(
+		t.end_time,
+		'%Y-%m-%d %H:%i:%S'
+	) End AS end_time_str
+  	FROM
+  		t_sms_client_order t 
+	WHERE
+	   t.client_id = #{params.clientId}
+	   AND t.product_type = #{params.productType} 
+	   AND t.status in(1)
+	 ) sub  
+	 GROUP by sub.product_type,sub.product_type_name,sub.end_time_str,sub.area_code,sub.operator_code,price
+	 ) top
+	ORDER BY top.end_time
+	LIMIT #{startIndex},#{pageSize}
+  </select>
+
+	<select id="listRemain1"  resultType="map">
+
+		select top.* from (
+		SELECT  sub.product_type,sub.product_type_name,sub.area_code_str,
+		sub.operator_code_str,SUM(sub.remain_quantity) as remain_quantity,
+		sub.end_time_str,sub.end_time,round(SUM(sub.sale_price)/SUM(sub.quantity),4) as price
+		FROM (
+		SELECT
+		t.sub_id,
+		t.order_id,
+		t.client_id,
+		t.agent_id,
+		t.product_id,
+		t.product_type,
+		CASE t.product_type
+		WHEN 0 THEN '行业'
+		WHEN 1 THEN '营销'
+		WHEN 2 THEN '国际'
+		WHEN 3 THEN '验证码'
+		WHEN 4 THEN '通知'
+		WHEN 7 THEN 'USSD'
+		WHEN 8 THEN '闪信'
+		ELSE '未知产品' END as product_type_name,
+		t.operator_code,
+		CASE  t.operator_code
+		WHEN 0 THEN '全网'
+		WHEN 1 THEN '移动'
+		WHEN 2 THEN '联通'
+		WHEN 3 THEN '电信'
+		WHEN 4 THEN '国际'
+		ELSE '-'
+		END as operator_code_str,
+		t.area_code,
+		CASE t.area_code
+		WHEN 0 THEN '全国'
+		WHEN 1 THEN '国际'
+		ELSE '-'
+		END as area_code_str,
+		t.product_name,
+		t.product_number,
+		t.order_type,
+		t.status,
+		CASE t.status
+		WHEN 0 THEN '审核中'
+		WHEN 1 THEN '订单生效'
+		WHEN 2 THEN '订单完成'
+		WHEN 3 THEN '订单失败'
+		ELSE '订单取消'
+		END as status_name,
+		t.active_period,
+		t.quantity,
+		IFNULL(t.remain_quantity,0) as remain_quantity,
+		case t.product_type
+		when 2 then CONCAT(ROUND(t.quantity, 2), "元")
+		else CONCAT(FLOOR(t.quantity), "条")
+		end quantity_str,
+		case t.product_type
+		when 2 then CONCAT(ROUND(t.remain_quantity, 2), "元")
+		else CONCAT(FLOOR(t.remain_quantity), "条")
+		end remain_quantity_str,
+		IFNULL(t.sale_price,0) as sale_price,
+		IFNULL(t.product_cost,0) as product_cost,
+		t.create_time,
+		DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') as create_time_str,
+		t.end_time,
+		CASE t.active_period
+		when 0 THEN "永久"
+		ELSE
+		DATE_FORMAT(
+		t.end_time,
+		'%Y-%m-%d %H:%i:%S'
+		) End AS end_time_str
+		FROM
+		t_sms_client_order t
+		WHERE
+		t.client_id = #{params.clientId}
+		AND t.product_type = #{params.productType}
+		AND t.status in(1)
+		) sub
+		GROUP by sub.product_type,sub.product_type_name,sub.end_time_str,sub.area_code,sub.operator_code
+		) top
+		ORDER BY top.end_time
+		LIMIT #{startIndex},#{pageSize}
+	</select>
+
+
+	<select id="listRemainCount"   resultType="java.lang.Integer">
+   
+   select count(1) from (
+   SELECT  sub.product_type,sub.product_type_name,SUM(sub.remain_quantity) as remain_quantity,sub.end_time_str FROM (
+  	SELECT
+  		t.sub_id,
+  		t.order_id,
+  		t.client_id,
+  		t.agent_id,
+  		t.product_id,
+  		t.product_type,
+  		CASE t.product_type
+			WHEN 0 THEN '行业'
+			WHEN 1 THEN '营销'
+			WHEN 2 THEN '国际'
+			WHEN 3 THEN '验证码'
+			WHEN 4 THEN '通知'
+			WHEN 7 THEN 'USSD'
+			WHEN 8 THEN '闪信'
+			ELSE '未知产品' END as product_type_name, 
+  		t.product_name,
+  		t.product_number,
+  		t.order_type,
+  		t.status,
+  		CASE t.status
+			WHEN 0 THEN '审核中'
+			WHEN 1 THEN '订单生效'
+			WHEN 2 THEN '订单完成'
+			WHEN 3 THEN '订单失败'
+			ELSE '订单取消'
+		END as status_name,
+  		t.active_period,
+  		t.quantity,
+  		t.remain_quantity,
+  		case t.product_type
+  			when 2 then CONCAT(ROUND(t.quantity, 2), "元")
+  			else CONCAT(FLOOR(t.quantity), "条")
+  		end quantity_str,
+  		case t.product_type
+  			when 2 then CONCAT(ROUND(t.remain_quantity, 2), "元")
+  			else CONCAT(FLOOR(t.remain_quantity), "条")
+  		end remain_quantity_str,
+  		t.sale_price,
+  		t.product_cost,
+  		t.create_time,
+  		DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') as create_time_str, 
+  		t.end_time,
+  		DATE_FORMAT(end_time,'%Y-%m-%d %H:%i:%S') as end_time_str
+  	FROM
+  		t_sms_client_order t 
+	WHERE
+	   t.client_id = #{params.clientId}
+	   AND t.product_type = #{params.productType} 
+	   AND t.status in(1)
+	   
+	 ) sub  
+	 GROUP by sub.product_type,sub.product_type_name,sub.end_time_str
+	 ) top
+  </select>
+  
+  
+  
+   <select id="getProductTypes"   resultType="java.lang.Integer">
+  	SELECT 
+  		distinct t.product_type
+  	FROM
+  		t_sms_client_order t 
+	WHERE
+	   t.client_id = #{clientId} 
+	   AND t.status in(1)
+  </select>
+  
+</mapper>

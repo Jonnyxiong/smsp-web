@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8"/>
+	<meta content="云之讯,云通讯,云通讯平台" name="keywords"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+	<title>云之讯—融合通讯开放平台让通讯更简单</title> 
+    <link rel='stylesheet' type='text/css' href='/css/reset.css' th:href="@{/css/reset.css}"/>
+    <link rel='stylesheet' type='text/css' href='/css/style.css'  th:href="@{/css/style.css}"/>
+    
+	<script type="text/javascript" src="/js/jquery-3.0.0.min.js" th:src="@{/js/jquery-3.0.0.min.js}"></script>
+	<script type="text/javascript" src="/js/jquery.JPlaceholder.js" th:src="@{/js/jquery.JPlaceholder.js}"></script>
+	<script type="text/javascript" src="/js/cookie.js" th:src="@{/js/cookie.js}" ></script>
+	<script type="text/javascript" src="/js/validate/jquery.validate.min.js" th:src="@{/js/validate/jquery.validate.min.js}"></script>
+	<script type="text/javascript" src="/js/hex_ha_ha_ha_ha_ha.js" th:src="@{/js/hex_ha_ha_ha_ha_ha.js}"></script>
+	<script type="text/javascript" src="/js/validate/smsp.validate.js" th:src="@{/js/validate/smsp.validate.js}"></script>
+	<script type="text/javascript" src="/js/layer/layer.js" th:src="@{/js/layer/layer.js}"></script>
+	<script type="text/javascript" src="/js/jquery.form.js" th:src="@{/js/jquery.form.js}"></script>	
+	
+    <script type="text/javascript" src="/js/base.js" th:src="@{/js/base.js}"></script>
+    <script type="text/javascript" src="/js/jquery.form.js" th:src="@{/js/jquery.form.js}"></script>
+    <!--[if lt IE 9]> 
+    <style type="text/css">
+    	div.header{position:inherit};
+    </style>
+    <![endif]--> 
+</head>
+<!-- 在线体验 -->
+<body>
+    <!--[if lt IE 9]>
+ 	<div style="background:yellow;width:100%;text-align:center;"><span style="color:red">您的浏览器版本过低，支持浏览器：Chrome 42+、Firefox 41+、IE 9+、Opera 29+</span></div>
+ 	<![endif]--> 
+	<!--公共头部 bof-->
+    <div class="header">
+        <div class="header_wp clearfix">
+            <div class="logo ft-l">
+                <h1>                
+                    <a href="/official/index.html" title="云之讯" th:href="@{/}"><img src="/img/logo.png" alt="云之讯.短信平台" /></a>
+                </h1>
+            </div>
+            <div class="ft-r clearfix">
+                <div class="nav ft-l">
+                    <ul>
+                        <li><a href="/official/index.html" th:href="@{/}">首页</a></li>
+                        <li class="active"><a href="/official/experience.html" th:href="@{/experience.html}">免费体验</a></li>
+                        <li class="alert-d"><a href="javascript:void(0)">招商代理</a></li>
+                    </ul>
+                </div>
+                <div class="login ft-l">
+            		<a href="/console/login.html" class="login"  th:href="@{/console/login}" th:if="${session.LOGIN_USER_INFO == null}">登录</a>
+            		<a href="/console/index.html" class="login" th:href="@{/console}" th:if="${session.LOGIN_USER_INFO !=null}">进入控制台</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--公共头部 eof-->
+    
+    <!--主体部分 bof-->
+	<div class="content experent">
+        <div class="content_wp">
+            <h1>在线免费体验</h1>
+            <div class="exp-info clearfix">
+                <div class="info-l ft-l">
+                <form id="experienceForm">
+                    <div class="info-in">
+                        <div class="group clearfix">
+                            <label for="phoneNum">手机号码</label>
+                            <input type="text" name="phoneNum" id="phoneNum" placeholder="请填写您的11位手机号码"/>
+                            <span class="phone error">请填写您的11位手机号码</span>
+                        </div>
+                        <div class="group clearfix">
+                            <label for="imgValid">图形码</label>
+                            <input type="text" name="imgValid" id="imgValid" />
+                            <img src="/img/random-code.png" alt="验证码" id="randCheckCodePic" onclick="refreshCodePic(this)" th:src="@{/randCheckCodePic}"/>
+                            <span class="randcode error">验证码输入错误</span>
+                       </div>
+                        <div class="group clearfix">
+                            <label for="msmValid">验证码</label>
+                            <input type="text" name="msmValid" id="msmValid" />
+                            <a class="getCode green-btn" href="javascript:;" onclick="fetchSMSCode(this)">获取验证码</a>
+                            <span class="error"></span>
+                        </div>
+                        <div class="group"><a class="green-btn submit" href="javascript:;" onclick="checkExpCode(this)">提交</a></div>
+                    </div>
+                </form>
+
+                </div>
+                <div class="info-r ft-r">
+                    <h3>体验流程</h3>
+                    <ul>
+                        <li><a href="javascript:void(0)">输入手机号码</a></li>
+                        <li><a href="javascript:void(0)">输入图形码</a></li>
+                        <li><a href="javascript:void(0)">输入验证码</a></li>
+                        <li><a href="javascript:void(0)">提交</a></li>
+                        <li class="last"><a href="javascript:void(0)">体验完成</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p class="btm">同一个手机号码一天最多只能免费体验3条短信，同一个IP一天最多只能免费在线体验5条短信</p>
+        </div>
+    </div>
+    <!--主体部分 eof-->
+    <!-- 代理商申请弹出框 -->
+	<div id="agentApplayBox"></div>
+</body>
+	<script  th:inline="javascript">
+	/*<![CDATA[*/
+	function refreshCodePic(obj){
+		var src = $(obj).attr("src") + "?" + Math.random();
+		$(obj).attr("src", src)
+	}
+	
+	// 获取验证码按钮处理
+	var timeCount = 120;
+	var needWaiting = false;
+	var timer; // 计时器
+	function setSendBtn(){
+		if(timeCount <= 0){
+			timeCount = 120;
+			needWaiting = false;
+			$(".getCode").html("获取验证码");
+			$(".getCode").removeClass("disabled");
+			$("#randCheckCodePic").click(); // 刷新验证码
+		}else{
+			$(".getCode").addClass("disabled");
+			timeCount--;
+			$(".getCode").html(timeCount + "秒后重新发送");
+			timer = setTimeout("setSendBtn()", 1000);
+		}
+	}
+	
+	var msgCode;
+	function fetchSMSCode(obj){
+		timeCount = 120;
+		if($(obj).hasClass("disabled") || needWaiting){ //防刷
+			console.log("你的手速太快了哦")
+			return ;
+		}
+		if(validate()){
+			needWaiting = true;
+			var url = /*[[@{/sms_experience}]]*/"/home/sms_experience";
+			$.ajax({
+				type : "post",
+				url : url,
+				async: false,
+				data: {
+					mobile : $("#phoneNum").val()
+				},
+				success: function(result){
+					needWaiting = false;
+					if(result.isSuccess == true){
+						if(result.data.success == true){
+							msgCode = result.data.msgCode;
+							console.log(msgCode);
+							setSendBtn();
+						}else{
+							layer.alert(result.data.msg, {icon: 2});
+						}
+					}else{
+						setSendBtn();
+					}
+	          	}
+			});
+			
+			
+		}
+		
+	}
+	
+	function validate(){
+		$(".phone.error").hide();
+		$(".randcode.error").hide();
+		var phoneNum = $("#phoneNum").val();
+		var imgValid = $("#imgValid").val();
+		
+		var checkCodeUrl = /*[[@{/randCodeCheck}]]*/"/randCodeCheck.html";
+		var validatePhone = Validate.isValidMobile(phoneNum);
+		var validCode = Validate.isCheckCodeRight(checkCodeUrl, imgValid);
+		
+		if(!validatePhone){
+			$(".phone.error").show();
+		}
+		if(!validCode){
+			$(".randcode.error").show();
+		}
+		if(!validatePhone || !validCode){
+			return false
+		}
+		return true;
+	}
+	
+	function checkExpCode(){
+		
+		if(validate()){
+			var msmValid = $("#msmValid").val();
+			if(msmValid === msgCode){
+				document.getElementById("experienceForm").reset(); // 清空表单输入框
+				$("#randCheckCodePic").click(); // 刷新验证码
+				clearTimeout(timer); // 清除计时器
+				$(".getCode").html("获取验证码");
+				$(".getCode").removeClass("disabled");
+				
+				layer.alert('验证码正确，体验成功', {icon: 1});
+			}else{
+				layer.alert('验证码不对哦', {icon: 2});
+			}
+		}
+	}
+	
+	
+
+	/*]]>*/
+	</script>
+</html>

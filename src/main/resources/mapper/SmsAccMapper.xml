@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="smsAcc">
+
+	<resultMap id="smsAccountModel" type="com.ucpaas.smsp.model.SmsAccountModel" >
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="clientid" property="clientId" jdbcType="VARCHAR"/>
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="sid" property="sid" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="agent_id" property="agentId" jdbcType="INTEGER" />
+		<result column="oauth_status" property="oauthStatus" jdbcType="INTEGER" />
+		<result column="oauth_date" property="oauthDate" jdbcType="TIMESTAMP" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="realname" property="realname" jdbcType="VARCHAR" />
+		<result column="client_level" property="clientLevel" jdbcType="INTEGER" />
+		<result column="client_type" property="clientType" jdbcType="INTEGER" />
+		<result column="needreport" property="needreport" jdbcType="INTEGER" />
+		<result column="needmo" property="needmo" jdbcType="INTEGER" />
+		<result column="needaudit" property="needaudit" jdbcType="INTEGER" />
+		<result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="moip" property="moip" jdbcType="VARCHAR" />
+		<result column="moport" property="moport" jdbcType="VARCHAR" />
+		<result column="nodeid" property="nodeid" jdbcType="VARCHAR" />
+		<result column="deliveryurl" property="deliveryurl" jdbcType="VARCHAR" />
+		<result column="mourl" property="mourl" jdbcType="VARCHAR" />
+		<result column="noticeurl" property="noticeurl" jdbcType="VARCHAR" />
+		<result column="nodenum" property="nodenum" jdbcType="INTEGER" />
+		<result column="paytype" property="paytype" jdbcType="INTEGER" />
+		<result column="needextend" property="needextend" jdbcType="INTEGER" />
+		<result column="signextend" property="signextend" jdbcType="INTEGER" />
+		<result column="remarks" property="remarks" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+ 	 </resultMap>
+ 	 
+	<!--  1. 获取用户账户的基本信息(根据clientId) -->
+ 	<select id="getAccountInfo" resultMap="smsAccountModel">
+ 		SELECT
+			name,
+			clientid,
+			sid,
+			status,
+			paytype,
+			createtime,
+			agent_id,
+			oauth_status,
+			oauth_date,
+			needreport,
+			realname,
+			address,
+			mobile,
+			email,
+			needmo,
+			needaudit,
+			deliveryurl,
+			mourl,
+			noticeurl,
+			nodenum,
+			client_level,
+			client_type,
+			needextend,
+			signextend,
+			CASE
+				WHEN ip = '*' THEN ''
+				ELSE ip
+			END AS ip,
+			moip,
+		 	moport,
+		 	nodeid,
+			remarks,
+			IFNULL(province,'') as province,
+			IFNULL(city,'') as city,
+			IFNULL(area,'') as area,
+			moip,
+			moport,
+			nodeid
+		FROM
+			t_sms_account
+		WHERE
+			clientid = #{clientId}
+	</select>
+ 	 
+ 	<!-- 2. 修改账户的基本信息 -->
+ 	<update id="updateAccountInfo">
+		UPDATE
+ 	 		t_sms_account
+ 	 	<set>
+ 	 		province = #{province},
+			city = #{city},
+			area = #{area},
+			address = #{address},
+			<if test="updateTime != null and updateTime != ''">
+				updatetime = #{updateTime},
+			</if>
+			<if test="ip != null and ip != ''">
+			    ip = #{ip},
+			</if>
+			<if test="deliveryurl != null and deliveryurl != ''">
+				deliveryurl = #{deliveryurl},
+			</if>
+			<if test="mourl != null and mourl != ''">
+				mourl = #{mourl},
+			</if>
+			<if test="noticeurl != null and noticeurl != ''">
+				noticeurl = #{noticeurl},
+			</if>
+			<if test="moip != null and moip != ''">
+				moip = #{moip},
+			</if>
+			<if test="moport != null">
+				moport = #{moport},
+			</if>
+			<if test="nodeid != null">
+				nodeid = #{nodeid},
+			</if>
+		</set> 
+		WHERE
+			clientid = #{clientId} 
+ 	</update>
+ 	 
+ 	<!-- 3. 获取客户资质信息 -->
+	<select id="getCerInfo" resultType="com.ucpaas.smsp.model.SmsOauthPic">
+		SELECT
+			p.id,
+			p.agent_id AS agentId,
+			p.client_id AS clientId,
+			p.id_nbr AS idNbr,
+			p.img_url AS imgUrl,
+			p.id_type AS idType,
+			p.id_order AS idOrder,
+			p.id_desc AS idDesc,
+			p.create_date AS createDate,
+			p.update_date AS updateDate,
+			p.status,
+			p.id_nbr2 AS idNbr2,
+			p.id_nbr3 AS idNbr3,
+			p.remote_path AS remotePath,
+			a.oauth_status AS oauthStatus,
+			a.realname,
+			a.client_type AS clientType,
+			p.oauth_type AS oauthType
+		FROM
+			t_sms_account a
+		LEFT JOIN 
+			t_sms_oauth_pic p 
+		ON a.clientid = p.client_id AND p.oauth_type = 2
+		WHERE
+			a.clientid = #{clientId}
+<!-- 		LEFT JOIN -->
+<!-- 			t_sms_oauth_pic p -->
+<!-- 		ON a.clientid = p.client_id -->
+<!-- 		WHERE p.client_id = #{clientId} -->
+<!-- 			AND p.oauth_type = 2; -->
+	</select>
+ 	
+ 	<!-- 4. 获取未通过客户资质未通过认证的原因 -->
+ 	<select id="getNotPassRemark" resultType="string">
+ 		SELECT
+			ol.remark
+		FROM
+			t_sms_oauth_audit_log ol
+		WHERE
+			id = (
+				SELECT
+					MAX(id)
+				FROM
+					t_sms_oauth_audit_log l
+				WHERE
+					l.audit_type = 2
+				AND
+					l.status = 0
+				AND
+					l.client_id = #{clientId}
+			)
+ 	</select>
+ 	
+ 	<!-- 5. 添加用户资质 -->
+	<insert id="addCerInfo">
+		INSERT INTO t_sms_oauth_pic (
+			agent_id,
+			client_id,
+			id_nbr,
+			img_url,
+			id_type,
+			create_date,
+			update_date,
+			oauth_type
+		)
+		VALUE
+			(
+				#{agentId},
+				#{clientId},
+				#{idNbr},
+				#{imgUrl},
+				#{idType},
+				NOW(),
+				#{updateDate},
+				#{oauthType}
+			)
+	
+	</insert>	
+ 	<!-- 6. 添加用户资质 -->
+	<insert id="updateCerInfo">
+		UPDATE
+			t_sms_oauth_pic p
+		<set>
+			<if test="idNbr != null and idNbr != ''">
+				p.id_nbr = #{idNbr},
+			</if>
+			<if test="imgUrl != null and imgUrl != ''">
+			p.img_url = #{imgUrl},
+			</if>		
+			<if test="idType != null and idType != ''">
+			p.id_type = #{idType},
+			</if>
+			p.update_date = #{updateDate}
+		</set>
+		WHERE
+			p.client_id = #{clientId}
+	
+	</insert>	
+	
+	<!-- 7. 修改客户资质同时修改客户的更新信息(将客户资质认证状态更新至待认证) -->
+ 	<update id="updateAccountWithCer">
+		UPDATE
+ 	 		t_sms_account
+		SET
+			client_type = #{clientType},updatetime = #{updateDate},realname = #{realname},oauth_status = 2
+		WHERE
+			clientid = #{clientId} 
+ 	</update>
+ 	
+ 	<!-- 8. 检查用户密码是否正确 -->
+ 	<select id="checkPassword" resultType="string">
+ 		SELECT
+ 			t.web_password
+ 		FROM
+ 			t_sms_client_info_ext t
+ 		WHERE
+ 			t.clientid = #{clientId}
+ 	</select>
+ 	
+ 	<!-- 9. 修改用户密码 -->
+ 	<update id="updatePassword">
+	 	UPDATE
+	 		t_sms_client_info_ext
+		SET 
+			web_password = #{password}
+		WHERE
+			clientid = #{clientId}
+ 	</update>
+ 	
+</mapper>

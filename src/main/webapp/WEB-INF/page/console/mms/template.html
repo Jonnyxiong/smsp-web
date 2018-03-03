@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>云之讯-短信平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="baidu-site-verification" content="zNwez22Bcq" />
+    <meta name="google-site-verification" content="6hC_46bMT6_bGxmL_Ec5V_7xnPSnQBhQBl8y3MtfoFc" />
+    <meta name="Baiduspider" content="noarchive"/>
+	<link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+    <link rel="stylesheet" href="/font/iconfont.css">
+	<link rel='stylesheet' type='text/css' href='/css/main.css' th:href="@{/css/main.css}"/>
+</head>
+<!-- 短信发送 -->
+<body>
+    <div id="wrap" class="clearfix">
+        <!-- 左侧导航栏 bf-->
+        <div id="sidebar">
+            <div class="logo">
+                <a href="/" title="云之讯"><img src="/img/logo2.png" alt="云之讯" /></a>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li><a href="/console" th:if="${accountModel.paytype ne 1}" ><span class="iconfont icon-shouyeshouye"></span>首页</a></li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-duanxin"></span>传统短信<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/bussiness/send.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信发送<span></span></a></li>
+                            <li><a href="/console/bussiness/template.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信模板管理<span></span></a></li>
+                            <li><a href="/console/bussiness/record.html"  class="">短信发送记录<span></span></a></li>
+                            <li><a href="/console/bussiness/statistics.html" class="">短信数据统计<span></span></a></li>
+                            <li><a href="/console/bussiness/price.html"  class="">国际短信报价<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li class="cur" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">
+                        <a href="javascript:void(0)" class="cur"><span class="iconfont icon-caixin2"></span>彩印<i class="show"></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/mms/send.html" class="">彩印发送<span></span></a></li>
+                            <li><a href="/console/mms/template.html" class="cur">彩印模版管理<span></span></a></li>
+                            <li><a href="/console/mms/record.html"  class="">彩印发送记录<span></span></a></li>
+                            <li><a href="/console/mms/ussdday.html" class="">彩印数据统计<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-qianbi01"></span>财务管理<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/order/list.html" class="">我的订单<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class=""><span class="iconfont icon-shenfenzheng"></span>账户管理<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/account/info.html" class="">账户资料<span></span></a></li>
+                            <li><a href="/console/account/security.html" class="">账户安全<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-bangzhuzhongxin"></span>帮助中心<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/help/smsAccessIntroduce.html" class="">短信接入<span></span></a></li>
+                            <li><a href="/console/help/FAQ.html" class="">FAQ<span></span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 左侧导航栏 ef -->
+        <!-- 右边内容 bf -->
+        <div id="main" class="relative " >
+            <div class="main-con" >
+                <div class="top order-top clearfix">
+                    <h1>彩印模版管理</h1>
+                    <div class="ft-r ">
+                        <a href="/console/login.html" class="lay-out btn-white btn-small btn" th:href="@{/console/quit}">退出</a>
+                    </div>
+                    <div class="top-r ft-r">
+						<span class="contact-phone" th:text="'联系电话：'+${accountModel.agentMobile}">联系电话：18689206965</span>
+					</div>
+                </div>
+                <div class="con-out ms-controller"  ms-controller="my-app" >
+                    <div class="crumbs clearfix">
+                        <a href="javascript:;" class="active ft-l">彩印模版管理</a>
+                        <button class="ft-r btn btn-green btn-small" ms-click="@showAddTemp">添加模板</button>
+                    </div>
+                    <div class="grid-wrap mt20" style="min-height: 600px;">
+                        <table class="grid-table grid-table-tx-c grid-table-border bg-white">
+                            <thead>
+                                <tr>
+                                    <th class="w-td1">模板ID</th>
+                                    <th class="w-td1">模板类型</th>
+                                    <th class="w-td2">签名</th>
+                                    <th class="w-td3">短信内容</th>
+                                    <th class="w-td2">提交时间</th>
+                                    <th class="w-td1">审核状态</th>
+                                    <th class="w-td2">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ms-for="(k, v) in @table.list">
+                                    <td>{{v.template_id}}</td>
+                                    <td>{{v.type_name}}</td>
+                                    <td>{{v.sign}}</td>
+                                    <td class="temp-cont"><p>{{v.content}}</p></td>
+                                    <td>{{v.update_time}}</td>
+                                    <td>{{v.check_status_name}}</td>
+                                    <td><a ms-for="(index , el) in v.opera" ms-click="@btnOpera(index,k,v.$model)" class="btn-link" :class="['index'+index]">{{el}}</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="pagination clearfix">
+                            <div class="ft-r">
+                                <input id="jump-to" type="text" name="jump-to" class="jump-page" ms-duplex="@jumpto"/>
+                                <a href="javascript:;" ms-click='@jumpPage' class="btn-page ml10">跳转</a>
+                            </div>
+                            <div class="pagination-btn ft-r">
+                                <a href="javascript:;" class="first page-btn"  ms-click='@firstPage'></a>
+                                <a href="javascript:;" class="pre page-btn"  ms-click='@prePage'></a>
+                                <a href="javascript:;" class="now">{{@table.currentPage}}/{{table.totalPage}}</a>
+                                <a href="javascript:;" class="after page-btn" ms-click='@nextPage'></a>
+                                <a href="javascript:;" class="last page-btn"  ms-click='@lastPage'></a>
+                            </div>
+                            <div class="show-count ft-r">共有<span class="allCount">{{@table.totalCount}}</span>条，每页显示
+                                <span class="select"><span>{{@table.pageRowCount}}</span>
+                                    <ul class="show-num">
+                                        <li ms-for="(index , el) in @rowCount" ms-click="@ChangePageRowCount(index)">{{el}}</li>
+                                    </ul>
+                                </span>条
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btm-copyright">
+                        <p>© 2016 ucpaas.com 版权所有 粤ICP备14046848号</p>
+                    </div>  
+                </div>  
+            </div>
+            
+        </div>
+        <!-- 右边内容 end -->
+    </div>
+<div class="grid-addTemp hide js-addTemp" ms-controller="dialog">
+    <input id="template_id" type="hidden" value="-1" ms-duplex="@item.template_id"/>
+    <div class="col-12">
+        <div class="title tx-r ft-l">
+            <span class="red">*</span>短信签名:
+        </div>
+        <div class="ctx ft-l">
+            <input type="text" class="input ft-l"  ms-duplex="@item.sign" ms-if="@isEdit()" >
+            <div class="tip relative ft-l" ms-if="@isEdit()">
+                <span class="iconfont icon-icontishiwenhao icon-tip"></span>
+                <div class="tip-ctx">
+                    <i class="triangle"></i>
+                    <p>2-8个汉字、英文字母和数字, 签名不能全是数字</p>
+                </div>
+            </div>
+            <p class="sign-ctx" ms-if="!@isEdit()">{{@item.sign}}</p>
+        </div>
+    </div>
+    <div class="col-12 mt20">
+        <div class="title tx-r ft-l"><span class="red">*</span>模板类型:</div>
+        <div class="ctx ft-l">
+            <div class="relative ft-l hover-select">
+                <span class="grid-select select" id="selctType">{{@item.type_name}}</span>
+                <input id="smstype" type="hidden" value="-1" ms-duplex="@item.type"/>
+                <ul class="select-list grid-select-list">
+                    <li ms-for="(i, el) in @template" ms-click="@chooseTemplate(i)">{{el.name}}</li>
+                </ul>
+            </div>
+            <div class="tip relative ft-l">
+                <span class="iconfont icon-icontishiwenhao icon-tip"></span>
+                <div class="tip-ctx">
+                    <i class="triangle"></i>
+                    <p>彩印是一项在用户通话过程中附加信息传递的增值业务。在主、被叫用户语音呼叫接通前、通话中、挂断后，由系统自动把用户预先设定好的彩印信息（心情、笑话、商情等）推送到对方手机上，以达到精准营销、彰显个性、分享心情、商情传递等目的。</p>
+                    <p>1.USSD模板：用于手机屏显仅支持0-4个参数，每个参数限制在10个字符内，模板总长度（包含签名和内容）不超过62个字符。e.g感谢您选择{1}旅游，888元旅游专属基金答谢您。你最想看的美景，特价路线都在这儿：httpxxxx；</p>
+                    <p>2.闪信模板：用于手机屏显仅支持0-4个参数，每个参数限制在10个字符内，模板总长度（包含签名和内容）不超过62个字符。e.g尊敬的客户，我是快递小哥{1}，正在为您派送包裹，烦请您接听。      -- {2}快递。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 mt20">
+        <div class="title tx-r ft-l"><span class="red">*</span>短信内容:</div>
+        <div class="ctx ft-l">
+            <textarea name="" id="" class="msg-ctx" placeholder="如：您好，你的验证码是{xxx}，请在{xxx}秒之内完成验证。" ms-duplex="@item.content"></textarea>
+        </div>
+    </div>
+    <div class="col-12 mt20">
+        <div class="title tx-r ft-l"></div>
+        <div class="ctx ft-l">
+            <p>变量请按序填写如{1}{2}；短信内容（含签名、变量内容）不能超过62个字符</p>
+        </div>
+    </div>
+    <div class="col-12 mt20">
+        <div class="title ft-l"></div>
+        <div class="ctx ft-l tx-r">
+            <a href="javascript:;" class="btn btn-green btn-small" ms-click="@saveTemp">保存</a>
+            <a href="javascript:;" class="btn btn-white btn-small ml20" ms-click="@closeLayer">取消</a>
+        </div>
+    </div>
+</div>
+<div class="grid-addTemp js-historyTemp ms-controller hide" ms-controller="history">
+    <h2 class="tx-c">审核通过模板二次审核中..</h2>
+    <p class="sign-ctx tx-c">该模板上次审核通过的内容仍可使用</p>
+    <div class="col-12">
+        <div class="title tx-r ft-l"><span class="red">*</span>短信签名:</div>
+        <div class="ctx ft-l"><p class="sign-ctx">{{@his_item.sign}}</p></div>
+    </div>
+    <div class="col-12 mt20">
+        <div class="title tx-r ft-l"><span class="red">*</span>模板类型:</div>
+        <div class="ctx ft-l"><p class="sign-ctx">{{@his_item.type_name}}</p></div>
+    </div>
+    <div class="col-12 mt20">
+        <div class="title tx-r ft-l"><span class="red">*</span>短信内容:</div>
+        <div class="ctx ft-l"><p class="sign-ctx">{{@his_item.content}}</p></div>
+    </div>
+</div>
+</body>
+<script src="/js/jquery.min.js"  th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" src="/js/common.js" th:src="@{/js/common.js}"></script>
+<script src="/js/layer/layer.js"  th:src="@{/js/layer/layer.js}"></script>
+<script src="/js/validate/smsp.validate.js"  th:src="@{/js/validate/smsp.validate.js}"></script>
+<script type="text/javascript" src="/js/jquery.form.js" th:src="@{/js/jquery.form.js}"></script>
+<script type="text/javascript" src="/js/avalon.js"></script>
+<script th:inline="javascript" type="text/javascript">
+$(function(){ 
+    var vm;
+    var templateListUrl = /*[[@{/console/template/temporary}]]*/'/console/template/temporary';
+    var templateHistoryUrl = /*[[@{/console/template/get}]]*/'/console/template/get';
+    var templateAddUrl = /*[[@{/console/template/add}]]*/'/console/template/add';
+    var templateUpdateUrl = /*[[@{/console/template/update}]]*/'/console/template/update';
+    var types = [], queryData = {};
+    types[0] = 7;
+    types[1] = 8;
+    queryData.types = types;
+    queryData.currentPage = 1;
+    $.ajax({
+        url : templateListUrl,
+        data : queryData,
+        dataType :'json',
+        success : function(res){
+            vm = avalon.define({
+                $id : 'my-app',
+                jumpto : '',
+                table : res,
+                rowCount : [15, 25, 35, 45],
+                //跳转
+                jumpPage : function(){
+                    var tagPage = parseInt(this.jumpto, 10);      //目标页面
+                    if(tagPage < 0 || tagPage > parseInt(this.table.totalPage, 10)){
+                        layer.alert('无效的页数', {
+                            icon: 2
+                        });
+                        return false;
+                    }
+
+                    queryData.currentPage = tagPage;
+                    loadTable({url : templateListUrl, type : 'POST', data : queryData} ,this);
+                },
+                 ChangePageRowCount : function(index){
+                    var pageRowCount = this.rowCount[index];
+
+                    queryData.pageRowCount = pageRowCount;
+                    loadTable({url : templateListUrl, type : 'POST', data :queryData},this);
+                },
+                //下一页
+                nextPage : function(){
+                    var pageNow = this.table.currentPage,
+                        pageNext = parseInt(pageNow, 10) + 1;
+                    if(this.table.totalPage == pageNow){
+                        layer.alert('已经是最后一页', {
+                            icon: 2
+                        });
+                        return false;
+                    }
+                    
+                    queryData.currentPage = pageNext;
+                    loadTable({url : templateListUrl, type : 'POST', data : queryData} ,this);
+                },
+                //最后一页
+                lastPage : function(){
+                    var last = this.table.totalPage
+                    if(this.table.currentPage == last){
+                        layer.alert('已经是最后一页', {
+                            icon: 2
+                        });
+                        return false;
+                    }
+
+                    queryData.currentPage = last;
+                    loadTable({url : templateListUrl, type : 'POST', data : queryData} ,this);
+                },
+                //前一页
+                prePage : function(){
+                    var pageNow = this.table.currentPage,
+                        pagpPre = parseInt(pageNow, 10) - 1;
+                    if(pagpPre == 0){
+                        layer.alert('已经是第一页', {
+                            icon: 2
+                        });
+                        return false;
+                    }
+
+                    queryData.currentPage = pagpPre;
+                    loadTable({url : templateListUrl, type : 'POST', data : queryData} ,this);
+                },
+                //第一页
+                firstPage : function(){
+                    var first = 1;
+                    if(this.table.currentPage == 1){
+                        layer.alert('已经是第一页', {
+                            icon: 2
+                        });
+                        return false;
+                    }
+
+                    queryData.currentPage = first;
+                    loadTable({url : templateListUrl, type : 'POST', data : queryData} ,this);
+                },
+                showAddTemp : function(){
+                    dialog.item = {template_id:'',sign:'',content:'',type:'',type_name:'',check_status:0};
+                    dialog.index = '';
+
+                    layer.open({
+                      type: 1,
+                      title: false, //不显示标题
+                      area: ['700px','550px'],
+                      content: $('.js-addTemp')
+                    });
+                },
+                btnOpera : function(index, arr_index, item){
+                    if(index == 1){
+                        //点击查看历史
+                        var template_id = item.template_id;
+                        $.ajax({
+                            url:templateHistoryUrl+"?template_id="+template_id,
+                            dataType:'json',
+                            success : function(res){
+                                history.his_item = res;
+                                layer.open({
+                                  type: 1,
+                                  title: false, //不显示标题
+                                  area: ['700px','550px'],
+                                  content: $('.js-historyTemp')
+                                });
+                            }
+                        })  
+                    } else {
+                        //修改， 编辑
+                        dialog.item = item;
+                        dialog.index = arr_index;
+                        layer.open({
+                            type: 1,
+                            title: false, //不显示标题
+                            area: ['700px','550px'],
+                            content: $('.js-addTemp')
+                        });
+                    }
+                }
+            })
+            avalon.scan(document.body);
+            var mainH = $("#main").height() > $(window).height() ? $("#main").height() : $(window).height();
+            $("#sidebar").height(mainH);
+        }
+    })
+
+    //添加 修改 编辑 模版
+    var dialog = avalon.define({
+        $id : 'dialog',
+        item : {},
+        index : '',
+        template : [{type:7,name:'USSD模板'},{type:8,name:'闪信模板'}],
+        chooseTemplate : function(index){
+            var temp_type = this.template[index].type,
+                temp_name = this.template[index].name;
+
+            this.item.type = temp_type;
+            this.item.type_name = temp_name;
+
+            $(".grid-select-list").hide();
+        },
+        isEdit : function(){
+            var check_status = this.item.check_status;
+            if(check_status === 0){
+                return true;
+            } else{
+                return false;
+            }
+        },
+        closeLayer : function(){
+            layer.closeAll();
+        },
+        saveTemp : function(){
+            if(!AuthSign(this.item.sign) || !AuthType(this.item.type) || !AuthContent(this.item.content)){
+                return false;
+            }
+            var data      = this.item.$model;
+            var arr_index = this.index;   // 当前编辑条目在table数组中的下标
+            var content   = this.content;
+            delete data["opera"];
+            delete data["old_update_time"];
+
+
+            if(this.index !== ''){
+                //修改， 删除
+                $.ajax({
+                    url:templateUpdateUrl,
+                    data:data,
+                    type: 'POST',
+                    dataType:'json',
+                    success : function(res){
+                       
+                        if(res.success){
+                            layer.closeAll();
+                            layer.msg('修改成功');
+                            //更新对应数据 刷新视图
+                            vm.table.list[arr_index].template_id       = res.data.template_id;
+                            vm.table.list[arr_index].check_status_name = res.data.check_status_name;
+                            vm.table.list[arr_index].check_status      = res.data.check_status;
+                            vm.table.list[arr_index].submit_type_name  = res.data.submit_type_name;
+                            vm.table.list[arr_index].submit_type       = res.data.submit_type;
+                            vm.table.list[arr_index].rownum            = res.data.rownum;
+                            vm.table.list[arr_index].type              = res.data.type;
+                            vm.table.list[arr_index].type_name         = res.data.type_name;
+                            vm.table.list[arr_index].sign              = res.data.sign;
+                            vm.table.list[arr_index].type_name         = res.data.type_name;
+                            vm.table.list[arr_index].content           = res.data.content;
+                            vm.table.list[arr_index].update_time       = res.data.update_time;
+                            vm.table.list[arr_index].create_time       = res.data.create_time;
+                            vm.table.list[arr_index].opera             = res.data.opera;
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    },
+                    error : function(){
+                         layer.msg('修改失败');
+                    }
+                })
+            } else {
+                //添加模版
+                $.ajax({
+                    url:templateAddUrl,
+                    data:data,
+                    type: 'POST',
+                    dataType:'json',
+                    success : function(res){
+                        if(res.success){
+                            layer.closeAll();
+                            layer.msg('添加成功');
+                            location.reload();
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    },
+                    error : function(){
+                         layer.msg('添加失败');
+                    }
+                })
+            }
+        }
+    })
+
+    //二次审核
+    var history = avalon.define({
+        $id : 'history',
+        his_item : {}
+    })
+})
+
+</script>
+
+</html>

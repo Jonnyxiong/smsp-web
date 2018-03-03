@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>云之讯-短信平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="baidu-site-verification" content="zNwez22Bcq" />
+    <meta name="google-site-verification" content="6hC_46bMT6_bGxmL_Ec5V_7xnPSnQBhQBl8y3MtfoFc" />
+    <meta name="Baiduspider" content="noarchive" />
+	<link rel="shortcut icon" href="/img/logo2.png" type="image/x-icon" th:href="@{/img/logo2.png}">
+    <link rel="stylesheet" href="/font/iconfont.css">
+    <link rel='stylesheet' type='text/css' href='/css/main.css' th:href="@{/css/main.css}" />
+</head>
+<!-- 短信发送 -->
+
+<body ms-controller="my-app">
+    <div id="wrap" class="clearfix">
+        <!-- 左侧导航栏 bf-->
+        <div id="sidebar">
+            <div class="logo">
+                <a href="/" title="云之讯"><img src="/img/logo2.png" alt="云之讯" /></a>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li><a href="/console" th:if="${accountModel.paytype ne 1}" ><span class="iconfont icon-shouyeshouye"></span>首页</a></li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-duanxin"></span>传统短信<i  class="show"></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/bussiness/send.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信发送<span></span></a></li>
+                            <li><a href="/console/bussiness/template.html" class="" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">短信模板管理<span></span></a></li>
+                            <li><a href="/console/bussiness/record.html"  class="">短信发送记录<span></span></a></li>
+                            <li><a href="/console/bussiness/statistics.html" class="">短信数据统计<span></span></a></li>
+                            <li><a href="/console/bussiness/price.html"  class="">国际短信报价<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li class="cur" th:if="${session.LOGIN_USER_INFO.smsfrom==6}">
+                        <a href="javascript:void(0)" class="cur"><span class="iconfont icon-caixin2"></span>彩印<i class="show"></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/mms/send.html" class="cur">彩印发送<span></span></a></li>
+                            <li><a href="/console/mms/template.html" class="">彩印模版管理<span></span></a></li>
+                            <li><a href="/console/mms/record.html"  class="">彩印发送记录<span></span></a></li>
+                            <li><a href="/console/mms/ussdday.html" class="">彩印数据统计<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-qianbi01"></span>财务管理<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/order/list.html" class="">我的订单<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class=""><span class="iconfont icon-shenfenzheng"></span>账户管理<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/account/info.html" class="">账户资料<span></span></a></li>
+                            <li><a href="/console/account/security.html" class="">账户安全<span></span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><span class="iconfont icon-bangzhuzhongxin"></span>帮助中心<i></i></a>
+                        <ul class="sub-nav">
+                            <li><a href="/console/help/smsAccessIntroduce.html" class="">短信接入<span></span></a></li>
+                            <li><a href="/console/help/FAQ.html" class="">FAQ<span></span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 左侧导航栏 ef -->
+        <!-- 右边内容 bf -->
+        <div id="main" class="relative">
+            <div class="main-con">
+                <div class="top order-top clearfix">
+                    <h1>彩印发送</h1>
+                    <div class="ft-r ">
+                        <a href="/console/login.html" class="lay-out btn-white btn-small btn" th:href="@{/console/quit}">退出</a>
+                    </div>
+                    <!-- 
+                    <div class="top-r ft-r">
+                        <span class="contact-phone" th:text="'联系电话：'+${accountModel.agentMobile}">联系电话：18689206965</span>
+                    </div> -->
+                </div>
+                <div class="con-out">
+                    <div class="crumbs"><a href="#" onclick="javascript:if(!isSessionValid()){return false}" th:href="@{/console/mms/send}" class="active">彩印发送</a></div>
+                    <div class="content send-content">
+                        <!-- grid -->
+                        <div class="num-pool clearfix">
+                            <label class="title ft-l"><span class="red">*</span>号码池</label>
+                            <div class="ft-l ctx">
+                                <div class="mb20">
+                                    <a class="btn btn-green importMobile" href="javascript:;">批量导入手机号</a>
+                                    <form method="post" id="importMobileForm" style="display: none;">
+                                        <input type="file" id="importMobile" name="excel" onchange="importMobileChange()" />
+                                    </form>
+                                    <a href="#" onclick="javascript:if(!isSessionValid()){return false}" th:href="@{/console/bussiness/mobile-example}"><i>下载批量导入模板</i></a>
+                                </div>
+                                <textarea id="mobile" name="mobile" placeholder="例如：18889462200，16656208020；以“,”号分隔"></textarea>
+                                <p class="mt10"><span></span>支持批量输入和批量导入，批量输入以“,”号分隔，批量导入提供导入表模板下载。</p>
+                            </div>
+                        </div>
+                        <!-- grid -->
+                        <div class="clearfix">
+                            <input type="hidden" name="templateId" id="templateId">
+                            <label class="title ft-l"><span class="white">*</span>选择模板</label>
+                            <div class="ft-l ctx">
+                                <a class="btn btn-green js-template" href="javascript:;">选择模板</a>
+                            </div>
+                        </div>
+                        <!-- grid -->
+                        <div class="msm-type clearfix mt20">
+                            <label class="title ft-l"><span class="red">*</span>短信类型</label>
+                            <div class="ctx ft-l">
+                                <span class="select  js-disable " id="selctType">请选择模板</span>
+                                <input id="smstype" type="hidden" value="0">
+                                <label class="ml10"><span class="red">*</span>短信签名</label>
+                                <input type="text" id="sign" name="sign" placeholder="请选择模板" class="js-disable" disabled="disabled" >
+                            </div>
+                        </div>
+                        <!-- grid -->
+                        <div class="msm-type clearfix mt20">
+                            <label class="ft-l title"><span class="red">*</span>模板内容</label>
+                            <div class="ctx ft-l msg-ctx">
+                                <div>
+                                    <p class="" style="width:100%;" >
+                                        <input class="" type="text" placeholder="请选择模板">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btm-copyright">
+                        <p>© 2016 ucpaas.com 版权所有 粤ICP备14046848号</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 右边内容 end -->
+    </div>
+    <!-- 模板选择弹框 start -->
+    <div class="grid-template">
+        <div class="crumbs clearfix">
+            <a href="javascript:;" class="active ft-l">彩印模板库</a>
+            <a href="javascript:;" class="ft-r btn btn-green btn-small" onclick="javascript:if(!isSessionValid()){return false}" th:href="@{/console/mms/template}">添加模板</a>
+        </div>
+        <div class="">
+            <table class="grid-table grid-table-tx-c grid-table-border">
+                <thead>
+                    <tr>
+                        <th class="w-td1">模板ID</th>
+                        <th class="w-td2">短信签名</th>
+                        <th class="w-td2">模板类型</th>
+                        <th class="w-td6">模板内容</th>
+                        <th class="w-td1">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ms-for="el in @msg_data">
+                        <input type="hidden" class="template-smstype" ms-duplex="el.sms_type"/>
+                        <input type="hidden" class="template-smstypename" ms-duplex="el.sms_type_name"/>
+                        <td ><span class="template-id">{{el.template_id}}</span></td>
+                        <td ><p class="ellipsis sign">{{el.sign}}</p></td>
+                        <td ><p class="ellipsis mold">{{el.type_name}}</p></td>
+                        <td ><p class="ellipsis ctx temp-cont">{{el.content}}</p></td>
+                        <td ><a href="javascript:;" class="btn-link js-import cymb">导入</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- 分页 -->
+            <div class="pagination clearfix">
+                <div class="ft-r">
+                    <input id="jump-to" type="text" name="jump-to" class="jump-page" ms-duplex="@jumpto" />
+                    <a href="javascript:;" ms-click='@jumpPage' class="btn-page ml10">跳转</a>
+                </div>
+                <div class="pagination-btn ft-r">
+                    <a href="javascript:;" class="first page-btn"  ms-click='@firstPage'></a>
+                    <a href="javascript:;" class="pre page-btn"  ms-click='@prePage'></a>
+                    <a href="javascript:;" class="now">{{@pageNow}}/{{@total}}</a>
+                    <a href="javascript:;" class="after page-btn"  ms-click='@nextPage'></a>
+                    <a href="javascript:;" class="last page-btn"  ms-click='@lastPage'></a>
+                </div>
+                <div class="show-count ft-r">共有<span class="allCount">{{@totalCount}}</span>条</div>
+            </div>
+            <!-- 分页 end  -->
+        </div>
+    </div>
+    <!-- 模板选择弹框 end  -->
+</body>
+<script src="/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" src="/js/common.js" th:src="@{/js/common.js}"></script>
+<script src="/js/layer/layer.js" th:src="@{/js/layer/layer.js}"></script>
+<script src="/js/validate/smsp.validate.js" th:src="@{/js/validate/smsp.validate.js}"></script>
+<script type="text/javascript" src="/js/jquery.form.js" th:src="@{/js/jquery.form.js}"></script>
+<script type="text/javascript" src="/js/sendSms.js"></script>
+<script type="text/javascript" src="/js/avalon.js"></script>
+<script th:inline="javascript" type="text/javascript">
+/*<![CDATA[*/
+avalon.config({
+    debug: false
+});
+
+$(function() {
+    var templateListUrl = /*[[@{/console/template/list}]]*/'/console/template/list';
+    var sendUrl = /*[[@{/console/mms/sendSms}]]*/'/console/mms/sendSms';
+    var types = [], queryData = {};
+    types[0] = 7;
+    types[1] = 8;
+    queryData.types = types;
+    var vm = avalon.define({
+        $id: "my-app",
+        msg_data: [],
+        pageNow: 0,
+        total: 0,
+        totalCount :0,
+        jumpto: '',
+        rowCount : [15, 25, 35, 45],
+         first: function(now, end) {
+            if (now == 1) {
+                return fasle;
+            } else {
+                return true;
+            }
+        },
+        last: function(now, end) {
+            if (now == end) {
+                return false;
+            } else {
+                return true;
+            }
+        },
+        //跳转
+        jumpPage: function() {
+            var tagPage = parseInt(this.jumpto, 10); //目标页面
+            if (tagPage < 0 || tagPage > parseInt(this.total, 10)) {
+                layer.alert('无效的页数', {
+                    icon: 2
+                });
+                return false;
+            }
+            queryData.currentPage = tagPage;
+            jumpPage({
+                url: templateListUrl,
+                type: 'POST',
+                data:  queryData
+            }, this);
+        },
+        //下一页
+        nextPage: function() {
+            var pageNow = this.pageNow,
+                pageNext = parseInt(pageNow, 10) + 1;
+            if (this.total == pageNow) {
+                layer.alert('已经是最后一页', {
+                    icon: 2
+                });
+                return false;
+            }
+            queryData.currentPage = pageNext;
+            jumpPage({
+                url: templateListUrl,
+                type: 'POST',
+                data: queryData
+            }, this);
+        },
+        //最后一页
+        lastPage: function() {
+            var last = this.total;
+            if (this.pageNow == last) {
+                layer.alert('已经是最后一页', {
+                    icon: 2
+                });
+                return false;
+            }
+            queryData.currentPage = last;
+            jumpPage({
+                url: templateListUrl,
+                type: 'POST',
+                data: queryData
+            }, this);
+        },
+        //前一页
+        prePage: function() {
+            var pageNow = this.pageNow,
+                pagpPre = parseInt(pageNow, 10) - 1;
+            if (pagpPre == 0) {
+                layer.alert('已经是第一页', {
+                    icon: 2
+                });
+                return false;
+            }
+            queryData.currentPage = pagpPre;
+            jumpPage({
+                url: templateListUrl,
+                type: 'POST',
+                data: queryData
+            }, this);
+        },
+        //第一页
+        firstPage: function() {
+            var first = 1;
+            if (this.pageNow == 1) {
+                layer.alert('已经是第一页', {
+                    icon: 2
+                });
+                return false;
+            }
+            queryData.currentPage = first;
+            jumpPage({
+                url: templateListUrl,
+                type: 'POST',
+                data:  queryData
+            }, this);
+        },
+        ChangePageRowCount : function(index){
+            var pageRowCount = this.rowCount[index];
+            queryData.pageRowCount = pageRowCount;
+            jumpPage({url : templateListUrl, type : 'POST', data : queryData},this);
+        }
+    })
+    avalon.scan(document.body);
+
+    //首次加载
+    jumpPage({
+        url: templateListUrl,
+        type: 'POST',
+        data: queryData
+    }, vm);
+
+
+
+    // 进入页面时判断用户是否已经完成资质认证
+    //      clientOauthStatusCheck();
+    //      clientAccountStatusCheck();
+
+    // 绑定批量导入手机号点击事件
+    $(".importMobile").on("click", function(e) {
+        e.preventDefault();
+        $("#random").val(Math.random());
+        $("#importMobile").trigger('click');
+    })
+
+    // 短信签名和模板内容控制事件
+    contentAndSignController();
+
+    // 过滤不合法手机号码
+    mobileCheckListener();
+    // 模板内容字数计数器
+    letterNumListener();
+
+    //发送模板短信
+    $(".msm-type").on("click", ".js-sendTemp", function() {
+        // 短信提交前校验
+        if (!smsValidate($(this).data("type"))) {
+            return;
+        }
+        // 客户认证状态
+        if (!clientAccountStatusCheck()) {
+            return;
+        }
+        var arr = [],
+            opt = {},
+            cont_str = 0;
+        $('.ctx-temp').each(function(k, v) {
+            arr[k] = $(v).val();
+            cont_str += $(v).val().length;
+        })
+        /*if(cont_str > 59){
+            layer.alert('彩印内容加上签名长度不能超过59个字符', {
+                icon: 2
+            });
+            return false;
+        }*/
+        opt.arr = arr;
+        opt.mobile = $("#mobile").val();
+        opt.smstype = $("#smstype").val();
+        opt.templateid = $("#templateId").val();
+
+        ityzl_SHOW_LOAD_LAYER("发送短信中，请勿刷新页面...");
+        $.ajax({
+            url: sendUrl,
+            type: 'POST',
+            data: opt,
+            success: function(result) {
+                layer.closeAll();
+                if (result != null && !$.isEmptyObject(result) && result != "") {
+                    if (result.success) {
+                        layer.confirm('短信提交成功，跳转到短信记录？', {
+                            icon: 1,
+                            title: '提示'
+                        }, function(index) {
+                            window.location.href = /*[[@{/console/mms/record}]]*/ "/console/mms/record";
+                            layer.close(index);
+                        });
+                    } else {
+                        layer.alert(result.msg, {
+                            icon: 2
+                        });
+                    }
+
+                } else if (result == "") {
+                    // session超时
+                    layer.alert('系统错误，请联系客服', {
+                        icon: 2
+                    });
+                } else {
+                    layer.alert('系统错误，请联系客服', {
+                        icon: 2
+                    });
+                }
+            }
+        })
+    })
+});
+
+function importMobileChange() {
+    if (!checkFile("")) {
+        return;
+    }
+    var options = {
+        beforeSubmit: function() {
+            $(".importMobile").attr("disabled", true);
+            ityzl_SHOW_LOAD_LAYER("正在导入手机号，请勿刷新页面...");
+        },
+        success: function(result) {
+            layer.closeAll(); //疯狂模式，关闭所有层
+            $(".importMobile").attr("disabled", false);
+            // 重置表单否则下次导入同样文件名文件时onchange有效
+            document.getElementById("importMobileForm").reset();
+
+            if (!result.success) { // 导入失败或则不合法
+                layer.alert(result.msg, {
+                    icon: 2
+                });
+                return;
+            } else {
+                $("#mobile").val(result.mobileList);
+
+                var errorMobileCount = result.errorMobileCount;
+                var duplicateMobileCount = result.duplicateMobileCount;
+                var errorMsg = "";
+                if(errorMobileCount != null && errorMobileCount > 0){
+                    errorMsg = '过滤掉不合法号码：' + errorMobileCount + '个，<br>' ;
+                }
+                if(duplicateMobileCount != null && duplicateMobileCount > 0){
+                    errorMsg = '过滤掉重复号码：' + duplicateMobileCount + '个，<br>';
+                }
+
+                if(errorMsg.length > 0){
+//							layer.alert(errorMsg  + "解析用时："+ result.time/1000 + "秒，"+'<br>'+"成功导入号码：" + result.mobileList.length + "个", {icon: 2});
+                    layer.alert(errorMsg  +"成功导入号码：" + result.mobileList.length + "个", {icon: 2});
+                }else{
+                    layer.msg("成功导入号码：" + result.mobileList.length + "个");
+                }
+            }
+        },
+        url: /*[[@{/console/bussiness/importMobile}]]*/ "${ctx}/sms/importMobile",
+        type: "post",
+        timeout: 60000
+    };
+    $("#importMobileForm").ajaxSubmit(options);
+}
+
+function smsSubmit() {
+    // 短信提交前校验
+    if (!smsValidate()) {
+        return;
+    }
+    // 短信签名和模板内容控制事件
+    if (!clientAccountStatusCheck()) {
+        return;
+    }
+
+    ityzl_SHOW_LOAD_LAYER("发送短信中，请勿刷新页面...");
+
+    var msg_content = "【" + $("#sign").val() + "】" + $("#content").val();
+    $.ajax({
+        type: "post",
+        url: /*[[@{/console/bussiness/send}]]*/ "${ctx}/sms/send",
+        data: {
+            mobile: $("#mobile").val(),
+            // sign : $("#sign").val(),
+            smstype: $("#smstype").val(),
+            content: msg_content
+        },
+        success: function(result) {
+            layer.closeAll();
+            if (result != null && !$.isEmptyObject(result) && result != "") {
+                if (result.success) {
+                    layer.confirm('短信提交成功，跳转到短信记录？', {
+                        icon: 1,
+                        title: '提示'
+                    }, function(index) {
+                        window.location.href = /*[[@{/console/bussiness/record}]]*/ "${ctx}/bussiness/query-sms-record";
+                        layer.close(index);
+                    });
+                } else {
+                    layer.alert(result.msg, {
+                        icon: 2
+                    });
+                }
+
+            } else if (result == "") {
+                // session超时
+            } else {
+                layer.alert('系统错误，请联系客服', {
+                    icon: 2
+                });
+            }
+
+        }
+    });
+}
+
+
+
+// 检查客户认证状态
+function clientAccountStatusCheck() {
+    var checkResult = false;
+    $.ajax({
+        type: "get",
+        url: /*[[@{/console/account/isOauth}]]*/ "${ctx}/common/clientAccountStatusCheck",
+        async: false,
+        success: function(result) {
+            if (result != null) {
+                if (result.oauthStatus == false) {
+                    layer.alert('未完成资质认证，跳转到认证页面？', {
+                        icon: 2,
+                        title: '提示'
+                    }, function(index) {
+                        window.location.href = /*[[@{/console/qualification}]]*/ "${ctx}/account/cerInfo";
+                        layer.close(index);
+                    });
+                } else {
+                    checkResult = true;
+                }
+            } else {
+                layer.alert('系统错误，请联系客服', {
+                    icon: 2
+                });
+            }
+
+        }
+    });
+
+    return checkResult;
+}
+
+// 获得input输入框中光标位置
+/*function getCursortPosition(ctrl) {
+    var CaretPos = 0; // IE Support
+    if (document.selection) {
+        ctrl.focus();
+        var Sel = document.selection.createRange();
+        Sel.moveStart('character', -ctrl.value.length);
+        CaretPos = Sel.text.length;
+    }
+    // Firefox support
+    else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+        CaretPos = ctrl.selectionStart;
+    return (CaretPos);
+}
+
+// 设置input输入框中光标的位置
+function setCaretPosition(ctrl, pos) {
+    if (ctrl.setSelectionRange) {
+        ctrl.focus();
+        ctrl.setSelectionRange(pos, pos);
+    } else if (ctrl.createTextRange) {
+        var range = ctrl.createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', pos);
+        range.moveStart('character', pos);
+        range.select();
+    }
+}
+*/
+
+
+/*]]>*/
+</script>
+
+</html>
